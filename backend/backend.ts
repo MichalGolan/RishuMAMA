@@ -8,6 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+//routers
 app.use('/users', userRouter);
 
 const port = process.env.PORT || "3000";
