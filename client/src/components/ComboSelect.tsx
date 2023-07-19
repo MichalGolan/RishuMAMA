@@ -1,10 +1,15 @@
 import {Autocomplete, TextField} from "@mui/material";
 import React, { useState } from "react";
 
-const options = ['Option 1', 'Option 2'];
+interface Props {
+    name: string;
+    options: string[];
+    enabled: boolean;
+    setVal: Function;
+}
 
-export default function ComboSelect() {
-    const [value, setValue] = useState<string | null>(options[0]);
+export default function ComboSelect(props: Props) {
+    const [value, setValue] = useState<string>("");
     const [inputValue, setInputValue] = useState('');
 
     return (
@@ -12,17 +17,20 @@ export default function ComboSelect() {
             <br />
             <Autocomplete
                 value={value}
-                onChange={(event: any, newValue: string | null) => {
+                onChange={(event: any, newValue: string) => {
                     setValue(newValue);
+                    props.setVal(newValue);
                 }}
                 inputValue={inputValue}
                 onInputChange={(event, newInputValue) => {
                     setInputValue(newInputValue);
                 }}
                 id="controllable-states-demo"
-                options={options}
+                options={props.options}
+                disabled={!props.enabled}
+                disableClearable={true}
                 sx={{ width: 300 }}
-                renderInput={(params) => <TextField {...params} label="Controllable" />}
+                renderInput={(params) => <TextField {...params} label={props.name} />}
             />
         </div>
     );
