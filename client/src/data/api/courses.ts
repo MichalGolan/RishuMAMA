@@ -3,7 +3,6 @@ import { ApiResponse } from "./utils";
 
 export type Department = "COMPUTER_SCIENCE" | "PSYCHOLOGY";
 export function getDepartments() {
-   
   type GetDepartmentsResponse = ApiResponse<Department[]>;
   return httpClient.get<GetDepartmentsResponse>("/courses/departments");
 }
