@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Button, List, ListItem, Stack, styled} from "@mui/material";
-import ComboSelect from "./ComboSelect";
-import {Department, Frame, Semester} from "../data/api/courses";
-import { useGetDepartmentsQuery } from '../data/queries/useGetDepartmentsQuery';
-import { useGetFramesQuery } from '../data/queries/useGetFramesQuery';
-import { useGetSemestersQuery } from '../data/queries/useGetSemestersQuery';
+import ComboSelect from "../ComboSelect";
+import {Department, Frame, Semester} from "../../data/api/courses";
+import { useGetDepartmentsQuery } from '../../data/queries/useGetDepartmentsQuery';
+import { useGetFramesQuery } from '../../data/queries/useGetFramesQuery';
+import { useGetSemestersQuery } from '../../data/queries/useGetSemestersQuery';
 import { isAxiosError } from 'axios';
 
 const noneChosen = "";
@@ -20,9 +20,6 @@ function Sidebar() {
     const [semester, setSemester] = useState<string>(noneChosen);
 
     const [showButtonState, setShowButtonState] = useState<boolean>(false);
-
-   
-
 
     useEffect(() => {
         setShowButtonState(frame!==noneChosen && department !==noneChosen && semester!==noneChosen);

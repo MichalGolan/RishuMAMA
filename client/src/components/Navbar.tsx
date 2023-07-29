@@ -16,7 +16,7 @@ import {
 import React, { useState } from "react";
 import ComboSelect from "./ComboSelect";
 import WeekTable from "./WeekTable";
-import Sidebar from "./Sidebar";
+import Sidebar from "./side panel/Sidebar";
 
 const StyledToolbar = styled(Toolbar)({
     display: "flex",
