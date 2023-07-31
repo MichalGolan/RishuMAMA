@@ -1,21 +1,13 @@
-import { Mail, Notifications, Inbox, ChevronLeft, ChevronRight} from "@mui/icons-material";
+import { ChevronLeft, ChevronRight} from "@mui/icons-material";
 import MenuIcon from '@mui/icons-material/Menu';
 import {
     AppBar,
-    Autocomplete,
-    Avatar,
-    Badge,
     Box, Divider, Drawer, IconButton,
-    InputBase, List, ListItem, ListItemButton, ListItemIcon, ListItemText,
-    Menu,
-    MenuItem,
-    styled, TextField,
+    styled,
     Toolbar,
     Typography, useTheme,
 } from "@mui/material";
 import React, { useState } from "react";
-import ComboSelect from "./ComboSelect";
-import WeekTable from "./WeekTable";
 import Sidebar from "./side panel/Sidebar";
 
 const StyledToolbar = styled(Toolbar)({
@@ -120,7 +112,7 @@ const Navbar = () => {
             </AppBarStyled>
             <Main open={open}>
                 <DrawerHeader />
-                <WeekTable/>
+            {/*    Week table here   */}
             
             </Main>
             <Drawer

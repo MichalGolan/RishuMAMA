@@ -19,3 +19,27 @@ export function getSemesters() {
   return httpClient.get<GetYearsResponse>("/courses/semesters");
 }
 
+export type Course = {
+  name: string,
+  department: string,
+  frame: string,
+  semester: string
+}
+
+export function getFiltered(department: string, frame: string, semester: string) {
+
+  const params = {
+    semester: semester,
+    frame: frame,
+    department: department
+  }
+
+  type GetFilteredResponse = ApiResponse<Course[]>;
+  return httpClient.get<GetFilteredResponse>(
+      "/courses/filtered",
+      {
+        params: params
+      }
+  );
+}
+
