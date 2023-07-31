@@ -7,6 +7,8 @@ export function useGetFilteredCoursesQuery(department: string, frame: string, se
         queryFn: async () => {
             const response = await getFiltered(department, frame, semester);
             return response.data.result;
-        }
+        },
+        refetchOnWindowFocus: false,
+        enabled: false // disable this query from automatically running
     })
 }

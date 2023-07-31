@@ -19,11 +19,11 @@ function Sidebar() {
     const [frame, setFrame] = useState<string>(noneChosen);
     const [department, setDepartment] = useState<string>(noneChosen);
     const [semester, setSemester] = useState<string>(noneChosen);
-    const [filteredCourses, setFilteredCourses] = useState<Course[]>([])
-    const {isLoading: isCoursesLoading, data: courses, isError: isCoursesError} = useGetFilteredCoursesQuery(department, frame, semester);
+    const [courseChosen, setCourseChosen] = useState<string>("");
+    const {isLoading: isCoursesLoading,refetch: fetchFilteredCourses, data: courses, isError: isCoursesError} = useGetFilteredCoursesQuery(department, frame, semester);
 
+    const [coursesFetched, setCoursesFetched] = useState<boolean>(false);
     const [showButtonState, setShowButtonState] = useState<boolean>(false);
-    //const [areFiltersChosen, setAreFiltersChosen] =useState<boolean>(false)
 
     useEffect(() => {
         setShowButtonState(frame!==noneChosen && department !==noneChosen && semester!==noneChosen);
@@ -31,9 +31,9 @@ function Sidebar() {
 
 
     function filter() {
-        console.log("filtering....");
-        console.log(courses);
-        console.log(department);
+        fetchFilteredCourses().then(r => console.log("courses fetched"));
+        setCoursesFetched(true);
+        setCourseChosen("");
     }
 
     if(isDepartmentsLoading || isFrameLoading || isSemesterLoading)  return <div>yay</div>
@@ -56,21 +56,27 @@ function Sidebar() {
                         enabled={true}
                         name={"מסגרת"}
                         options={frames.map(getFramePresentation)}
-                        setVal={(val: string) => setFrame(getFrameDB(val))} />
+                        setVal={(val: string) => setFrame(getFrameDB(val))}
+                        isParentControlled={false}
+                        value={courseChosen}/>
                 </ListItem>
                 <ListItem key="select2" >
                     <ComboSelect
                         enabled={true}
                         name={"מסלול"}
                         options={departments.map(getDepartmentPresentation)}
-                        setVal={(val: string) => setDepartment(getDepartmentDB(val))}/>
+                        setVal={(val: string) => setDepartment(getDepartmentDB(val))}
+                        isParentControlled={false}
+                        value={courseChosen}/>
                 </ListItem>
                 <ListItem key="select3" >
                     <ComboSelect
                         enabled={true}
                         name={"סמסטר"}
                         options={semesters.map(getSemesterPresentation)}
-                        setVal={(val: string) => setSemester(getSemesterDB(val))}/>
+                        setVal={(val: string) => setSemester(getSemesterDB(val))}
+                        isParentControlled={false}
+                        value={courseChosen}/>
                 </ListItem>
                 <Button
                     variant="contained"
@@ -78,7 +84,14 @@ function Sidebar() {
                     onClick={filter}>
                     Show me classes
                 </Button>
-                {/*<ListItem key="select3" ><ComboSelect enabled={true} name={"סמסטר"} options={semesters.map(getSemesterPresentation)} setVal={setSemester}/></ListItem>*/}
+                <ListItem key="select3" >
+                    <ComboSelect
+                        enabled={coursesFetched}
+                        name={"קורסים"}
+                        options={courses ? courses.map(course => course.name) : []}
+                        setVal={setSemester}
+                        isParentControlled={true}
+                        value={courseChosen}/></ListItem>
             </List>
         </Stack>
     );

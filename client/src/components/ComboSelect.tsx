@@ -6,6 +6,8 @@ interface Props {
     options: string[];
     enabled: boolean;
     setVal: Function;
+    isParentControlled: boolean;
+    value: string;
 }
 
 export default function ComboSelect(props: Props) {
@@ -18,7 +20,9 @@ export default function ComboSelect(props: Props) {
             <Autocomplete
                 value={value}
                 onChange={(event: any, newValue: string) => {
-                    setValue(newValue);
+                    if(!props.isParentControlled){
+                        setValue(newValue);
+                    }
                     props.setVal(newValue);
                 }}
                 inputValue={inputValue}
