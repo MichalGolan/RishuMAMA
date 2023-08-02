@@ -1,9 +1,10 @@
 import {Autocomplete, TextField} from "@mui/material";
 import React, { useState } from "react";
+import {Course} from "../data/api/courses";
 
 interface Props {
     name: string;
-    options: string[];
+    options: string[] | Course[];
     enabled: boolean;
     setVal: Function;
 }
@@ -11,6 +12,16 @@ interface Props {
 export default function ComboSelect(props: Props) {
     const [value, setValue] = useState<string>("");
     const [inputValue, setInputValue] = useState('');
+
+    function mapOptions(){
+        if(props.options.length > 0){
+            if(typeof props.options[0] === 'string'){
+                return props.options as string[];
+            }
+            return props.options.map(course => (course as Course).name);
+        }
+        else return [];
+    }
 
     return (
         <div>
@@ -26,7 +37,7 @@ export default function ComboSelect(props: Props) {
                     setInputValue(newInputValue);
                 }}
                 id="controllable-states-demo"
-                options={props.options}
+                options={mapOptions()}
                 disabled={!props.enabled}
                 disableClearable={true}
                 sx={{ width: 300 }}
