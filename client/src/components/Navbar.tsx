@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import Sidebar from "./side panel/Sidebar";
+import WeekView from "./planner/WeekView";
 
 const StyledToolbar = styled(Toolbar)({
     display: "flex",
@@ -112,8 +113,7 @@ const Navbar = () => {
             </AppBarStyled>
             <Main open={open}>
                 <DrawerHeader />
-            {/*    Week table here   */}
-            
+            <WeekView />
             </Main>
             <Drawer
                 sx={{
