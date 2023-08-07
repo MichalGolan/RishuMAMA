@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {Button, List, ListItem, Stack, styled} from "@mui/material";
 import ComboSelect from "../ComboSelect";
-import {Course, Department, Frame, getFiltered, Semester} from "../../data/api/courses";
+import {Course, CourseLight, Department, Frame, getFiltered, Semester} from "../../data/api/courses";
 import { useGetDepartmentsQuery } from '../../data/queries/useGetDepartmentsQuery';
 import { useGetFramesQuery } from '../../data/queries/useGetFramesQuery';
 import { useGetSemestersQuery } from '../../data/queries/useGetSemestersQuery';
 import { isAxiosError } from 'axios';
 import {useGetFilteredCoursesQuery} from "../../data/queries/useGetFilteredCoursesQuery";
 import CourseToggleDisplay from "./CourseToggleDisplay";
+
 
 const noneChosen = "";
 
@@ -64,6 +65,11 @@ function Sidebar() {
         return names;
     }
 
+    const removeCourseToggle =  (id: number) => {
+        const newList = [...chosenCourses].filter((item) => item.id !== id);
+        setChosenCourses(new Set(newList));
+    }
+
     return (
         <Stack
             direction="column"
@@ -111,8 +117,10 @@ function Sidebar() {
                         setVal={chooseCourse}/></ListItem>
             </List>
             <CourseToggleDisplay
-                courses={mapCoursesToNames()}
-                onToggled={(isOn: boolean, name: string) => console.log("on, name", isOn, name)}/>
+                courses={[...chosenCourses].map(diluteCourseData)}
+                onToggleCheck={(id: number, isChecked: boolean) =>
+                    console.log(`course #${id} is ${isChecked ? 'checked' : 'unchecked'}`)}
+                removeCourse={removeCourseToggle}/>
         </Stack>
     );
 }
@@ -177,4 +185,8 @@ function getSemesterDB(sem: string): Semester {
     };
 
     return mapping[sem] || sem;
+}
+
+function diluteCourseData(course: Course): CourseLight {
+    return { id: course.id, name: course.name};
 }
