@@ -20,10 +20,16 @@ export function getSemesters() {
 }
 
 export type Course = {
+  id: number,
   name: string,
   department: string,
   frame: string,
   semester: string
+}
+
+export type CourseLight = {
+  id: number,
+  name: string
 }
 
 export function getFiltered(department: string, frame: string, semester: string) {

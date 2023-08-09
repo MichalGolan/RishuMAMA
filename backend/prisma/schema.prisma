@@ -41,15 +41,27 @@ enum Year {
   OPTIONAL_COURSES
 }
 
-// Create the models with enum fields
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
 model Course {
-  id         Int        @id @default(autoincrement())
+  id         Int         @id @default(autoincrement())
   name       String
   department Department
   semester   Semester
   year       Year
-  
-  // Define the relation to the selected courses
-  selectedBy User[]     @relation("SelectedCourses")
+  startTime  String?     // Represented as "hh:mm"
+  endTime    String?     // Represented as "hh:mm"
+  day        DayOfWeek?  // The day of the week
+  selectedBy User[]      @relation("SelectedCourses")
 }
+
+
 
