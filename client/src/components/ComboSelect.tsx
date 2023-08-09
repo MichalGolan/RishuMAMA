@@ -7,6 +7,7 @@ interface Props {
     options: string[] | Course[];
     enabled: boolean;
     setVal: Function;
+    courseChoicesInput: boolean;
 }
 
 export default function ComboSelect(props: Props) {
@@ -31,6 +32,10 @@ export default function ComboSelect(props: Props) {
                 onChange={(event: any, newValue: string) => {
                     setValue(newValue);
                     props.setVal(newValue);
+                    if(props.courseChoicesInput){
+                        setInputValue("");
+                        setValue("");
+                    }
                 }}
                 inputValue={inputValue}
                 onInputChange={(event, newInputValue) => {
