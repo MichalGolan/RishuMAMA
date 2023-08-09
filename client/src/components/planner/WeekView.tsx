@@ -23,7 +23,7 @@ export default function WeekView (props: Props) {
             eventTimeFormat={{hour:'2-digit', minute:'2-digit', meridiem:false}}
             height= 'auto'
             slotLabelFormat={{hour:'2-digit', minute:'2-digit'}}
-            slotDuration='00:15:00'
+            slotDuration='00:30:00'
             slotLabelInterval={{hour: 1}}  
             allDaySlot={false}
             contentHeight={100}

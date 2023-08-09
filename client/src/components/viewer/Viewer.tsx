@@ -8,9 +8,9 @@ import {
     Typography, useTheme,
 } from "@mui/material";
 import React, { useState } from "react";
-import Sidebar from "./side panel/Sidebar";
-import WeekView from "./planner/WeekView";
-
+import Sidebar from "../side panel/Sidebar";
+import WeekView from "../planner/WeekView";
+import "./Viewer.css"
 const StyledToolbar = styled(Toolbar)({
     display: "flex",
     flexDirection: "row",
@@ -75,7 +75,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     justifyContent: 'flex-start',
 }));
 
-const Navbar = () => {
+const Viewer = () => {
     const theme = useTheme();
     const username = "מיכל";
     const [open, setOpen] = useState(false);
@@ -113,7 +113,11 @@ const Navbar = () => {
             </AppBarStyled>
             <Main open={open}>
                 <DrawerHeader />
-            <WeekView />
+                <div className="viewer-row">
+                    <WeekView />
+                    <div style={{alignSelf:"center", flex:"none"}}>  here will be exams board
+                    </div>
+                </div>
             </Main>
             <Drawer
                 sx={{
@@ -141,4 +145,4 @@ const Navbar = () => {
     );
 }
 
-export default Navbar;
+export default Viewer;

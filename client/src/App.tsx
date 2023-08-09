@@ -1,9 +1,9 @@
 import React, {useRef} from "react";
-import Navbar from "./components/Navbar";
+import Viewer from "./components/viewer/Viewer";
 export function App() {
     return (
         <div>
-            <Navbar/>
+            <Viewer/>
         </div>
     )
 }

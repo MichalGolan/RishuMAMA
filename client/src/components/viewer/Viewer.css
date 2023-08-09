@@ -1,0 +1,9 @@
+.viewer-row {
+    display: flex;
+    justify-content:space-between;
+}
+
+.fc {
+    width: 1100px;
+
+}
