@@ -123,8 +123,9 @@ function Sidebar() {
             </List>
             <CourseToggleDisplay
                 courses={[...chosenCourses].map(diluteCourseData)}
-                onToggleCheck={(id: number, isChecked: boolean) =>
+                onToggleCheck={(id: number, isChecked: boolean) =>{
                     console.log(`course #${id} is ${isChecked ? 'checked' : 'unchecked'}`)}
+                }
                 removeCourse={removeCourseToggle}/>
         </Stack>
     );
