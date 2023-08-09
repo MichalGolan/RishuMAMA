@@ -1,11 +1,14 @@
 import React from 'react';
 import {Stack, ToggleButton} from "@mui/material";
 import CourseToggle from "./CourseToggle";
-import {Course} from "../../data/api/courses";
+import {Course, CourseLight} from "../../data/api/courses";
+import Toggle from "./course toggle/Toggle";
+import './ToggleContainer.css'
 
 interface Props {
-    courses: string[];
-    onToggled: Function;
+    courses: CourseLight[];
+    onToggleCheck: Function;
+    removeCourse: Function;
 }
 
 function CourseToggleDisplay(props: Props) {
@@ -13,15 +16,26 @@ function CourseToggleDisplay(props: Props) {
     console.log(props.courses);
 
     return (
-        <Stack>
-            { props.courses
-                .map((course: string) =>
-                    <CourseToggle
-                        name={course}
-                        onToggled={props.onToggled}/>) }
+        <div className="toggle-container">
+            {props.courses.map(course =>
+                <Toggle
+                    name={course.name}
+                    id={course.id}
+                    removeCourse={props.removeCourse}
+                    onToggleCheck={props.onToggleCheck}/>)}
+        </div>
+    )
 
-        </Stack>
-    );
+    // return (
+    //     <Stack>
+    //         { props.courses
+    //             .map((course: string) =>
+    //                 <CourseToggle
+    //                     name={course}
+    //                     onToggled={props.onToggleCheck}/>) }
+    //
+    //     </Stack>
+    // );
 }
 
 export default CourseToggleDisplay;

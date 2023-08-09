@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Button, List, ListItem, Stack, styled} from "@mui/material";
 import ComboSelect from "../ComboSelect";
-import {Course, Department, Frame, getFiltered, Semester} from "../../data/api/courses";
+import {Course, CourseLight, Department, Frame, getFiltered, Semester} from "../../data/api/courses";
 import { useGetDepartmentsQuery } from '../../data/queries/useGetDepartmentsQuery';
 import { useGetFramesQuery } from '../../data/queries/useGetFramesQuery';
 import { useGetSemestersQuery } from '../../data/queries/useGetSemestersQuery';
@@ -9,10 +9,10 @@ import { isAxiosError } from 'axios';
 import {useGetFilteredCoursesQuery} from "../../data/queries/useGetFilteredCoursesQuery";
 import CourseToggleDisplay from "./CourseToggleDisplay";
 
+
 const noneChosen = "";
 
 function Sidebar() {
-
     const {isLoading: isDepartmentsLoading, data: departments, isError: isDepartmentsError} = useGetDepartmentsQuery();
     const {isLoading: isFrameLoading, data: frames, isError: isFramesError} = useGetFramesQuery();
     const {isLoading: isSemesterLoading, data: semesters, isError: isSemestersError} = useGetSemestersQuery();
@@ -25,6 +25,7 @@ function Sidebar() {
     const [coursesFetched, setCoursesFetched] = useState<boolean>(false);
     const [showButtonState, setShowButtonState] = useState<boolean>(false);
     const [chosenCourses, setChosenCourses] = useState<Set<Course>>(new Set<Course>())
+    console.log(`chosen courses ${chosenCourses.size}`);
 
     useEffect(() => {
         setShowButtonState(frame!==noneChosen && department !==noneChosen && semester!==noneChosen);
@@ -42,7 +43,7 @@ function Sidebar() {
     if(isDepartmentsLoading || isFrameLoading || isSemesterLoading)  return <div>yay</div>
     if(isDepartmentsError || isFramesError || isSemestersError) return <div>error off</div>
 
-    function chooseCourse(courseName: string){
+    function addCourse(courseName: string){
         console.log("chosen: ", courseName);
         //map course name to Course
         if(!courses) return;
@@ -64,6 +65,11 @@ function Sidebar() {
         return names;
     }
 
+    const removeCourseToggle =  (id: number) => {
+        const newList = [...chosenCourses].filter((item) => item.id !== id);
+        setChosenCourses(new Set(newList));
+    }
+
     return (
         <Stack
             direction="column"
@@ -81,21 +87,24 @@ function Sidebar() {
                         enabled={true}
                         name={"מסגרת"}
                         options={frames.map(getFramePresentation)}
-                        setVal={(val: string) => setFrame(getFrameDB(val))}/>
+                        setVal={(val: string) => setFrame(getFrameDB(val))}
+                        courseChoicesInput={false}/>
                 </ListItem>
                 <ListItem key="select2" >
                     <ComboSelect
                         enabled={true}
                         name={"מסלול"}
                         options={departments.map(getDepartmentPresentation)}
-                        setVal={(val: string) => setDepartment(getDepartmentDB(val))}/>
+                        setVal={(val: string) => setDepartment(getDepartmentDB(val))}
+                        courseChoicesInput={false}/>
                 </ListItem>
                 <ListItem key="select3" >
                     <ComboSelect
                         enabled={true}
                         name={"סמסטר"}
                         options={semesters.map(getSemesterPresentation)}
-                        setVal={(val: string) => setSemester(getSemesterDB(val))}/>
+                        setVal={(val: string) => setSemester(getSemesterDB(val))}
+                        courseChoicesInput={false}/>
                 </ListItem>
                 <Button
                     variant="contained"
@@ -108,11 +117,15 @@ function Sidebar() {
                         enabled={coursesFetched}
                         name={"קורסים"}
                         options={courses ? courses : []}
-                        setVal={chooseCourse}/></ListItem>
+                        setVal={addCourse}
+                        courseChoicesInput={true}/>
+                </ListItem>
             </List>
             <CourseToggleDisplay
-                courses={mapCoursesToNames()}
-                onToggled={(isOn: boolean, name: string) => console.log("on, name", isOn, name)}/>
+                courses={[...chosenCourses].map(diluteCourseData)}
+                onToggleCheck={(id: number, isChecked: boolean) =>
+                    console.log(`course #${id} is ${isChecked ? 'checked' : 'unchecked'}`)}
+                removeCourse={removeCourseToggle}/>
         </Stack>
     );
 }
@@ -177,4 +190,8 @@ function getSemesterDB(sem: string): Semester {
     };
 
     return mapping[sem] || sem;
+}
+
+function diluteCourseData(course: Course): CourseLight {
+    return { id: course.id, name: course.name};
 }

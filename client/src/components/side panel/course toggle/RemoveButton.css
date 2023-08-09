@@ -1,0 +1,41 @@
+.close {
+    border: none;
+    width: 1.5em;
+    height: 1.5em;
+    background: transparent;
+    cursor: pointer;
+    color: #d72a2a;
+    padding: 0 0 20px;
+    margin-left: 7px;
+    display: inline-block;
+    margin-bottom: 4px;
+}
+    /*border-radius: 50%;
+    color: #1da1f2;
+    font: inherit;
+    overflow: hidden;
+    position: relative;*/
+    /*text-indent
+.close:focus {
+    outline: solid 0 transparent;
+    box-shadow: 0 0 0 2px #8ed0f9;
+}
+.close:hover {
+    /*background-color: rgba(29,161,142,0.1);*/
+    /*background-color: #8ed0f9;*/
+/*}*/
+/*.close:before,
+.close:after {
+    position: absolute;
+    top: 15%;
+    left: calc(49.9375%);
+    width: .125em;
+    height: 70%;
+    border-radius: .125em;
+    transform: rotate(45deg);
+    background: currentcolor;
+    content: '';
+}
+.close:after {
+    transform: rotate(-45deg);
+}*/

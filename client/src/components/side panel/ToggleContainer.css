@@ -1,0 +1,9 @@
+.toggle-container {
+    text-align: center;
+    display: grid;
+    grid-template-columns: auto;
+    justify-content: center;
+    justify-items: start;
+    grid-gap: 10px;
+    width: 100%;
+}
