@@ -1,0 +1,16 @@
+{
+  "name": "rishumama",
+  "version": "1.0.0",
+  "description": "Michal Golan  318457116\r Michal Aronov 316032317",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cd backend && ts-node backend.ts",
+    "copy-client": "cp -R client/dist public",
+    "build-client": "cd client && npm run build",
+    "build": "npm run build-client && npm run copy-client"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
