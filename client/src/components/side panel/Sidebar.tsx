@@ -9,10 +9,13 @@ import { isAxiosError } from 'axios';
 import {useGetFilteredCoursesQuery} from "../../data/queries/useGetFilteredCoursesQuery";
 import CourseToggleDisplay from "./CourseToggleDisplay";
 
+interface Props {
+    courseSelectionChange: Function;
+}
 
 const noneChosen = "";
 
-function Sidebar() {
+function Sidebar(props: Props) {
     const {isLoading: isDepartmentsLoading, data: departments, isError: isDepartmentsError} = useGetDepartmentsQuery();
     const {isLoading: isFrameLoading, data: frames, isError: isFramesError} = useGetFramesQuery();
     const {isLoading: isSemesterLoading, data: semesters, isError: isSemestersError} = useGetSemestersQuery();
@@ -26,6 +29,9 @@ function Sidebar() {
     const [showButtonState, setShowButtonState] = useState<boolean>(false);
     const [chosenCourses, setChosenCourses] = useState<Set<Course>>(new Set<Course>())
     console.log(`chosen courses ${chosenCourses.size}`);
+
+    //const [courseSelectionChange, setcourseSelectionState] = useState<CourseData>({id:0, isChecked:true});
+
 
     useEffect(() => {
         setShowButtonState(frame!==noneChosen && department !==noneChosen && semester!==noneChosen);
@@ -123,8 +129,10 @@ function Sidebar() {
             </List>
             <CourseToggleDisplay
                 courses={[...chosenCourses].map(diluteCourseData)}
-                onToggleCheck={(id: number, isChecked: boolean) =>
-                    console.log(`course #${id} is ${isChecked ? 'checked' : 'unchecked'}`)}
+                onToggleCheck={(id: number, name: string, isChecked: boolean) => {
+                    //console.log(`course #${id} is ${isChecked ? 'checked' : 'unchecked'}`)
+                    props.courseSelectionChange(id, name, isChecked);
+                }}
                 removeCourse={removeCourseToggle}/>
         </Stack>
     );
@@ -193,5 +201,5 @@ function getSemesterDB(sem: string): Semester {
 }
 
 function diluteCourseData(course: Course): CourseLight {
-    return { id: course.id, name: course.name};
+    return { id: course.id, name: course.name, isChecked: false};
 }

@@ -29,9 +29,15 @@ export type Course = {
 
 export type CourseLight = {
   id: number,
-  name: string
+  name: string,
+  isChecked: boolean
 }
 
+/*export type CourseData = {
+  id: number,
+  isChecked: boolean
+}
+*/
 export function getFiltered(department: string, frame: string, semester: string) {
 
   const params = {
