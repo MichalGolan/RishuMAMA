@@ -8,10 +8,8 @@
     "start": "cd backend && ts-node backend.ts",
     "copy-client": "cp -R client/dist public",
     "build-client": "cd client && npm ci && npm run build",
-    "build": "npm run build-client && npm run copy-client"
-  },
-  "devDependencies": {
-    "typescript": "^4.9.3"
+    "build-backend": "cd backend && npm ci",
+    "build": "npm run build-backend && npm run build-client && npm run copy-client"
   },
   "keywords": [],
   "author": "",
