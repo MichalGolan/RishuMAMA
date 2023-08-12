@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "cd backend && npx ts-node backend.ts",
-    "copy-client": "cp -R client/dist public",
+    "copy-client": "cp -R client/dist backend/public",
     "build-client": "cd client && npm ci && npm run build",
     "build-backend": "cd backend && npm ci",
     "build": "npm run build-backend && npm run build-client && npm run copy-client"
