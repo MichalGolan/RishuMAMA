@@ -17,7 +17,11 @@ app.use('/courses', coursesRouter);
 
 app.get('*', (req, res) => {
   console.log('sending file');
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+const pathName = path.join(__dirname, 'public','index.html');
+console.log({
+  pathName
+});
+res.sendFile(pathName);
 });
 
 
