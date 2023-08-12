@@ -16,12 +16,16 @@ app.use('/users', userRouter);
 app.use('/courses', coursesRouter);
 
 app.get('*', (req, res) => {
-  console.log('sending file');
-const pathName = path.join(__dirname, 'public','index.html');
-console.log({
-  pathName
-});
-res.sendFile(pathName);
+  try{ 
+    console.log('sending file');
+    const pathName = path.join(__dirname, 'public','index.html');
+    console.log({pathName});
+    res.sendFile(pathName);
+  } catch (error) {
+    console.log(error);
+    res.send(error);
+  }
+  
 });
 
 
