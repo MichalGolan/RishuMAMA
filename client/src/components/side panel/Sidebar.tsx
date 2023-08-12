@@ -9,8 +9,13 @@ import { isAxiosError } from 'axios';
 import {useGetFilteredCoursesQuery} from "../../data/queries/useGetFilteredCoursesQuery";
 import CourseToggleDisplay from "./CourseToggleDisplay";
 
+
+type CourseToggleEvent = {
+    id: number;
+    active: boolean;
+}
 interface Props {
-    courseSelectionChange: Function;
+    onCourseToggle: (event: CourseToggleEvent) => void;
 }
 
 const noneChosen = "";
@@ -46,7 +51,7 @@ function Sidebar(props: Props) {
         })
     }
 
-    if(isDepartmentsLoading || isFrameLoading || isSemesterLoading)  return <div>yay</div>
+    if(isDepartmentsLoading || isFrameLoading || isSemesterLoading)  return <div>Loading</div>
     if(isDepartmentsError || isFramesError || isSemestersError) return <div>error off</div>
 
     function addCourse(courseName: string){
@@ -74,6 +79,7 @@ function Sidebar(props: Props) {
     const removeCourseToggle =  (id: number) => {
         const newList = [...chosenCourses].filter((item) => item.id !== id);
         setChosenCourses(new Set(newList));
+        props.onCourseToggle({id, active: false});
     }
 
     return (
@@ -131,7 +137,10 @@ function Sidebar(props: Props) {
                 courses={[...chosenCourses].map(diluteCourseData)}
                 onToggleCheck={(id: number, name: string, isChecked: boolean) => {
                     //console.log(`course #${id} is ${isChecked ? 'checked' : 'unchecked'}`)
-                    props.courseSelectionChange(id, name, isChecked);
+                    props.onCourseToggle({
+                        id,
+                        active: isChecked,
+                    });
                 }}
                 removeCourse={removeCourseToggle}/>
         </Stack>

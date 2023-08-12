@@ -10,32 +10,40 @@ import React from "react"
 import { Api } from "@mui/icons-material"
 import '@fullcalendar/react/dist/vdom'
 import { CourseLight } from "../../data/api/courses"
+import {useGetActiveCoursesLectures} from "../../data/queries/useGetActiveCoursesLectures";
 
 interface Props {
-    courseShowUpdateData: CourseLight;
+    activeCoursesIds: Array<number>;
 }
 
 let todayStr = new Date().toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
 
 export default function WeekView (props: Props) {
     const calendarRef:LegacyRef<FullCalendar> = React.createRef();
+    const lectures = useGetActiveCoursesLectures(props.activeCoursesIds);
 
+    const events: EventInput[] = lectures.map(lecture => ({
+        id: lecture.id,
+        title: lecture.courseId.toString(),
+        start: lecture.start,
+        end: lecture.end,
+    }))
     const [currentEvents, setCurrentEvents] = useState<EventApi[]>([]);
 
-    useEffect(() => {
-        if (props.courseShowUpdateData.isChecked) {
-          addEvents();
-        } else {
-          removeEvents(props.courseShowUpdateData.id);
-        }
-      }, [props.courseShowUpdateData]);
+    // useEffect(() => {
+    //     if (props.activeCoursesIds.isChecked) {
+    //       addEvents();
+    //     } else {
+    //       removeEvents(props.activeCoursesIds.id);
+    //     }
+    //   }, [props.activeCoursesIds]);
 
     const handleDateSelect = (selectInfo: DateSelectArg) => {
         let title = prompt('Please enter a new title for your event')
         let calendarApi = selectInfo.view.calendar
-    
+
         calendarApi.unselect() // clear date selection
-    
+
         if (title) {
           calendarApi.addEvent({
             id: createEventId(),
@@ -46,7 +54,7 @@ export default function WeekView (props: Props) {
           })
         }
       }
-      
+
       function renderEventContent(eventContent: EventContentArg) {
         return (
           <>
@@ -68,11 +76,11 @@ export default function WeekView (props: Props) {
       const handleEvents = (events: EventApi[]) => {
         setCurrentEvents(events);
       }
-    
+
     const addEvents = ()  => {
-        
+
         const calendarApi = calendarRef.current?.getApi();
-        let newEvents: EventInput = { 
+        let newEvents: EventInput = {
             id: createEventId(),
             title: 'dynamic event',
             start: todayStr + 'T08:15:00',
@@ -93,13 +101,13 @@ export default function WeekView (props: Props) {
         /*removeEvents.forEach(event => {
              event.remove();
         });*/
-        
+
     }
 
     return (
         <div className="fc-time-grid fc-slats">
             <FullCalendar
-                ref={calendarRef}
+                // ref={calendarRef}
                 plugins={[ timeGridPlugin ]}
                 initialView="timeGridWeek"
                 locale="he"
@@ -114,19 +122,19 @@ export default function WeekView (props: Props) {
                 dayHeaderFormat={{weekday:"short"}}
                 slotMinTime={'08:00:00'}
                 slotMaxTime={'21:00:00'}
-                eventTimeFormat={{hour:'2-digit', minute:'2-digit', meridiem:false}}
-                height= 'auto'
+                // eventTimeFormat={{hour:'2-digit', minute:'2-digit', meridiem:false}}  TODO ?? working
                 slotLabelFormat={{hour:'2-digit', minute:'2-digit'}}
+                height= 'auto'
                 slotDuration='00:30:00'
-                slotLabelInterval={{hour: 1}}  
+                slotLabelInterval={{hour: 1}}
                 allDaySlot={false}
                 contentHeight={100}
-                initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
-                select={handleDateSelect}
+                // initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
+                // select={handleDateSelect}
                 eventContent={renderEventContent} // custom render function
-                eventClick={handleEventClick}
-                eventsSet={handleEvents}
-
+                // eventClick={handleEventClick}
+                // eventsSet={handleEvents}
+                events={events}
             />
         </div>
     )

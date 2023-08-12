@@ -80,7 +80,7 @@ const Viewer = () => {
     const theme = useTheme();
     const username = "מיכל";
     const [open, setOpen] = useState(false);
-    const [courseShowUpdateData, setCourseShowUpdateData] = useState<CourseLight>({id: 0, name: "", isChecked: false});
+    const [activeCoursesIds, setActiveCoursesIds] = useState<Array<number>>([]);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -88,12 +88,6 @@ const Viewer = () => {
 
     const handleDrawerClose = () => {
         setOpen(false);
-    };
-
-    const courseSelectionChange = (id:number, name:string, isChecked:boolean) => {
-        console.log(`from viewer! course name: ${name} id#${id} is ${isChecked ? 'checked' : 'unchecked'}`);
-        setCourseShowUpdateData({id, name, isChecked});
-
     };
 
 
@@ -123,7 +117,7 @@ const Viewer = () => {
             <Main open={open}>
                 <DrawerHeader />
                 <div className="viewer-row">
-                    <WeekView courseShowUpdateData={courseShowUpdateData}/>
+                    <WeekView activeCoursesIds={activeCoursesIds}/>
                     <div style={{alignSelf:"center", flex:"none"}}>  here will be exams board
                     </div>
                 </div>
@@ -147,8 +141,17 @@ const Viewer = () => {
                     <Typography>בחירת פילטרים</Typography>
                 </DrawerHeader>
                 <Divider />
-                <Sidebar courseSelectionChange={courseSelectionChange}/>
-                
+                <Sidebar onCourseToggle={({id, active}) => {
+                    if(!active){
+                        return setActiveCoursesIds(activeCoursesIds.filter(courseId => courseId !== id));
+                    }
+
+                    const course = activeCoursesIds.find(courseId => courseId === id);
+                    if(course) return;
+
+                    setActiveCoursesIds([...activeCoursesIds, id]);
+                }}/>
+
             </Drawer>
         </Box>
     );
