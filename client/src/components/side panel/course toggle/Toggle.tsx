@@ -5,17 +5,18 @@ import RemoveButton from "./RemoveButton";
 interface Props {
     name: string;
     id: number;
+    isChecked: boolean;
     removeCourse:  Function;
     onToggleCheck: Function;
 }
 
 function Toggle(props: Props) {
-    const [checked, setChecked] = useState(false);
+    const [checked, setChecked] = useState(props.isChecked);
     console.log(checked);
 
     const handleChange = () => {
         setChecked(!checked);
-        props.onToggleCheck(props.id, !checked);
+        props.onToggleCheck(props.id, props.name, !checked);
     };
 
     return (

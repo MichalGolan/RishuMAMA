@@ -4,18 +4,31 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 
 import './WeekView.css'
 import { INITIAL_EVENTS, createEventId } from "./EventsUtils"
-import { LegacyRef, useState } from "react"
+import { LegacyRef, useEffect, useState } from "react"
 import { Lecture } from "../../data/api/lectures"
 import React from "react"
 import { Api } from "@mui/icons-material"
+import '@fullcalendar/react/dist/vdom'
+import { CourseLight } from "../../data/api/courses"
 
-interface Props {}
+interface Props {
+    courseShowUpdateData: CourseLight;
+}
+
 let todayStr = new Date().toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
 
 export default function WeekView (props: Props) {
     const calendarRef:LegacyRef<FullCalendar> = React.createRef();
 
     const [currentEvents, setCurrentEvents] = useState<EventApi[]>([]);
+
+    useEffect(() => {
+        if (props.courseShowUpdateData.isChecked) {
+          addEvents();
+        } else {
+          removeEvents(props.courseShowUpdateData.id);
+        }
+      }, [props.courseShowUpdateData]);
 
     const handleDateSelect = (selectInfo: DateSelectArg) => {
         let title = prompt('Please enter a new title for your event')
@@ -57,6 +70,7 @@ export default function WeekView (props: Props) {
       }
     
     const addEvents = ()  => {
+        
         const calendarApi = calendarRef.current?.getApi();
         let newEvents: EventInput = { 
             id: createEventId(),
@@ -66,7 +80,19 @@ export default function WeekView (props: Props) {
             extendedProps: {
                 lecturer:"michal",
             }};
+        console.log(`from add events, id is ${newEvents.id}`);
         calendarApi?.addEvent(newEvents);
+    }
+
+    const removeEvents = (id: number) => {
+        console.log(`id ${id}`)
+        const calendarApi = calendarRef.current?.getApi();
+        const event = calendarApi?.getEventById(id.toString());
+        event?.remove();
+        console.log(calendarApi?.getEvents());
+        /*removeEvents.forEach(event => {
+             event.remove();
+        });*/
         
     }
 

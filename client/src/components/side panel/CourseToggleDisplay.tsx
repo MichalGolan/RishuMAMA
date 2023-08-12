@@ -21,21 +21,11 @@ function CourseToggleDisplay(props: Props) {
                 <Toggle
                     name={course.name}
                     id={course.id}
+                    isChecked={course.isChecked}
                     removeCourse={props.removeCourse}
                     onToggleCheck={props.onToggleCheck}/>)}
         </div>
     )
-
-    // return (
-    //     <Stack>
-    //         { props.courses
-    //             .map((course: string) =>
-    //                 <CourseToggle
-    //                     name={course}
-    //                     onToggled={props.onToggleCheck}/>) }
-    //
-    //     </Stack>
-    // );
 }
 
 export default CourseToggleDisplay;

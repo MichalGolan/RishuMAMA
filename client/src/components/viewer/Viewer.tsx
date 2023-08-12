@@ -7,10 +7,11 @@ import {
     Toolbar,
     Typography, useTheme,
 } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import Sidebar from "../side panel/Sidebar";
 import WeekView from "../planner/WeekView";
 import "./Viewer.css"
+import { CourseLight } from "../../data/api/courses";
 const StyledToolbar = styled(Toolbar)({
     display: "flex",
     flexDirection: "row",
@@ -79,6 +80,7 @@ const Viewer = () => {
     const theme = useTheme();
     const username = "מיכל";
     const [open, setOpen] = useState(false);
+    const [courseShowUpdateData, setCourseShowUpdateData] = useState<CourseLight>({id: 0, name: "", isChecked: false});
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -87,6 +89,13 @@ const Viewer = () => {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    const courseSelectionChange = (id:number, name:string, isChecked:boolean) => {
+        console.log(`from viewer! course name: ${name} id#${id} is ${isChecked ? 'checked' : 'unchecked'}`);
+        setCourseShowUpdateData({id, name, isChecked});
+
+    };
+
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -114,7 +123,7 @@ const Viewer = () => {
             <Main open={open}>
                 <DrawerHeader />
                 <div className="viewer-row">
-                    <WeekView />
+                    <WeekView courseShowUpdateData={courseShowUpdateData}/>
                     <div style={{alignSelf:"center", flex:"none"}}>  here will be exams board
                     </div>
                 </div>
@@ -138,7 +147,7 @@ const Viewer = () => {
                     <Typography>בחירת פילטרים</Typography>
                 </DrawerHeader>
                 <Divider />
-                <Sidebar />
+                <Sidebar courseSelectionChange={courseSelectionChange}/>
                 
             </Drawer>
         </Box>
