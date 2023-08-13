@@ -28,15 +28,6 @@ export default function WeekView (props: Props) {
         start: lecture.start,
         end: lecture.end,
     }))
-    const [currentEvents, setCurrentEvents] = useState<EventApi[]>([]);
-
-    // useEffect(() => {
-    //     if (props.activeCoursesIds.isChecked) {
-    //       addEvents();
-    //     } else {
-    //       removeEvents(props.activeCoursesIds.id);
-    //     }
-    //   }, [props.activeCoursesIds]);
 
     const handleDateSelect = (selectInfo: DateSelectArg) => {
         let title = prompt('Please enter a new title for your event')
@@ -72,37 +63,6 @@ export default function WeekView (props: Props) {
           clickInfo.event.remove()
         }
       }
-
-      const handleEvents = (events: EventApi[]) => {
-        setCurrentEvents(events);
-      }
-
-    const addEvents = ()  => {
-
-        const calendarApi = calendarRef.current?.getApi();
-        let newEvents: EventInput = {
-            id: createEventId(),
-            title: 'dynamic event',
-            start: todayStr + 'T08:15:00',
-            end:  todayStr + 'T10:00:00',
-            extendedProps: {
-                lecturer:"michal",
-            }};
-        console.log(`from add events, id is ${newEvents.id}`);
-        calendarApi?.addEvent(newEvents);
-    }
-
-    const removeEvents = (id: number) => {
-        console.log(`id ${id}`)
-        const calendarApi = calendarRef.current?.getApi();
-        const event = calendarApi?.getEventById(id.toString());
-        event?.remove();
-        console.log(calendarApi?.getEvents());
-        /*removeEvents.forEach(event => {
-             event.remove();
-        });*/
-
-    }
 
     return (
         <div className="fc-time-grid fc-slats">

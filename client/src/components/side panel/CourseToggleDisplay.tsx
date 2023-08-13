@@ -19,6 +19,7 @@ function CourseToggleDisplay(props: Props) {
         <div className="toggle-container">
             {props.courses.map(course =>
                 <Toggle
+                    key={course.id}
                     name={course.name}
                     id={course.id}
                     isChecked={course.isChecked}
