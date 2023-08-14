@@ -5,6 +5,7 @@ import {userRouter} from "./routers/users";
 import {coursesRouter} from "./routers/courses";
 import { errorHandler } from './middlewares/error.middleware';
 import * as path from 'path'
+import {lectureRouter} from "./routers/lectures";
 const app = express();
 
 app.use(express.json());
@@ -14,6 +15,8 @@ app.use(cors());
 app.use('/users', userRouter);
 
 app.use('/courses', coursesRouter);
+
+app.use('/lectures', lectureRouter);
 
 app.get('*', (req, res) => {
   try{ 

@@ -143,13 +143,13 @@ const Viewer = () => {
                 <Divider />
                 <Sidebar onCourseToggle={({id, active}) => {
                     if(!active){
-                        return setActiveCoursesIds(activeCoursesIds.filter(courseId => courseId !== id));
+                        setActiveCoursesIds((prevState) => prevState.filter(courseId => courseId !== id));
                     }
 
                     const course = activeCoursesIds.find(courseId => courseId === id);
                     if(course) return;
 
-                    setActiveCoursesIds([...activeCoursesIds, id]);
+                    setActiveCoursesIds(prevState => [...prevState, id]);
                 }}/>
 
             </Drawer>

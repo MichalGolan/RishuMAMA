@@ -5,9 +5,9 @@ export function useGetSemestersQuery(){
     return useQuery({
         queryKey: ['semesters'],
         queryFn: async () => {
-            // const response = await getSemesters();
-            // return response.data.result;
-            return ['A'] as Semester[];
+            const response = await getSemesters();
+            return response.data.result;
+            // return ['A'] as Semester[];
         }
     })
 }

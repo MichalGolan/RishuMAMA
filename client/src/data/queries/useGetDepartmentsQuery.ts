@@ -5,9 +5,9 @@ export function useGetDepartmentsQuery(){
     return useQuery({
         queryKey: ['departments'],
         queryFn: async () => {
-            // const response = await getDepartments();
-            // return response.data.result;
-            return ['COMPUTER_SCIENCE'] as Department[];
+            const response = await getDepartments();
+            return response.data.result;
+            //return ['COMPUTER_SCIENCE'] as Department[];
         }
     })
 }

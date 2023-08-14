@@ -5,12 +5,12 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import './WeekView.css'
 import { INITIAL_EVENTS, createEventId } from "./EventsUtils"
 import { LegacyRef, useEffect, useState } from "react"
-import { Lecture } from "../../data/api/lectures"
+import {fixLectureTimeToWeekViewDate, Lecture} from "../../data/api/lectures"
 import React from "react"
 import { Api } from "@mui/icons-material"
 import '@fullcalendar/react/dist/vdom'
 import { CourseLight } from "../../data/api/courses"
-import {useGetActiveCoursesLectures} from "../../data/queries/useGetActiveCoursesLectures";
+import {useGetActiveCoursesLecturesQuery} from "../../data/queries/useGetActiveCoursesLectures";
 
 interface Props {
     activeCoursesIds: Array<number>;
@@ -20,14 +20,40 @@ let todayStr = new Date().toISOString().replace(/T.*$/, '') // YYYY-MM-DD of tod
 
 export default function WeekView (props: Props) {
     const calendarRef:LegacyRef<FullCalendar> = React.createRef();
-    const lectures = useGetActiveCoursesLectures(props.activeCoursesIds);
+    console.log("Weekview prop of active ids is ", props.activeCoursesIds);
+    const {data: lectures, refetch: refetchLectures} = useGetActiveCoursesLecturesQuery(props.activeCoursesIds);
+    const [events, setEvents] = useState<EventInput[]>([]);
+    // const events: EventInput[] = lectures ? lectures.map(lecture => ({
+    //     id: lecture.id.toString(),
+    //     title: lecture.courseId.toString(),
+    //     start: fixLectureTimeToWeekViewDate(lecture.start, lecture.day),
+    //     end: fixLectureTimeToWeekViewDate(lecture.end, lecture.day),
+    // })): [];
+    
+    console.log("events:" ,events);
 
-    const events: EventInput[] = lectures.map(lecture => ({
-        id: lecture.id,
-        title: lecture.courseId.toString(),
-        start: lecture.start,
-        end: lecture.end,
-    }))
+    // refetchLectures().then((result) => {
+    //     console.log("result data!!!!!!!", getEvents(result.data ? result.data : []));
+    //     setEvents(getEvents(result.data ? result.data : []))
+    // })
+
+    useEffect(() => {
+        refetchLectures().then((result) => {
+            const myEvents = getEvents(result.data ? result.data : []);
+            console.log("result data!!!!!!!", myEvents);
+            setEvents(myEvents);
+        })
+    }, [props.activeCoursesIds])
+
+    function getEvents (myLectures: Lecture[]) : EventInput[] {
+        console.log("transforming ", myLectures);
+        return myLectures.map(lecture => ({
+            id: lecture.id.toString(),
+            title: lecture.courseId.toString(),
+            start: fixLectureTimeToWeekViewDate(lecture.startTime, lecture.day),
+            end: fixLectureTimeToWeekViewDate(lecture.endTime, lecture.day),
+        }));
+    }
 
     const handleDateSelect = (selectInfo: DateSelectArg) => {
         let title = prompt('Please enter a new title for your event')

@@ -45,8 +45,6 @@ function Sidebar(props: Props) {
 
     function filter() {
         fetchFilteredCourses().then(r => {
-            console.log("courses fetched");
-            console.log(`${courses}`)
             setCoursesFetched(true);
         })
     }
