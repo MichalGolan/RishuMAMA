@@ -80,7 +80,7 @@ const Viewer = () => {
     const theme = useTheme();
     const username = "מיכל";
     const [open, setOpen] = useState(false);
-    const [activeCoursesIds, setActiveCoursesIds] = useState<Array<number>>([]);
+    const [activeCourses, setActiveCourses] = useState<Array<CourseLight>>([]);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -89,6 +89,23 @@ const Viewer = () => {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    const courseIdToTitle = (courseId: number) : string => {
+        const course = activeCourses.find((course) => course.id === courseId);
+        return course ? course.name : '';
+    }
+
+    const handleCourseToggle = (id: number, name: string, active: Boolean) => {
+        if(!active){
+            return setActiveCourses(activeCourses.filter(course => course.id !== id));
+        }
+
+        const course = activeCourses.find(course => course.id === id);
+
+        if(course) return;
+
+        setActiveCourses([...activeCourses, {id: id, name: name, isChecked: true}]);
+    }
 
 
     return (
@@ -117,7 +134,7 @@ const Viewer = () => {
             <Main open={open}>
                 <DrawerHeader />
                 <div className="viewer-row">
-                    <WeekView activeCoursesIds={activeCoursesIds}/>
+                    <WeekView activeCourses={activeCourses} courseIdToTitle={courseIdToTitle}/>
                     <div style={{alignSelf:"center", flex:"none"}}>  here will be exams board
                     </div>
                 </div>
@@ -141,16 +158,7 @@ const Viewer = () => {
                     <Typography>בחירת פילטרים</Typography>
                 </DrawerHeader>
                 <Divider />
-                <Sidebar onCourseToggle={({id, active}) => {
-                    if(!active){
-                        setActiveCoursesIds((prevState) => prevState.filter(courseId => courseId !== id));
-                    }
-
-                    const course = activeCoursesIds.find(courseId => courseId === id);
-                    if(course) return;
-
-                    setActiveCoursesIds(prevState => [...prevState, id]);
-                }}/>
+                <Sidebar onCourseToggle={handleCourseToggle}/>
 
             </Drawer>
         </Box>

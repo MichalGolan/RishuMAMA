@@ -15,7 +15,7 @@ type CourseToggleEvent = {
     active: boolean;
 }
 interface Props {
-    onCourseToggle: (event: CourseToggleEvent) => void;
+    onCourseToggle: Function
 }
 
 const noneChosen = "";
@@ -34,9 +34,6 @@ function Sidebar(props: Props) {
     const [showButtonState, setShowButtonState] = useState<boolean>(false);
     const [chosenCourses, setChosenCourses] = useState<Set<Course>>(new Set<Course>())
     console.log(`chosen courses ${chosenCourses.size}`);
-
-    //const [courseSelectionChange, setcourseSelectionState] = useState<CourseData>({id:0, isChecked:true});
-
 
     useEffect(() => {
         setShowButtonState(frame!==noneChosen && department !==noneChosen && semester!==noneChosen);
@@ -134,11 +131,7 @@ function Sidebar(props: Props) {
             <CourseToggleDisplay
                 courses={[...chosenCourses].map(diluteCourseData)}
                 onToggleCheck={(id: number, name: string, isChecked: boolean) => {
-                    //console.log(`course #${id} is ${isChecked ? 'checked' : 'unchecked'}`)
-                    props.onCourseToggle({
-                        id,
-                        active: isChecked,
-                    });
+                    props.onCourseToggle(id, name, isChecked);
                 }}
                 removeCourse={removeCourseToggle}/>
         </Stack>
