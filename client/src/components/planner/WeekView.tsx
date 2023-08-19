@@ -52,9 +52,16 @@ export default function WeekView (props: Props) {
     }
 
     function checkCollision(lecture: Lecture, activeLec:Lecture) : boolean {
-      // TODO add logic
-      return false;
+        const [hours1, minutes1] = lecture.startTime.split(':').map(Number);
+        const [hours2, minutes2] = activeLec.startTime.split(':').map(Number);
+        
+        const totalMinutes1 = hours1 * 60 + minutes1;
+        const totalMinutes2 = hours2 * 60 + minutes2;
+    
+        // Check if the start times conflict
+        return Math.abs(totalMinutes1 - totalMinutes2) < 60; // Assuming a 1-hour conflict threshold
     }
+    
     // check if Lecture is from a course that other lecture of it was chosen
     function checkParallelLectureChosen(lecture: Lecture) : boolean {
       let parallel: boolean = false;
@@ -106,11 +113,18 @@ export default function WeekView (props: Props) {
       )
     }
 
+    
     const handleEventClick = (clickInfo: EventClickArg) => {
       if (confirm(`Are you sure you want to choose this Lecture '${clickInfo.event.title}'`)) {
         const selectedLecture = lectures?.find((lecture) => lecture.id.toString() === clickInfo.event.id);
         if(selectedLecture){
-          setActiveLectures([...activeLectures, selectedLecture])
+          
+          if (activeLectures.includes(selectedLecture)) {
+            setActiveLectures(activeLectures.filter(lecture => lecture.id !== selectedLecture.id));
+          }
+          else {
+            setActiveLectures([...activeLectures, selectedLecture])
+          }
         }
         // clickInfo.event.remove()
       }
