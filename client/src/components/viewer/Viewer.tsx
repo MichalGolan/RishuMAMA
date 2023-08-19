@@ -12,6 +12,9 @@ import Sidebar from "../side panel/Sidebar";
 import WeekView from "../planner/WeekView";
 import "./Viewer.css"
 import { CourseLight } from "../../data/api/courses";
+import Login from "../log in/Login";
+import SignUp from "../sign up/SignUp";
+
 const StyledToolbar = styled(Toolbar)({
     display: "flex",
     flexDirection: "row",
@@ -81,6 +84,8 @@ const Viewer = () => {
     const username = "מיכל";
     const [open, setOpen] = useState(false);
     const [activeCourses, setActiveCourses] = useState<Array<CourseLight>>([]);
+    const [isLoggedIn, setLoggedIn] = useState<boolean>(true);
+    const [signUp, setSignUp] = useState<Boolean>(false);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -107,6 +112,9 @@ const Viewer = () => {
         setActiveCourses([...activeCourses, {id: id, name: name, isChecked: true}]);
     }
 
+    const onSignUp = () => {
+        setSignUp(!signUp);
+    }
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -155,11 +163,17 @@ const Viewer = () => {
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <ChevronLeft /> : <ChevronRight />}
                     </IconButton>
-                    <Typography>בחירת פילטרים</Typography>
+                    {isLoggedIn && <Typography>בחירת פילטרים</Typography> }
                 </DrawerHeader>
                 <Divider />
-                <Sidebar onCourseToggle={handleCourseToggle}/>
-
+                {
+                    isLoggedIn
+                    ? <Sidebar onCourseToggle={handleCourseToggle}/>
+                    : signUp 
+                    ? <SignUp onSignUp={onSignUp}></SignUp>
+                    : <Login onSignUp={onSignUp}></Login>                   
+                }
+                
             </Drawer>
         </Box>
     );
