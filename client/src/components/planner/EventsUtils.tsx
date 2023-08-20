@@ -28,6 +28,5 @@ export const INITIAL_EVENTS: EventInput[] = [
 ]
 
 export function createEventId() {
-  console.log(`hereeee ${eventGuid}`)
   return String(eventGuid++)
 }

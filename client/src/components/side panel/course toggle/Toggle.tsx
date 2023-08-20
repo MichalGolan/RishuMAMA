@@ -12,8 +12,6 @@ interface Props {
 
 function Toggle(props: Props) {
     const [checked, setChecked] = useState(props.isChecked);
-    console.log(checked);
-
     const handleChange = () => {
         setChecked(!checked);
         props.onToggleCheck(props.id, props.name, !checked);

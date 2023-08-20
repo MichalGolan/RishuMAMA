@@ -12,9 +12,6 @@ interface Props {
 }
 
 function CourseToggleDisplay(props: Props) {
-
-    console.log(props.courses);
-
     return (
         <div className="toggle-container">
             {props.courses.map(course =>

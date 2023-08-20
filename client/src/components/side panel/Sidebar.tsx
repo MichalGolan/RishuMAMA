@@ -33,7 +33,6 @@ function Sidebar(props: Props) {
     const [coursesFetched, setCoursesFetched] = useState<boolean>(false);
     const [showButtonState, setShowButtonState] = useState<boolean>(false);
     const [chosenCourses, setChosenCourses] = useState<Set<Course>>(new Set<Course>())
-    console.log(`chosen courses ${chosenCourses.size}`);
 
     useEffect(() => {
         setShowButtonState(frame!==noneChosen && department !==noneChosen && semester!==noneChosen);
@@ -50,13 +49,11 @@ function Sidebar(props: Props) {
     if(isDepartmentsError || isFramesError || isSemestersError) return <div>error off</div>
 
     function addCourse(courseName: string){
-        console.log("chosen: ", courseName);
         //map course name to Course
         if(!courses) return;
         const course = courses.find((course) => course.name === courseName);
         if(!course) return;
         setChosenCourses(prevState => {
-            //console.log(prevState.add(course));
             prevState.add(course)
             return new Set(prevState);
         });
@@ -64,10 +61,8 @@ function Sidebar(props: Props) {
 
     function mapCoursesToNames(){
         //const names = [...chosenCourses].map((course) => course.name);
-        console.log(chosenCourses);
         const names: string[] = [];
         chosenCourses.forEach((course) => names.push(course.name));
-        console.log("mapped...", names);
         return names;
     }
 
