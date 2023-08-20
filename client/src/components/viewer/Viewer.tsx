@@ -1,4 +1,5 @@
 import { ChevronLeft, ChevronRight} from "@mui/icons-material";
+import PersonIcon from '@mui/icons-material/Person';
 import MenuIcon from '@mui/icons-material/Menu';
 import {
     AppBar,
@@ -82,9 +83,9 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 const Viewer = () => {
     const theme = useTheme();
     const username = "מיכל";
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true);
     const [activeCourses, setActiveCourses] = useState<Array<CourseLight>>([]);
-    const [isLoggedIn, setLoggedIn] = useState<boolean>(true);
+    const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [signUp, setSignUp] = useState<Boolean>(false);
 
     const handleDrawerOpen = () => {
@@ -125,7 +126,7 @@ const Viewer = () => {
                     </Typography>
                     <SideBox>
                         <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-                            שלום {username}
+                            שלום {username ? username : ''}
                         </Typography>
                         <IconButton
                             color="inherit"
@@ -134,7 +135,7 @@ const Viewer = () => {
                             onClick={handleDrawerOpen}
                             sx={{ ...(open && { display: 'none' }) }}
                         >
-                            <MenuIcon />
+                            { isLoggedIn ? <MenuIcon /> : <PersonIcon />}
                         </IconButton>
                     </SideBox>
                 </StyledToolbar>
