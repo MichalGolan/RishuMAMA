@@ -118,7 +118,24 @@ export default function WeekView (props: Props) {
     function renderEventContent(eventContent: EventContentArg) {
         const isActive = (activeLectures
             .find(lecture => lecture.id.toString() === eventContent.event.id))
-        const eventClass = `${eventClasses.event} ${isActive ? eventClasses.active : ''}`
+        let eventClass = `${eventClasses.event} ${isActive ? eventClasses.active : ''}`
+
+        const thisLecture =
+            lectures?.find(lecture => lecture.id.toString() === eventContent.event.id);
+
+        if(thisLecture) {
+            // if the event is NOT active AND it collides with another event, give it a red border
+            let colliding: boolean = false;
+            lectures?.forEach((lecture) => {
+                if (thisLecture.id !== lecture.id && checkCollision(thisLecture, lecture)) {
+                    colliding = true
+                    return;
+                }
+            })
+
+        if(!isActive && colliding)
+            eventClass += ' colliding';
+        }
 
         if(isActive){
             eventContent.backgroundColor = eventContent.event.extendedProps.color;
@@ -130,13 +147,13 @@ export default function WeekView (props: Props) {
             eventContent.textColor = 'black';
         }
 
-      return (
-        <div className={eventClass}>
-          <p>{eventContent.event.title}</p>
-          <p style={{direction: 'ltr'}}>{eventContent.timeText}</p>
-          <p>{eventContent.event.extendedProps.lecturer}</p>
-        </div>
-      )
+        return (
+          <div className={eventClass}>
+            <p>{eventContent.event.title}</p>
+            <p style={{direction: 'ltr'}}>{eventContent.timeText}</p>
+            <p>{eventContent.event.extendedProps.lecturer}</p>
+          </div>
+        )
     }
 
     
@@ -183,6 +200,7 @@ export default function WeekView (props: Props) {
                 slotDuration='00:30:00'
                 slotLabelInterval={{hour: 1}}
                 allDaySlot={false}
+                slotEventOverlap={false}
                 contentHeight={100}
                 // initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
                 // select={handleDateSelect}

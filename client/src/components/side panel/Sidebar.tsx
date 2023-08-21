@@ -8,6 +8,7 @@ import { useGetSemestersQuery } from '../../data/queries/useGetSemestersQuery';
 import { isAxiosError } from 'axios';
 import {useGetFilteredCoursesQuery} from "../../data/queries/useGetFilteredCoursesQuery";
 import CourseToggleDisplay from "./CourseToggleDisplay";
+import {defaultColor} from "../../utils/defaults";
 
 
 type CourseToggleEvent = {
@@ -33,7 +34,6 @@ function Sidebar(props: Props) {
     const [coursesFetched, setCoursesFetched] = useState<boolean>(false);
     const [showButtonState, setShowButtonState] = useState<boolean>(false);
     const [chosenCourses, setChosenCourses] = useState<Set<Course>>(new Set<Course>())
-    console.log(`chosen courses ${chosenCourses.size}`);
 
     useEffect(() => {
         setShowButtonState(frame!==noneChosen && department !==noneChosen && semester!==noneChosen);
@@ -50,7 +50,6 @@ function Sidebar(props: Props) {
     if(isDepartmentsError || isFramesError || isSemestersError) return <div>error off</div>
 
     function addCourse(courseName: string){
-        console.log("chosen: ", courseName);
         //map course name to Course
         if(!courses) return;
         const course = courses.find((course) => course.name === courseName);
@@ -201,5 +200,5 @@ function getSemesterDB(sem: string): Semester {
 }
 
 function diluteCourseData(course: Course): CourseLight {
-    return { id: course.id, name: course.name, isChecked: false};
+    return { id: course.id, name: course.name, isChecked: false, color: defaultColor };
 }

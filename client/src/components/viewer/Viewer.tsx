@@ -12,6 +12,8 @@ import Sidebar from "../side panel/Sidebar";
 import WeekView from "../planner/WeekView";
 import "./Viewer.css"
 import { CourseLight } from "../../data/api/courses";
+import { defaultColor } from "../../utils/defaults";
+
 const StyledToolbar = styled(Toolbar)({
     display: "flex",
     flexDirection: "row",
@@ -26,8 +28,6 @@ const SideBox = styled(Box)(({ theme }) => ({
 }));
 
 const drawerWidth = 350;
-
-const defaultColor = '#6082B6'
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
     open?: boolean;
