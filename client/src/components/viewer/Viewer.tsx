@@ -12,8 +12,7 @@ import Sidebar from "../side panel/Sidebar";
 import WeekView from "../planner/WeekView";
 import "./Viewer.css"
 import { CourseLight } from "../../data/api/courses";
-import Login from "../log in/Login";
-import SignUp from "../sign up/SignUp";
+import { defaultColor } from "../../utils/defaults";
 
 const StyledToolbar = styled(Toolbar)({
     display: "flex",
@@ -109,7 +108,7 @@ const Viewer = () => {
 
         if(course) return;
 
-        setActiveCourses([...activeCourses, {id: id, name: name, isChecked: true}]);
+        setActiveCourses([...activeCourses, {id: id, name: name, isChecked: true, color: defaultColor}]);
     }
 
     const onSignUp = () => {
@@ -166,14 +165,7 @@ const Viewer = () => {
                     {isLoggedIn && <Typography>בחירת פילטרים</Typography> }
                 </DrawerHeader>
                 <Divider />
-                {
-                    isLoggedIn
-                    ? <Sidebar onCourseToggle={handleCourseToggle}/>
-                    : signUp 
-                    ? <SignUp onSignUp={onSignUp}></SignUp>
-                    : <Login onSignUp={onSignUp}></Login>                   
-                }
-                
+                <Sidebar onCourseToggle={handleCourseToggle}/>               
             </Drawer>
         </Box>
     );
