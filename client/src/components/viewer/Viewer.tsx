@@ -27,6 +27,8 @@ const SideBox = styled(Box)(({ theme }) => ({
 
 const drawerWidth = 350;
 
+const defaultColor = '#6082B6'
+
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
     open?: boolean;
 }>(({ theme, open }) => ({
@@ -104,7 +106,7 @@ const Viewer = () => {
 
         if(course) return;
 
-        setActiveCourses([...activeCourses, {id: id, name: name, isChecked: true}]);
+        setActiveCourses([...activeCourses, {id: id, name: name, isChecked: true, color: defaultColor}]);
     }
 
 

@@ -11,6 +11,8 @@ import '@fullcalendar/react/dist/vdom'
 import {useGetActiveCoursesLecturesQuery} from "../../data/queries/useGetActiveCoursesLectures";
 import {CourseLight} from "../../data/api/courses";
 
+import eventClasses from './event.module.css';
+
 interface Props {
     activeCourses: Array<CourseLight>;
     courseIdToTitle: Function;
@@ -52,14 +54,22 @@ export default function WeekView (props: Props) {
     }
 
     function checkCollision(lecture: Lecture, activeLec:Lecture) : boolean {
-        const [hours1, minutes1] = lecture.startTime.split(':').map(Number);
-        const [hours2, minutes2] = activeLec.startTime.split(':').map(Number);
-        
-        const totalMinutes1 = hours1 * 60 + minutes1;
-        const totalMinutes2 = hours2 * 60 + minutes2;
-    
-        // Check if the start times conflict
-        return Math.abs(totalMinutes1 - totalMinutes2) < 60; // Assuming a 1-hour conflict threshold
+        if(lecture.day !== activeLec.day) return false;
+        function isHour1LessThanHour2(hour1: string, hour2: string){
+            const [h1, m1] = hour1.split(':').map(Number);
+            const [h2, m2] = hour2.split(':').map(Number);
+
+            if(h1 < h2){
+                return true;
+            } else if(h1 > h2){
+                return false;
+            } else {
+                return m1 < m2;
+            }
+        }
+
+        return isHour1LessThanHour2(lecture.startTime, activeLec.endTime) &&
+            isHour1LessThanHour2(activeLec.startTime, lecture.endTime)
     }
     
     // check if Lecture is from a course that other lecture of it was chosen
@@ -80,6 +90,10 @@ export default function WeekView (props: Props) {
                 title: props.courseIdToTitle(lecture.courseId),
                 start: fixLectureTimeToWeekViewDate(lecture.startTime, lecture.day),
                 end: fixLectureTimeToWeekViewDate(lecture.endTime, lecture.day),
+                extendedProps: {
+                    lecturer: lecture.lecutrer,
+                    color: '#6082B6'
+                }
             }
         });
     }
@@ -102,20 +116,32 @@ export default function WeekView (props: Props) {
     }
 
     function renderEventContent(eventContent: EventContentArg) {
+        const isActive = (activeLectures
+            .find(lecture => lecture.id.toString() === eventContent.event.id))
+        const eventClass = `${eventClasses.event} ${isActive ? eventClasses.active : ''}`
+
+        if(isActive){
+            eventContent.backgroundColor = eventContent.event.extendedProps.color;
+            eventContent.textColor = '#fff';
+        }
+
+        else {
+            eventContent.backgroundColor = '#F5F5F5';
+            eventContent.textColor = 'black';
+        }
+
       return (
-        <>
-          <i>{eventContent.event.title}</i>
-          <br></br>
-          <b>{eventContent.timeText}</b>
-          <br></br>
-          <b>{eventContent.event.extendedProps.lecturer}</b>
-        </>
+        <div className={eventClass}>
+          <p>{eventContent.event.title}</p>
+          <p style={{direction: 'ltr'}}>{eventContent.timeText}</p>
+          <p>{eventContent.event.extendedProps.lecturer}</p>
+        </div>
       )
     }
 
     
     const handleEventClick = (clickInfo: EventClickArg) => {
-      if (confirm(`Are you sure you want to choose this Lecture '${clickInfo.event.title}'`)) {
+      if (confirm(`Are you sure you want to modify this Lecture '${clickInfo.event.title}'`)) {
         const selectedLecture = lectures?.find((lecture) => lecture.id.toString() === clickInfo.event.id);
         if(selectedLecture){
           
@@ -148,7 +174,10 @@ export default function WeekView (props: Props) {
                 dayHeaderFormat={{weekday:"short"}}
                 slotMinTime={'08:00:00'}
                 slotMaxTime={'21:00:00'}
-                // eventTimeFormat={{hour:'2-digit', minute:'2-digit', meridiem:false}}  TODO ?? working
+                eventTimeFormat={{hour:'2-digit', minute:'2-digit', meridiem:false}}
+                //eventColor={'red'}
+                //eventBorderColor={'blue'}
+                //eventBackgroundColor={'gray'}
                 slotLabelFormat={{hour:'2-digit', minute:'2-digit'}}
                 height= 'auto'
                 slotDuration='00:30:00'
