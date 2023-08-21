@@ -1,3 +1,9 @@
+/*.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}*/
+
 .container{
     display: grid;
     width: 100%;
@@ -61,5 +67,6 @@
 
 .toggle-label {
     margin-left: 5px;
+    /*position: relative;*/
     top: 2px;
 }

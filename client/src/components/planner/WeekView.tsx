@@ -1,15 +1,15 @@
-import FullCalendar from "@fullcalendar/react"
-import { DateSelectArg, EventClickArg, EventContentArg, formatDate, EventInput} from "@fullcalendar/core"
+import FullCalendar, { CalendarApi } from "@fullcalendar/react"
+import { EventApi, DateSelectArg, EventClickArg, EventContentArg, formatDate, EventInput} from "@fullcalendar/core"
 import timeGridPlugin from '@fullcalendar/timegrid'
 
 import './WeekView.css'
-import { createEventId } from "./EventsUtils"
+import { INITIAL_EVENTS, createEventId } from "./EventsUtils"
 import { LegacyRef, useEffect, useState } from "react"
-import { fixLectureTimeToWeekViewDate, Lecture } from "../../data/api/lectures"
+import {DayOfWeek, fixLectureTimeToWeekViewDate, Lecture} from "../../data/api/lectures"
 import React from "react"
 import '@fullcalendar/react/dist/vdom'
-import { useGetActiveCoursesLecturesQuery } from "../../data/queries/useGetActiveCoursesLectures";
-import { CourseLight } from "../../data/api/courses";
+import {useGetActiveCoursesLecturesQuery} from "../../data/queries/useGetActiveCoursesLectures";
+import {CourseLight} from "../../data/api/courses";
 
 import eventClasses from './event.module.css';
 
@@ -156,6 +156,7 @@ export default function WeekView (props: Props) {
         )
     }
 
+    
     const handleEventClick = (clickInfo: EventClickArg) => {
       if (confirm(`Are you sure you want to modify this Lecture '${clickInfo.event.title}'`)) {
         const selectedLecture = lectures?.find((lecture) => lecture.id.toString() === clickInfo.event.id);
@@ -191,6 +192,9 @@ export default function WeekView (props: Props) {
                 slotMinTime={'08:00:00'}
                 slotMaxTime={'21:00:00'}
                 eventTimeFormat={{hour:'2-digit', minute:'2-digit', meridiem:false}}
+                //eventColor={'red'}
+                //eventBorderColor={'blue'}
+                //eventBackgroundColor={'gray'}
                 slotLabelFormat={{hour:'2-digit', minute:'2-digit'}}
                 height= 'auto'
                 slotDuration='00:30:00'
@@ -198,7 +202,7 @@ export default function WeekView (props: Props) {
                 allDaySlot={false}
                 slotEventOverlap={false}
                 contentHeight={100}
-                // initialEvents={INITIAL_EVENTS}
+                // initialEvents={INITIAL_EVENTS} // alternatively, use the `events` setting to fetch from a feed
                 // select={handleDateSelect}
                 eventContent={renderEventContent} // custom render function
                 eventClick={handleEventClick}

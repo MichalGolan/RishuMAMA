@@ -13,7 +13,7 @@ userRouter.get("/:userId", async (req, res) => {
   const user = await prismaClient.user.findFirst(
     {
       where: {
-        //id: userId
+        id: userId
       }
     }
   );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import './Toggle.css'
 import RemoveButton from "./RemoveButton";
 
