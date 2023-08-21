@@ -1,14 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import {Button, List, ListItem, Stack, styled} from "@mui/material";
+
+import Button from "@mui/material/Button"
+import List from "@mui/material/List"
+import ListItem from "@mui/material/ListItem"
+import Stack from "@mui/material/Stack"
+
 import ComboSelect from "../ComboSelect";
-import {Course, CourseLight, Department, Frame, getFiltered, Semester} from "../../data/api/courses";
+import { Course, CourseLight, Department, Frame, getFiltered, Semester } from "../../data/api/courses";
 import { useGetDepartmentsQuery } from '../../data/queries/useGetDepartmentsQuery';
 import { useGetFramesQuery } from '../../data/queries/useGetFramesQuery';
 import { useGetSemestersQuery } from '../../data/queries/useGetSemestersQuery';
-import { isAxiosError } from 'axios';
-import {useGetFilteredCoursesQuery} from "../../data/queries/useGetFilteredCoursesQuery";
+import { useGetFilteredCoursesQuery } from "../../data/queries/useGetFilteredCoursesQuery";
 import CourseToggleDisplay from "./CourseToggleDisplay";
-import {defaultColor} from "../../utils/defaults";
+import { defaultColor } from "../../utils/defaults";
 
 
 type CourseToggleEvent = {
