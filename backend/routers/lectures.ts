@@ -13,7 +13,6 @@ lectureRouter.get("/", async (req, res) => {
 
 lectureRouter.post("/", async (req, res) => {
     let courseIds = req.body.courseIds;
-    console.log(courseIds);
 
     try {
         const activeLectures = await prismaClient.lecture.findMany({
@@ -24,7 +23,6 @@ lectureRouter.post("/", async (req, res) => {
         const response: ApiResponse<Lecture[]> = {
             result: activeLectures
         };
-        console.log(response.result);
 
         return res.json(response);
     } catch (e) {
