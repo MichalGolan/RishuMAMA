@@ -1,0 +1,15 @@
+.event {
+    /*font-family: 'Varela Round', sans-serif;*/
+    text-align: center;
+    font-size: 1em;
+    line-height: 1.2em;
+    background-color: transparent;
+}
+
+.event.active {
+    font-weight: bold;
+}
+
+.event:hover {
+    cursor: default;
+}

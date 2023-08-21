@@ -8,9 +8,15 @@ import { useGetSemestersQuery } from '../../data/queries/useGetSemestersQuery';
 import { isAxiosError } from 'axios';
 import {useGetFilteredCoursesQuery} from "../../data/queries/useGetFilteredCoursesQuery";
 import CourseToggleDisplay from "./CourseToggleDisplay";
+import {defaultColor} from "../../utils/defaults";
 
+
+type CourseToggleEvent = {
+    id: number;
+    active: boolean;
+}
 interface Props {
-    courseSelectionChange: Function;
+    onCourseToggle: Function
 }
 
 const noneChosen = "";
@@ -28,10 +34,6 @@ function Sidebar(props: Props) {
     const [coursesFetched, setCoursesFetched] = useState<boolean>(false);
     const [showButtonState, setShowButtonState] = useState<boolean>(false);
     const [chosenCourses, setChosenCourses] = useState<Set<Course>>(new Set<Course>())
-    console.log(`chosen courses ${chosenCourses.size}`);
-
-    //const [courseSelectionChange, setcourseSelectionState] = useState<CourseData>({id:0, isChecked:true});
-
 
     useEffect(() => {
         setShowButtonState(frame!==noneChosen && department !==noneChosen && semester!==noneChosen);
@@ -40,17 +42,14 @@ function Sidebar(props: Props) {
 
     function filter() {
         fetchFilteredCourses().then(r => {
-            console.log("courses fetched");
-            console.log(`${courses}`)
             setCoursesFetched(true);
         })
     }
 
-    if(isDepartmentsLoading || isFrameLoading || isSemesterLoading)  return <div>yay</div>
+    if(isDepartmentsLoading || isFrameLoading || isSemesterLoading)  return <div>Loading</div>
     if(isDepartmentsError || isFramesError || isSemestersError) return <div>error off</div>
 
     function addCourse(courseName: string){
-        console.log("chosen: ", courseName);
         //map course name to Course
         if(!courses) return;
         const course = courses.find((course) => course.name === courseName);
@@ -74,6 +73,7 @@ function Sidebar(props: Props) {
     const removeCourseToggle =  (id: number) => {
         const newList = [...chosenCourses].filter((item) => item.id !== id);
         setChosenCourses(new Set(newList));
+        props.onCourseToggle({id, active: false});
     }
 
     return (
@@ -130,8 +130,7 @@ function Sidebar(props: Props) {
             <CourseToggleDisplay
                 courses={[...chosenCourses].map(diluteCourseData)}
                 onToggleCheck={(id: number, name: string, isChecked: boolean) => {
-                    //console.log(`course #${id} is ${isChecked ? 'checked' : 'unchecked'}`)
-                    props.courseSelectionChange(id, name, isChecked);
+                    props.onCourseToggle(id, name, isChecked);
                 }}
                 removeCourse={removeCourseToggle}/>
         </Stack>
@@ -201,5 +200,5 @@ function getSemesterDB(sem: string): Semester {
 }
 
 function diluteCourseData(course: Course): CourseLight {
-    return { id: course.id, name: course.name, isChecked: false};
+    return { id: course.id, name: course.name, isChecked: false, color: defaultColor };
 }

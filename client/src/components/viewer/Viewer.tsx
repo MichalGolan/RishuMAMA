@@ -12,6 +12,8 @@ import Sidebar from "../side panel/Sidebar";
 import WeekView from "../planner/WeekView";
 import "./Viewer.css"
 import { CourseLight } from "../../data/api/courses";
+import { defaultColor } from "../../utils/defaults";
+
 const StyledToolbar = styled(Toolbar)({
     display: "flex",
     flexDirection: "row",
@@ -80,7 +82,9 @@ const Viewer = () => {
     const theme = useTheme();
     const username = "מיכל";
     const [open, setOpen] = useState(false);
-    const [courseShowUpdateData, setCourseShowUpdateData] = useState<CourseLight>({id: 0, name: "", isChecked: false});
+    const [activeCourses, setActiveCourses] = useState<Array<CourseLight>>([]);
+    const [isLoggedIn, setLoggedIn] = useState<boolean>(true);
+    const [signUp, setSignUp] = useState<Boolean>(false);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -90,12 +94,26 @@ const Viewer = () => {
         setOpen(false);
     };
 
-    const courseSelectionChange = (id:number, name:string, isChecked:boolean) => {
-        console.log(`from viewer! course name: ${name} id#${id} is ${isChecked ? 'checked' : 'unchecked'}`);
-        setCourseShowUpdateData({id, name, isChecked});
+    const courseIdToTitle = (courseId: number) : string => {
+        const course = activeCourses.find((course) => course.id === courseId);
+        return course ? course.name : '';
+    }
 
-    };
+    const handleCourseToggle = (id: number, name: string, active: Boolean) => {
+        if(!active){
+            return setActiveCourses(activeCourses.filter(course => course.id !== id));
+        }
 
+        const course = activeCourses.find(course => course.id === id);
+
+        if(course) return;
+
+        setActiveCourses([...activeCourses, {id: id, name: name, isChecked: true, color: defaultColor}]);
+    }
+
+    const onSignUp = () => {
+        setSignUp(!signUp);
+    }
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -123,7 +141,7 @@ const Viewer = () => {
             <Main open={open}>
                 <DrawerHeader />
                 <div className="viewer-row">
-                    <WeekView courseShowUpdateData={courseShowUpdateData}/>
+                    <WeekView activeCourses={activeCourses} courseIdToTitle={courseIdToTitle}/>
                     <div style={{alignSelf:"center", flex:"none"}}>  here will be exams board
                     </div>
                 </div>
@@ -144,11 +162,10 @@ const Viewer = () => {
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <ChevronLeft /> : <ChevronRight />}
                     </IconButton>
-                    <Typography>בחירת פילטרים</Typography>
+                    {isLoggedIn && <Typography>בחירת פילטרים</Typography> }
                 </DrawerHeader>
                 <Divider />
-                <Sidebar courseSelectionChange={courseSelectionChange}/>
-                
+                <Sidebar onCourseToggle={handleCourseToggle}/>               
             </Drawer>
         </Box>
     );

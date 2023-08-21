@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getFrames } from "../api/courses";
+import {Frame, getFrames} from "../api/courses";
 
 export function useGetFramesQuery(){
     return useQuery({
@@ -7,6 +7,7 @@ export function useGetFramesQuery(){
         queryFn: async () => {
             const response = await getFrames();
             return response.data.result;
+            // return ['A'] as Frame[];
         }
     })
 }

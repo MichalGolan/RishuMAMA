@@ -30,7 +30,8 @@ export type Course = {
 export type CourseLight = {
   id: number,
   name: string,
-  isChecked: boolean
+  isChecked: boolean,
+  color: string
 }
 
 /*export type CourseData = {
