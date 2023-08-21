@@ -1,12 +1,15 @@
-import { ChevronLeft, ChevronRight} from "@mui/icons-material";
-import MenuIcon from '@mui/icons-material/Menu';
-import {
-    AppBar,
-    Box, Divider, Drawer, IconButton,
-    styled,
-    Toolbar,
-    Typography, useTheme,
-} from "@mui/material";
+import ChevronRight from "@mui/icons-material/ChevronRight"
+import ChevronLeft from "@mui/icons-material/ChevronLeft"
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography"
+import {useTheme, styled } from "@mui/material/styles"
+
 import { useState } from "react";
 import Sidebar from "../side panel/Sidebar";
 import WeekView from "../planner/WeekView";
@@ -131,9 +134,8 @@ const Viewer = () => {
                             aria-label="open drawer"
                             edge="end"
                             onClick={handleDrawerOpen}
-                            sx={{ ...(open && { display: 'none' }) }}
-                        >
-                            <MenuIcon />
+                            sx={{ ...(open && { display: 'none' }) }}>
+                            <FilterAltIcon />
                         </IconButton>
                     </SideBox>
                 </StyledToolbar>
