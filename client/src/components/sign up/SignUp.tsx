@@ -14,14 +14,18 @@ interface Props {
 }
 
 export default function SignIn(props: Props) {
-  /*const handleSubmit = (event) => {
+  const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };*/
+    const target = event.target as typeof event.target & {
+      email: { value: string };
+      name: { value: string };
+      password: { value: string };
+    };
+    const email = target.email.value; 
+    const name  = target.name.value;
+    const password = target.password.value; 
+    console.log(`email ${email} name ${name} password ${password}`);
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -36,7 +40,7 @@ export default function SignIn(props: Props) {
         <Typography component="h1" variant="h5">
           Sign Up
         </Typography>
-        <Box component="form" /*onSubmit={handleSubmit}*/ noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required

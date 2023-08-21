@@ -21,7 +21,7 @@ function useUsers() {
     isLoading,
   };
 }
-
+/*
 export function UsersList() {
   const {users, isLoading} = useUsers();
 
@@ -36,3 +36,4 @@ export function UsersList() {
   );
 
 }
+*/

@@ -7,22 +7,39 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { useGetUserQuery } from "../../data/queries/useGetUserQuery";
+import { useState } from "react";
+import { User } from "../../data/api/users";
 
 
 interface Props {
     onSignUp: Function;
+    onLogin: Function;
 }
-
+const noneChosen = "";
 export default function Login(props: Props) {
-  /*const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };*/
+  
+  const [email, setEmail] = useState<string>(noneChosen);
+  const [password, setPassword] = useState<string>(noneChosen);
 
+  const {isLoading: isGetUserLoading, refetch: refetchUser, data: userData, isError: isGetUserError} = useGetUserQuery(email, password);
+
+  const handleSubmit = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    const target = event.target as typeof event.target & {
+      email: { value: string };
+      password: { value: string };
+    };
+    setEmail(target.email.value); 
+    setPassword(target.password.value);
+    console.log(`email ${email} password ${password}`);
+
+    refetchUser();
+    console.log(`here email ${email} password ${password}`);
+    console.log(`${userData}`)
+  }
+
+  
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -36,7 +53,7 @@ export default function Login(props: Props) {
         <Typography component="h1" variant="h5">
           Log in
         </Typography>
-        <Box component="form" /*onSubmit={handleSubmit}*/ noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
             margin="normal"
             required

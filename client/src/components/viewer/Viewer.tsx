@@ -1,4 +1,5 @@
-import { ChevronLeft, ChevronRight} from "@mui/icons-material";
+/*import ChevronLeft from "@mui/icons-material";
+import ChevronRight from "@mui/icons-material";*/
 import PersonIcon from '@mui/icons-material/Person';
 import MenuIcon from '@mui/icons-material/Menu';
 import {
@@ -15,6 +16,7 @@ import "./Viewer.css"
 import { CourseLight } from "../../data/api/courses";
 import Login from "../log in/Login";
 import SignUp from "../sign up/SignUp";
+import { User } from "../../data/api/users";
 
 const StyledToolbar = styled(Toolbar)({
     display: "flex",
@@ -86,7 +88,8 @@ const Viewer = () => {
     const [open, setOpen] = useState(true);
     const [activeCourses, setActiveCourses] = useState<Array<CourseLight>>([]);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
-    const [signUp, setSignUp] = useState<Boolean>(false);
+    const [signUp, setSignUp] = useState<Boolean>(true);
+    const [user, setUser] = useState<User>({name:"", email:"", password:""});
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -115,6 +118,10 @@ const Viewer = () => {
 
     const onSignUp = () => {
         setSignUp(!signUp);
+    }
+
+    const onLogin = (user: User) => {
+        setUser(user);
     }
 
     return (
@@ -162,7 +169,7 @@ const Viewer = () => {
             >
                 <DrawerHeader>
                     <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'rtl' ? <ChevronLeft /> : <ChevronRight />}
+                        {/* {theme.direction === 'rtl' ? <ChevronLeft /> : <ChevronRight />} */}
                     </IconButton>
                     {isLoggedIn && <Typography>בחירת פילטרים</Typography> }
                 </DrawerHeader>
@@ -172,7 +179,7 @@ const Viewer = () => {
                     ? <Sidebar onCourseToggle={handleCourseToggle}/>
                     : signUp 
                     ? <SignUp onSignUp={onSignUp}></SignUp>
-                    : <Login onSignUp={onSignUp}></Login>                   
+                    : <Login onSignUp={onSignUp} onLogin={onLogin}></Login>                   
                 }
                 
             </Drawer>
