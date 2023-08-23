@@ -5,7 +5,6 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AppBar from "@mui/material/AppBar";
 
-import MenuIcon from '@mui/icons-material/Menu';
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
@@ -95,7 +94,7 @@ const Viewer = () => {
     const [open, setOpen] = useState(true);
     const [activeCourses, setActiveCourses] = useState<Array<CourseLight>>([]);
     const [user, setUser] = useState<User>(defaultUser);
-    const [isLoggedIn, setLoggedIn] = useState<boolean>(true);
+    const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [signUp, setSignUp] = useState<Boolean>(false);
     const [activeExams, setActiveExams] = useState<Exam[]>([]);
 
@@ -110,6 +109,8 @@ const Viewer = () => {
     const logout = () => {
         setUser(defaultUser);
         setLoggedIn(false);
+        setActiveExams([]);
+        setActiveCourses([]);
     }
 
     const courseIdToTitle = (courseId: number) : string => {
