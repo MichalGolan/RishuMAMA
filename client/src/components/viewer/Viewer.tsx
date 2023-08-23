@@ -123,17 +123,12 @@ const Viewer = () => {
     const onSignUp = (user: User) => {
         setUser(user);
         setSignUp(!signUp);
-//        setLoggedIn(!isLoggedIn);
     }
 
     const onLogin = (user: User) => {
         setUser(user);
         setLoggedIn(!isLoggedIn);
     }
-
-   /* useEffect(() => {
-        setLoggedIn(!isLoggedIn);
-      }, [user]);*/
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -144,7 +139,7 @@ const Viewer = () => {
                     </Typography>
                     <SideBox>
                         <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-                            שלום {user.name !== '' ? user.name : 'אורח'}
+                            Hello {user.name !== '' ? user.name : 'אורח'}
                         </Typography>
                         <IconButton
                             color="inherit"
