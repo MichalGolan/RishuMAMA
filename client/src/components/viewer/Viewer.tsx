@@ -2,6 +2,7 @@ import ChevronRight from "@mui/icons-material/ChevronRight"
 import ChevronLeft from "@mui/icons-material/ChevronLeft"
 import PersonIcon from '@mui/icons-material/Person';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import LogoutIcon from '@mui/icons-material/Logout';
 import AppBar from "@mui/material/AppBar";
 
 import MenuIcon from '@mui/icons-material/Menu';
@@ -26,7 +27,7 @@ import { User } from "../../data/api/users";
 const StyledToolbar = styled(Toolbar)({
     display: "flex",
     flexDirection: "row",
-    justifyContent: "right",
+    justifyContent: "space-between",
     gap:"50px"
 });
 
@@ -34,6 +35,8 @@ const SideBox = styled(Box)(({ theme }) => ({
     display: "flex",
     alignItems: "center",
     gap: "20px",
+    //justifyContent: "right",
+
 }));
 
 const drawerWidth = 350;
@@ -86,6 +89,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     ...theme.mixins.toolbar,
     justifyContent: 'flex-start',
 }));
+const defaultUser: User = {name:"", email:"", password:""}
 
 const Viewer = () => {
     const theme = useTheme();
@@ -93,7 +97,7 @@ const Viewer = () => {
     const [activeCourses, setActiveCourses] = useState<Array<CourseLight>>([]);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [signUp, setSignUp] = useState<Boolean>(true);
-    const [user, setUser] = useState<User>({name:"", email:"", password:""});
+    const [user, setUser] = useState<User>(defaultUser);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -102,6 +106,11 @@ const Viewer = () => {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    const logout = () => {
+        setUser(defaultUser);
+        setLoggedIn(false);
+    }
 
     const courseIdToTitle = (courseId: number) : string => {
         const course = activeCourses.find((course) => course.id === courseId);
@@ -134,13 +143,23 @@ const Viewer = () => {
         <Box sx={{ display: 'flex' }}>
             <AppBarStyled position="fixed">
                 <StyledToolbar>
-                    <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-                        RISHUMAMA
-                    </Typography>
                     <SideBox>
                         <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-                            Hello {user.name !== '' ? user.name : 'אורח'}
-                        </Typography>
+                                RISHUMAMA
+                        </Typography> 
+                        <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
+                            Hello {isLoggedIn ? user.name : 'guest'}
+                        </Typography>   
+                        <IconButton
+                            color="inherit"
+                            edge="end"
+                            onClick={logout}
+                        >
+                            { isLoggedIn && <LogoutIcon/> }
+                        </IconButton> 
+                                        
+                    </SideBox>
+                    <SideBox>
                         <IconButton
                             color="inherit"
                             aria-label="open drawer"
