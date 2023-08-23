@@ -17,11 +17,13 @@ interface Props {
     onLogin: Function;
 }
 const noneChosen = "";
+const USER_NOT_FOUND = "Wrong Email or password, please try again.";
 export default function Login(props: Props) {
   
   const [email, setEmail] = useState<string>(noneChosen);
   const [password, setPassword] = useState<string>(noneChosen);
-
+  const [userNotFound, setUserNotFound] = useState<boolean>(false);
+  const [invalidEmailmessage, setInvalidEmailmessage] = useState<string>("");
   const {isLoading: isGetUserLoading, refetch: fetchUser, data: userData, isError: isGetUserError} = useGetUserQuery(email, password);
 
   const handleSubmit = (event: React.SyntheticEvent) => {
@@ -30,10 +32,35 @@ export default function Login(props: Props) {
     fetchUser().then(r => {
       if(r.data) {
         props.onLogin(r.data);
+        setUserNotFound(false);
+      } else {
+        setUserNotFound(true);
       }
     })
   }
 
+  function emailValidator(email: string) : string{
+    if (!email) {
+      return "Email is required";
+    } else if (!new RegExp(/\S+@\S+\.\S+/).test(email)) {
+      return "Incorrect email format";
+    }
+    return "";
+  };
+
+  const getErrorMessage = () :string =>{
+    if (invalidEmailmessage !== '') {
+      return invalidEmailmessage;
+    } else if (userNotFound) {
+      return USER_NOT_FOUND;
+    } 
+    return '';
+  }
+  function isValidCredentials(): boolean {
+    let ret = email !== "" && password !== "" && invalidEmailmessage === '' ;
+    console.log( ret);
+    return ret;
+  }
   
   return (
     <Container component="main" maxWidth="xs">
@@ -57,7 +84,10 @@ export default function Login(props: Props) {
             label="Email Address"
             name="email"
             autoComplete="email"
-            onChange={e => {setEmail(e.target.value)}}
+            onChange={e => {
+              setInvalidEmailmessage(emailValidator(e.target.value));
+              setEmail(e.target.value)
+            }}
             value={email}
           />
           <TextField
@@ -77,6 +107,7 @@ export default function Login(props: Props) {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            disabled={!isValidCredentials()}
           >
             Log In
           </Button>
@@ -87,6 +118,8 @@ export default function Login(props: Props) {
               </Link>
             </Grid>
           </Grid>
+          <br></br>
+          <h3 className="error">{getErrorMessage()}</h3>
         </Box>
       </Box>
     </Container>
