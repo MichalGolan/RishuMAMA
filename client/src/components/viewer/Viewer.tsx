@@ -1,21 +1,26 @@
-/*import ChevronLeft from "@mui/icons-material";
-import ChevronRight from "@mui/icons-material";*/
+import ChevronRight from "@mui/icons-material/ChevronRight"
+import ChevronLeft from "@mui/icons-material/ChevronLeft"
 import PersonIcon from '@mui/icons-material/Person';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import AppBar from "@mui/material/AppBar";
+
 import MenuIcon from '@mui/icons-material/Menu';
-import {
-    AppBar,
-    Box, Divider, Drawer, IconButton,
-    styled,
-    Toolbar,
-    Typography, useTheme,
-} from "@mui/material";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography"
+import {useTheme, styled } from "@mui/material/styles"
+
 import { useState } from "react";
 import Sidebar from "../side panel/Sidebar";
 import WeekView from "../planner/WeekView";
 import "./Viewer.css"
 import { CourseLight } from "../../data/api/courses";
-import Login from "../log in/Login";
 import SignUp from "../sign up/SignUp";
+import Login from "../log in/Login";
+import { defaultColor } from "../../utils/defaults";
 import { User } from "../../data/api/users";
 
 const StyledToolbar = styled(Toolbar)({
@@ -113,7 +118,7 @@ const Viewer = () => {
 
         if(course) return;
 
-        setActiveCourses([...activeCourses, {id: id, name: name, isChecked: true}]);
+        setActiveCourses([...activeCourses, {id: id, name: name, isChecked: true, color: defaultColor}]);
     }
 
     const onSignUp = () => {
@@ -142,7 +147,7 @@ const Viewer = () => {
                             onClick={handleDrawerOpen}
                             sx={{ ...(open && { display: 'none' }) }}
                         >
-                            { isLoggedIn ? <MenuIcon /> : <PersonIcon />}
+                            <MenuIcon />
                         </IconButton>
                     </SideBox>
                 </StyledToolbar>
