@@ -14,13 +14,13 @@ interface Props {
   onSignUp: Function;
 }
 const noneChosen = "";
-
+const USER_ALREADY_EXIST = "This email address is already registered. Please use a different email or log in."
 export default function SignUp(props: Props) {
   const [email, setEmail] = useState<string>(noneChosen);
   const [name, setName] = useState<string>(noneChosen);
   const [password, setPassword] = useState<string>(noneChosen);
   const [invalidEmailmessage, setInvalidEmailmessage] = useState<string>("");
-  const [userNotFound, setUserNotFound] = useState<boolean>(false);
+  const [userRegistered, setUserRegistered] = useState<boolean>(false);
 
   const {isLoading: isPostUserLoading, refetch: fetchUser, data: userData, isError: isPostUserError} = usePostUserQuery(email, name, password);
 
@@ -30,8 +30,9 @@ export default function SignUp(props: Props) {
     fetchUser().then(r => {
       if(r.data) {
         props.onSignUp(r.data);
+        setUserRegistered(false);
       } else {
-        //setUserNotFound(true);
+        setUserRegistered(true);
       }
     })
   }
@@ -49,6 +50,15 @@ export default function SignUp(props: Props) {
   function isValidCredentials(): boolean {
     let ret = email !== "" &&  name !== "" && password !== "" && invalidEmailmessage === '' ;
     return ret;
+  }
+
+  const getErrorMessage = () :string =>{
+    if (invalidEmailmessage !== '') {
+      return invalidEmailmessage;
+    } else if (userRegistered) {
+      return USER_ALREADY_EXIST;
+    } 
+    return '';
   }
 
   return (
@@ -117,6 +127,8 @@ export default function SignUp(props: Props) {
               </Link>
             </Grid>
           </Grid>
+          <br></br>
+          <h3 className="error">{getErrorMessage()}</h3>
         </Box>
       </Box>
     </Container>

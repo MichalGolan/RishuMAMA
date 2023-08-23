@@ -55,6 +55,7 @@ export default function Login(props: Props) {
     } 
     return '';
   }
+  
   function isValidCredentials(): boolean {
     let ret = email !== "" && password !== "" && invalidEmailmessage === '' ;
     return ret;
