@@ -74,7 +74,7 @@ function Sidebar(props: Props) {
     const removeCourseToggle =  (id: number) => {
         const newList = [...chosenCourses].filter((item) => item.id !== id);
         setChosenCourses(new Set(newList));
-        props.onCourseToggle({id, active: false});
+        props.onCourseToggle(id, null, false, null);
     }
 
     return (
@@ -131,7 +131,9 @@ function Sidebar(props: Props) {
             <CourseToggleDisplay
                 courses={[...chosenCourses].map(diluteCourseData)}
                 onToggleCheck={(id: number, name: string, isChecked: boolean) => {
-                    props.onCourseToggle(id, name, isChecked);
+                    const course = [...chosenCourses].find(course => course.id === id);
+                    const exams = [ {date: course?.exam_A, isFirst: true}, {date: course?.exam_B, isFirst: false}];
+                    props.onCourseToggle(id, name, isChecked, exams);
                 }}
                 removeCourse={removeCourseToggle}/>
         </Stack>
