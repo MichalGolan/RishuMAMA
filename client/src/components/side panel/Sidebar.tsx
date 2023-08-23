@@ -59,7 +59,6 @@ function Sidebar(props: Props) {
         const course = courses.find((course) => course.name === courseName);
         if(!course) return;
         setChosenCourses(prevState => {
-            //console.log(prevState.add(course));
             prevState.add(course)
             return new Set(prevState);
         });
@@ -67,10 +66,8 @@ function Sidebar(props: Props) {
 
     function mapCoursesToNames(){
         //const names = [...chosenCourses].map((course) => course.name);
-        console.log(chosenCourses);
         const names: string[] = [];
         chosenCourses.forEach((course) => names.push(course.name));
-        console.log("mapped...", names);
         return names;
     }
 

@@ -1,7 +1,11 @@
 import ChevronRight from "@mui/icons-material/ChevronRight"
 import ChevronLeft from "@mui/icons-material/ChevronLeft"
+import PersonIcon from '@mui/icons-material/Person';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import LogoutIcon from '@mui/icons-material/Logout';
 import AppBar from "@mui/material/AppBar";
+
+import MenuIcon from '@mui/icons-material/Menu';
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
@@ -10,17 +14,20 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography"
 import {useTheme, styled } from "@mui/material/styles"
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "../side panel/Sidebar";
 import WeekView from "../planner/WeekView";
 import "./Viewer.css"
 import { CourseLight } from "../../data/api/courses";
+import SignUp from "../sign up/SignUp";
+import Login from "../log in/Login";
 import { defaultColor } from "../../utils/defaults";
+import { User } from "../../data/api/users";
 
 const StyledToolbar = styled(Toolbar)({
     display: "flex",
     flexDirection: "row",
-    justifyContent: "right",
+    justifyContent: "space-between",
     gap:"50px"
 });
 
@@ -28,6 +35,8 @@ const SideBox = styled(Box)(({ theme }) => ({
     display: "flex",
     alignItems: "center",
     gap: "20px",
+    //justifyContent: "right",
+
 }));
 
 const drawerWidth = 350;
@@ -80,14 +89,15 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     ...theme.mixins.toolbar,
     justifyContent: 'flex-start',
 }));
+const defaultUser: User = {name:"", email:"", password:""}
 
 const Viewer = () => {
     const theme = useTheme();
-    const username = "מיכל";
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true);
     const [activeCourses, setActiveCourses] = useState<Array<CourseLight>>([]);
-    const [isLoggedIn, setLoggedIn] = useState<boolean>(true);
-    const [signUp, setSignUp] = useState<Boolean>(false);
+    const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
+    const [signUp, setSignUp] = useState<Boolean>(true);
+    const [user, setUser] = useState<User>(defaultUser);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -96,6 +106,11 @@ const Viewer = () => {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    const logout = () => {
+        setUser(defaultUser);
+        setLoggedIn(false);
+    }
 
     const courseIdToTitle = (courseId: number) : string => {
         const course = activeCourses.find((course) => course.id === courseId);
@@ -114,28 +129,45 @@ const Viewer = () => {
         setActiveCourses([...activeCourses, {id: id, name: name, isChecked: true, color: defaultColor}]);
     }
 
-    const onSignUp = () => {
+    const onSignUp = (user: User) => {
+        setUser(user);
         setSignUp(!signUp);
+    }
+
+    const onLogin = (user: User) => {
+        setUser(user);
+        setLoggedIn(!isLoggedIn);
     }
 
     return (
         <Box sx={{ display: 'flex' }}>
             <AppBarStyled position="fixed">
                 <StyledToolbar>
-                    <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-                        RISHUMAMA
-                    </Typography>
                     <SideBox>
                         <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-                            שלום {username}
-                        </Typography>
+                                RISHUMAMA
+                        </Typography> 
+                        <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
+                            Hello {isLoggedIn ? user.name : 'guest'}
+                        </Typography>   
+                        <IconButton
+                            color="inherit"
+                            edge="end"
+                            onClick={logout}
+                        >
+                            { isLoggedIn && <LogoutIcon/> }
+                        </IconButton> 
+                                        
+                    </SideBox>
+                    <SideBox>
                         <IconButton
                             color="inherit"
                             aria-label="open drawer"
                             edge="end"
                             onClick={handleDrawerOpen}
-                            sx={{ ...(open && { display: 'none' }) }}>
-                            <FilterAltIcon />
+                            sx={{ ...(open && { display: 'none' }) }}
+                        >
+                            { isLoggedIn ? <FilterAltIcon /> : <PersonIcon /> }
                         </IconButton>
                     </SideBox>
                 </StyledToolbar>
@@ -167,7 +199,14 @@ const Viewer = () => {
                     {isLoggedIn && <Typography>בחירת פילטרים</Typography> }
                 </DrawerHeader>
                 <Divider />
-                <Sidebar onCourseToggle={handleCourseToggle}/>               
+                {
+                    isLoggedIn
+                    ? <Sidebar onCourseToggle={handleCourseToggle}/>
+                    : signUp 
+                    ? <SignUp onSignUp={onSignUp}></SignUp>
+                    : <Login onSignUp={onSignUp} onLogin={onLogin}></Login>                   
+                }
+                
             </Drawer>
         </Box>
     );

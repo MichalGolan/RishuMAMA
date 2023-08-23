@@ -11,11 +11,12 @@ datasource db {
 }
 
 model User {
-  id              String   @id @default(uuid())
+  id              Int      @id @default(autoincrement())
   email           String   @unique
   name            String?
   createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  //updatedAt       DateTime @updatedAt
+  password        String   
   // Define the relation to the selected courses
   selectedCourses Course[] @relation("SelectedCourses")
 }

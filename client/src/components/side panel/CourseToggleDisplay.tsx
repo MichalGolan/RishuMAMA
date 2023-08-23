@@ -9,8 +9,7 @@ interface Props {
     removeCourse: Function;
 }
 
-function CourseToggleDisplay(props: Props) {
-
+function CourseToggleDisplay(props: Props) {    
     return (
         <div className="toggle-container">
             {props.courses.map(course =>
