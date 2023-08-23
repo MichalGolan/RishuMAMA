@@ -22,21 +22,19 @@ export default function Login(props: Props) {
   const [email, setEmail] = useState<string>(noneChosen);
   const [password, setPassword] = useState<string>(noneChosen);
 
-  const {isLoading: isGetUserLoading, refetch: refetchUser, data: userData, isError: isGetUserError} = useGetUserQuery(email, password);
+  const {isLoading: isGetUserLoading, refetch: fetchUser, data: userData, isError: isGetUserError} = useGetUserQuery(email, password);
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    const target = event.target as typeof event.target & {
-      email: { value: string };
-      password: { value: string };
-    };
-    setEmail(target.email.value); 
-    setPassword(target.password.value);
     console.log(`email ${email} password ${password}`);
 
-    refetchUser();
+    fetchUser().then(r => {
+      if(r.data) {
+        props.onLogin(r.data);
+      }
+  })
     console.log(`here email ${email} password ${password}`);
-    console.log(`${userData}`)
+
   }
 
   
@@ -62,7 +60,8 @@ export default function Login(props: Props) {
             label="Email Address"
             name="email"
             autoComplete="email"
-            // autoFocus
+            onChange={e => {setEmail(e.target.value)}}
+            value={email}
           />
           <TextField
             margin="normal"
@@ -73,6 +72,8 @@ export default function Login(props: Props) {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={e => {setPassword(e.target.value)}}
+            value={password}
           />
           <Button
             type="submit"

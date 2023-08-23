@@ -34,32 +34,41 @@ userRouter.get("/", async (req, res) => {
 
 userRouter.get("/user", async (req, res) => {
   let { email, password } = req.query;
-  console.log(`email ${email} name ${name} password ${password}`);
+  console.log(`email ${email} password ${password}`);
+
   try {
     const data = await prismaClient.user.findFirst({
       select: {
         name: true,
         email: true,
         password: true,
-        
       },
       where: {
         email: email as string,
         password: password as string
       },
     });
+    console.log(`after req email ${data} password ${data?.name}`);
+
     if (data && data.name) {
       const user: User = {name:data.name, email:data.email, password:data.password}
       const response: ApiResponse<User> = {
         result: user
       };
+      console.log(`name ${data.name} email ${data.email} password ${data.password}`);
+
       return res.json(response);
       
     } else {
       // handle not signed user
+      return res.json({
+        error: "here"
+      })
     }
     
   } catch (e) {
-
+    return res.json({
+      error: e
+    })
   }
 });

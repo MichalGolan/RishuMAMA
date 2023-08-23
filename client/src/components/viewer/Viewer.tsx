@@ -126,7 +126,9 @@ const Viewer = () => {
     }
 
     const onLogin = (user: User) => {
+        console.log(`on login ${user}`);
         setUser(user);
+        setLoggedIn(!isLoggedIn);
     }
 
     return (
@@ -138,7 +140,7 @@ const Viewer = () => {
                     </Typography>
                     <SideBox>
                         <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-                            שלום {username ? username : ''}
+                            שלום {user.name !== '' ? user.name : 'אורח'}
                         </Typography>
                         <IconButton
                             color="inherit"
@@ -147,7 +149,7 @@ const Viewer = () => {
                             onClick={handleDrawerOpen}
                             sx={{ ...(open && { display: 'none' }) }}
                         >
-                            <MenuIcon />
+                            { isLoggedIn ? <FilterAltIcon /> : <PersonIcon /> }
                         </IconButton>
                     </SideBox>
                 </StyledToolbar>
@@ -174,7 +176,7 @@ const Viewer = () => {
             >
                 <DrawerHeader>
                     <IconButton onClick={handleDrawerClose}>
-                        {/* {theme.direction === 'rtl' ? <ChevronLeft /> : <ChevronRight />} */}
+                        {theme.direction === 'rtl' ? <ChevronLeft /> : <ChevronRight />}
                     </IconButton>
                     {isLoggedIn && <Typography>בחירת פילטרים</Typography> }
                 </DrawerHeader>

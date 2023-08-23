@@ -19,7 +19,7 @@ export function getUser(email:String, password: String) {
 
   type GetUserResponse = ApiResponse<User>;
   return httpClient.get<GetUserResponse>(
-    "/user",
+    "/users/user",
     {
       params: params
     } 
