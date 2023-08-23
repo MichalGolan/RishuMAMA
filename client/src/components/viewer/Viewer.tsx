@@ -13,7 +13,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography"
 import {useTheme, styled } from "@mui/material/styles"
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "../side panel/Sidebar";
 import WeekView from "../planner/WeekView";
 import "./Viewer.css"
@@ -120,14 +120,20 @@ const Viewer = () => {
         setActiveCourses([...activeCourses, {id: id, name: name, isChecked: true, color: defaultColor}]);
     }
 
-    const onSignUp = () => {
+    const onSignUp = (user: User) => {
+        setUser(user);
         setSignUp(!signUp);
+//        setLoggedIn(!isLoggedIn);
     }
 
     const onLogin = (user: User) => {
         setUser(user);
         setLoggedIn(!isLoggedIn);
     }
+
+   /* useEffect(() => {
+        setLoggedIn(!isLoggedIn);
+      }, [user]);*/
 
     return (
         <Box sx={{ display: 'flex' }}>

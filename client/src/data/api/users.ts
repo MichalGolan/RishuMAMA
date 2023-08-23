@@ -25,3 +25,14 @@ export function getUser(email:String, password: String) {
     } 
   );
 }
+
+export function postUser(email: string, name: string, password: string) {
+  const data = {
+    email: email,
+    name: name,
+    password: password
+  }
+  type GetUserResponse = ApiResponse<User>;
+  return httpClient.post<GetUserResponse>(
+    "/users/user", data);
+}

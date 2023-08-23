@@ -19,7 +19,6 @@ interface Props {
 const noneChosen = "";
 const USER_NOT_FOUND = "Wrong Email or password, please try again.";
 export default function Login(props: Props) {
-  
   const [email, setEmail] = useState<string>(noneChosen);
   const [password, setPassword] = useState<string>(noneChosen);
   const [userNotFound, setUserNotFound] = useState<boolean>(false);
@@ -58,7 +57,6 @@ export default function Login(props: Props) {
   }
   function isValidCredentials(): boolean {
     let ret = email !== "" && password !== "" && invalidEmailmessage === '' ;
-    console.log( ret);
     return ret;
   }
   

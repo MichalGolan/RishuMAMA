@@ -7,24 +7,48 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-
+import { useState } from "react";
+import { usePostUserQuery } from "../../data/queries/usePostUserQuery"
 
 interface Props {
   onSignUp: Function;
 }
+const noneChosen = "";
 
-export default function SignIn(props: Props) {
+export default function SignUp(props: Props) {
+  const [email, setEmail] = useState<string>(noneChosen);
+  const [name, setName] = useState<string>(noneChosen);
+  const [password, setPassword] = useState<string>(noneChosen);
+  const [invalidEmailmessage, setInvalidEmailmessage] = useState<string>("");
+  const [userNotFound, setUserNotFound] = useState<boolean>(false);
+
+  const {isLoading: isPostUserLoading, refetch: fetchUser, data: userData, isError: isPostUserError} = usePostUserQuery(email, name, password);
+
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    const target = event.target as typeof event.target & {
-      email: { value: string };
-      name: { value: string };
-      password: { value: string };
-    };
-    const email = target.email.value; 
-    const name  = target.name.value;
-    const password = target.password.value; 
-    console.log(`email ${email} name ${name} password ${password}`);
+
+    fetchUser().then(r => {
+      if(r.data) {
+        props.onSignUp(r.data);
+      } else {
+        //setUserNotFound(true);
+      }
+    })
+  }
+
+  
+  function emailValidator(email: string) : string{
+    if (!email) {
+      return "";
+    } else if (!new RegExp(/\S+@\S+\.\S+/).test(email)) {
+      return "Incorrect email format";
+    }
+    return "";
+  };
+
+  function isValidCredentials(): boolean {
+    let ret = email !== "" &&  name !== "" && password !== "" && invalidEmailmessage === '' ;
+    return ret;
   }
 
   return (
@@ -49,7 +73,11 @@ export default function SignIn(props: Props) {
             label="Email Address"
             name="email"
             autoComplete="email"
-            // autoFocus
+            onChange={e => {
+              setInvalidEmailmessage(emailValidator(e.target.value));
+              setEmail(e.target.value)
+            }}
+            value={email}
           />
           <TextField
             margin="normal"
@@ -59,7 +87,8 @@ export default function SignIn(props: Props) {
             label="Name"
             name="name"
             autoComplete="name"
-            // autoFocus
+            onChange={e => {setName(e.target.value)}}
+            value={name}
           />
           <TextField
             margin="normal"
@@ -69,15 +98,17 @@ export default function SignIn(props: Props) {
             label="Password"
             type="password"
             id="password"
-            // autoComplete="current-password"
+            onChange={e => {setPassword(e.target.value)}}
+            value={password}
           />
           <Button
             type="submit"
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            disabled={!isValidCredentials()}
           >
-            Sign In
+            Sign Up
           </Button>
           <Grid container>
             <Grid item>
