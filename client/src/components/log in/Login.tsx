@@ -41,7 +41,7 @@ export default function Login(props: Props) {
 
   function emailValidator(email: string) : string{
     if (!email) {
-      return "Email is required";
+      return "";
     } else if (!new RegExp(/\S+@\S+\.\S+/).test(email)) {
       return "Incorrect email format";
     }
