@@ -13,6 +13,7 @@ import { useGetSemestersQuery } from '../../data/queries/useGetSemestersQuery';
 import { useGetFilteredCoursesQuery } from "../../data/queries/useGetFilteredCoursesQuery";
 import CourseToggleDisplay from "./CourseToggleDisplay";
 import { defaultColor } from "../../utils/defaults";
+import { usePostUserCourseSelectionQuery } from '../../data/queries/usePostUserCourseSelectionQuery';
 
 
 type CourseToggleEvent = {
@@ -20,7 +21,8 @@ type CourseToggleEvent = {
     active: boolean;
 }
 interface Props {
-    onCourseToggle: Function
+    onCourseToggle: Function,
+    userEmail: string
 }
 
 const noneChosen = "";
@@ -33,16 +35,25 @@ function Sidebar(props: Props) {
     const [frame, setFrame] = useState<string>(noneChosen);
     const [department, setDepartment] = useState<string>(noneChosen);
     const [semester, setSemester] = useState<string>(noneChosen);
-    const {isLoading: isCoursesLoading,refetch: fetchFilteredCourses, data: courses, isError: isCoursesError} = useGetFilteredCoursesQuery(department, frame, semester);
-
     const [coursesFetched, setCoursesFetched] = useState<boolean>(false);
     const [showButtonState, setShowButtonState] = useState<boolean>(false);
     const [chosenCourses, setChosenCourses] = useState<Set<Course>>(new Set<Course>())
+
+    const {isLoading: isCoursesLoading,refetch: fetchFilteredCourses, data: courses, isError: isCoursesError} = useGetFilteredCoursesQuery(department, frame, semester);
+    const {
+        isLoading: isPostCourseSelectionLoading, 
+        refetch: fetchUserCourseSelection, 
+        data: postUserCourseSelection, 
+        isError: isPostSelectionError} = usePostUserCourseSelectionQuery([...chosenCourses].map(course => course.id)
+        , props.userEmail);
 
     useEffect(() => {
         setShowButtonState(frame!==noneChosen && department !==noneChosen && semester!==noneChosen);
     }, [frame, department, semester]);
 
+    useEffect(() => {
+        fetchUserCourseSelection()
+    }, [chosenCourses])
 
     function filter() {
         fetchFilteredCourses().then(r => {

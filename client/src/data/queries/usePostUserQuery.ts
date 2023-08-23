@@ -1,4 +1,4 @@
-import {User, postUser} from "../api/users";
+import {postUser} from "../api/users";
 import {useQuery} from "@tanstack/react-query";
 
 export function usePostUserQuery(email:string, name: string, password: string) {
@@ -11,4 +11,4 @@ export function usePostUserQuery(email:string, name: string, password: string) {
       refetchOnWindowFocus: false,
         enabled: false // disable this query from automatically running
     })
-  }
+}

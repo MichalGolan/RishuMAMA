@@ -77,6 +77,7 @@ userRouter.post("/user", async (req, res) => {
           email: email as string,
           name: name as string,
           password: password as string,
+          selectedCoursesIds: ""
         },
       });
       const user: User = {email: email, name: name, password: password}
@@ -96,3 +97,42 @@ userRouter.post("/user", async (req, res) => {
     })
   }
 });
+
+userRouter.post("/user-courses", async (req, res) => {
+  let { selectedCoursesIds, userEmail } = req.body;
+  console.log(`email: ${userEmail} selected ${selectedCoursesIds}`)
+  const selectedCoursesString: string = JSON.stringify(selectedCoursesIds);
+  try {
+    const updatedUser = await prismaClient.user.update({
+      where: { email: userEmail },
+      data: {
+        selectedCoursesIds: selectedCoursesString
+      },
+      
+      });
+      console.log(`${updatedUser} and ${updatedUser.email}`);
+      return res.json({
+        message: "selected courses updated successdully"
+      })
+
+    } catch (e) {
+      console.log("error")
+      return res.json({
+        error: e
+      })
+    }
+  return res.json({
+    error: "im in backend!"
+  })
+});
+
+/*
+const updatedUser: User = await prisma.updateUser({
+  data: {
+    role: 'ADMIN',
+  },
+  where: {
+    id: 'cjli512bd005g0a233s1ogbgy',
+  },
+})
+*/

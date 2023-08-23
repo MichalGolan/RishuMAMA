@@ -36,3 +36,10 @@ export function postUser(email: string, name: string, password: string) {
   return httpClient.post<GetUserResponse>(
     "/users/user", data);
 }
+
+export function postUserCourseSelection(selectedCoursesIds: Array<number>, userEmail: string) {
+  const data = { selectedCoursesIds: selectedCoursesIds, userEmail: userEmail }
+  type GetUserResponse = ApiResponse<User>;
+  return httpClient.post<GetUserResponse>(
+    "/users/user-courses", data);
+}

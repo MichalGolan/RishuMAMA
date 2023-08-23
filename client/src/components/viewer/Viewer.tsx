@@ -121,11 +121,9 @@ const Viewer = () => {
         if(!active){
             return setActiveCourses(activeCourses.filter(course => course.id !== id));
         }
-
+        
         const course = activeCourses.find(course => course.id === id);
-
         if(course) return;
-
         setActiveCourses([...activeCourses, {id: id, name: name, isChecked: true, color: defaultColor}]);
     }
 
@@ -201,7 +199,7 @@ const Viewer = () => {
                 <Divider />
                 {
                     isLoggedIn
-                    ? <Sidebar onCourseToggle={handleCourseToggle}/>
+                    ? <Sidebar onCourseToggle={handleCourseToggle} userEmail={user?.email}/>
                     : signUp 
                     ? <SignUp onSignUp={onSignUp}></SignUp>
                     : <Login onSignUp={onSignUp} onLogin={onLogin}></Login>                   
