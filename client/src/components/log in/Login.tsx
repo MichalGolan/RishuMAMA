@@ -26,15 +26,12 @@ export default function Login(props: Props) {
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    console.log(`email ${email} password ${password}`);
 
     fetchUser().then(r => {
       if(r.data) {
         props.onLogin(r.data);
       }
-  })
-    console.log(`here email ${email} password ${password}`);
-
+    })
   }
 
   

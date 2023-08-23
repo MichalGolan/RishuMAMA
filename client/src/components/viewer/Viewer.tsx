@@ -89,7 +89,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 const Viewer = () => {
     const theme = useTheme();
-    const username = "מיכל";
     const [open, setOpen] = useState(true);
     const [activeCourses, setActiveCourses] = useState<Array<CourseLight>>([]);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
@@ -126,7 +125,6 @@ const Viewer = () => {
     }
 
     const onLogin = (user: User) => {
-        console.log(`on login ${user}`);
         setUser(user);
         setLoggedIn(!isLoggedIn);
     }
