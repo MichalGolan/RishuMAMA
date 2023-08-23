@@ -1,10 +1,12 @@
-import {httpClient} from "../../http/axios";
+import { httpClient } from "../../http/axios";
+import { Course } from "./courses";
 import { ApiResponse } from "./utils";
 
 export type User = {
   name: string;
   email: string;
   password: string;
+  selectedCourses: Course[];
 };
 
 export function getAllUsers() {

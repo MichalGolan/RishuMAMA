@@ -87,7 +87,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     ...theme.mixins.toolbar,
     justifyContent: 'flex-start',
 }));
-const defaultUser: User = {name:"", email:"", password:""}
+const defaultUser: User = {name:"", email:"", password:"", selectedCourses:[]}
 
 const Viewer = () => {
     const theme = useTheme();
