@@ -57,6 +57,8 @@ model Course {
   department Department
   semester   Semester
   year       Year
+  exam_A     DateTime
+  exam_B     DateTime
 
   selectedBy User[]    @relation("SelectedCourses")
   lectures   Lecture[]

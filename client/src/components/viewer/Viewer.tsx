@@ -14,8 +14,9 @@ import { useState } from "react";
 import Sidebar from "../side panel/Sidebar";
 import WeekView from "../planner/WeekView";
 import "./Viewer.css"
-import { CourseLight } from "../../data/api/courses";
+import {CourseLight, Exam} from "../../data/api/courses";
 import { defaultColor } from "../../utils/defaults";
+import ExamBoard from "../exam board/ExamBoard";
 
 const StyledToolbar = styled(Toolbar)({
     display: "flex",
@@ -88,6 +89,7 @@ const Viewer = () => {
     const [activeCourses, setActiveCourses] = useState<Array<CourseLight>>([]);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(true);
     const [signUp, setSignUp] = useState<Boolean>(false);
+    const [activeExams, setActiveExams] = useState<Exam[]>([]);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -102,8 +104,9 @@ const Viewer = () => {
         return course ? course.name : '';
     }
 
-    const handleCourseToggle = (id: number, name: string, active: Boolean) => {
+    const handleCourseToggle = (id: number, name: string, active: Boolean, exams: {date: Date, isFirst: boolean}[]) => {
         if(!active){
+            setActiveExams(prevState => prevState.filter(activeExam => activeExam.course.id !== id));
             return setActiveCourses(activeCourses.filter(course => course.id !== id));
         }
 
@@ -111,7 +114,21 @@ const Viewer = () => {
 
         if(course) return;
 
-        setActiveCourses([...activeCourses, {id: id, name: name, isChecked: true, color: defaultColor}]);
+        const courseLight = {
+            id,
+            name,
+            isChecked: true,
+            color: defaultColor
+        }
+
+        const courseExams: Exam[] = exams.map((exam) => ({
+            course: courseLight,
+            date: new Date(exam.date),
+            isFirst: exam.isFirst
+        }))
+
+        setActiveExams(prevState => [...prevState, ...courseExams]);
+        setActiveCourses([...activeCourses, courseLight]);
     }
 
     const onSignUp = () => {
@@ -143,9 +160,10 @@ const Viewer = () => {
             <Main open={open}>
                 <DrawerHeader />
                 <div className="viewer-row">
-                    <WeekView activeCourses={activeCourses} courseIdToTitle={courseIdToTitle}/>
-                    <div style={{alignSelf:"center", flex:"none"}}>  here will be exams board
+                    <div style={{alignSelf:"flex-start", paddingTop: "23px", paddingRight: "10px", flex:"none", justifyContent:"flex-start"}}>
+                        <ExamBoard exams={activeExams}/>
                     </div>
+                    <WeekView activeCourses={activeCourses} courseIdToTitle={courseIdToTitle}/>
                 </div>
             </Main>
             <Drawer
