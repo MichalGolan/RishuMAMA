@@ -5,7 +5,6 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AppBar from "@mui/material/AppBar";
 
-import MenuIcon from '@mui/icons-material/Menu';
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
@@ -18,11 +17,12 @@ import { useEffect, useState } from "react";
 import Sidebar from "../side panel/Sidebar";
 import WeekView from "../planner/WeekView";
 import "./Viewer.css"
-import { CourseLight } from "../../data/api/courses";
 import SignUp from "../sign up/SignUp";
 import Login from "../log in/Login";
+import {CourseLight, Exam} from "../../data/api/courses";
 import { defaultColor } from "../../utils/defaults";
 import { User } from "../../data/api/users";
+import ExamBoard from "../exam board/ExamBoard";
 
 const StyledToolbar = styled(Toolbar)({
     display: "flex",
@@ -35,8 +35,6 @@ const SideBox = styled(Box)(({ theme }) => ({
     display: "flex",
     alignItems: "center",
     gap: "20px",
-    //justifyContent: "right",
-
 }));
 
 const drawerWidth = 350;
@@ -95,9 +93,10 @@ const Viewer = () => {
     const theme = useTheme();
     const [open, setOpen] = useState(true);
     const [activeCourses, setActiveCourses] = useState<Array<CourseLight>>([]);
-    const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
-    const [signUp, setSignUp] = useState<Boolean>(true);
     const [user, setUser] = useState<User>(defaultUser);
+    const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
+    const [signUp, setSignUp] = useState<Boolean>(false);
+    const [activeExams, setActiveExams] = useState<Exam[]>([]);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -110,6 +109,8 @@ const Viewer = () => {
     const logout = () => {
         setUser(defaultUser);
         setLoggedIn(false);
+        setActiveExams([]);
+        setActiveCourses([]);
     }
 
     const courseIdToTitle = (courseId: number) : string => {
@@ -117,14 +118,30 @@ const Viewer = () => {
         return course ? course.name : '';
     }
 
-    const handleCourseToggle = (id: number, name: string, active: Boolean) => {
+    const handleCourseToggle = (id: number, name: string, active: Boolean, exams: {date: Date, isFirst: boolean}[]) => {
         if(!active){
+            setActiveExams(prevState => prevState.filter(activeExam => activeExam.course.id !== id));
             return setActiveCourses(activeCourses.filter(course => course.id !== id));
         }
         
         const course = activeCourses.find(course => course.id === id);
         if(course) return;
-        setActiveCourses([...activeCourses, {id: id, name: name, isChecked: true, color: defaultColor}]);
+
+        const courseLight = {
+            id,
+            name,
+            isChecked: true,
+            color: defaultColor
+        }
+
+        const courseExams: Exam[] = exams.map((exam) => ({
+            course: courseLight,
+            date: new Date(exam.date),
+            isFirst: exam.isFirst
+        }))
+
+        setActiveExams(prevState => [...prevState, ...courseExams]);
+        setActiveCourses([...activeCourses, courseLight]);
     }
 
     const onSignUp = (user: User) => {
@@ -144,18 +161,18 @@ const Viewer = () => {
                     <SideBox>
                         <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
                                 RISHUMAMA
-                        </Typography> 
+                        </Typography>
                         <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
                             Hello {isLoggedIn ? user.name : 'guest'}
-                        </Typography>   
+                        </Typography>
                         <IconButton
                             color="inherit"
                             edge="end"
                             onClick={logout}
                         >
                             { isLoggedIn && <LogoutIcon/> }
-                        </IconButton> 
-                                        
+                        </IconButton>
+
                     </SideBox>
                     <SideBox>
                         <IconButton
@@ -173,9 +190,10 @@ const Viewer = () => {
             <Main open={open}>
                 <DrawerHeader />
                 <div className="viewer-row">
-                    <WeekView activeCourses={activeCourses} courseIdToTitle={courseIdToTitle}/>
-                    <div style={{alignSelf:"center", flex:"none"}}>  here will be exams board
+                    <div style={{alignSelf:"flex-start", paddingTop: "23px", paddingRight: "10px", flex:"none", justifyContent:"flex-start"}}>
+                        <ExamBoard exams={activeExams}/>
                     </div>
+                    <WeekView activeCourses={activeCourses} courseIdToTitle={courseIdToTitle}/>
                 </div>
             </Main>
             <Drawer
@@ -202,9 +220,9 @@ const Viewer = () => {
                     ? <Sidebar onCourseToggle={handleCourseToggle} userEmail={user?.email}/>
                     : signUp 
                     ? <SignUp onSignUp={onSignUp}></SignUp>
-                    : <Login onSignUp={onSignUp} onLogin={onLogin}></Login>                   
+                    : <Login onSignUp={onSignUp} onLogin={onLogin}></Login>
                 }
-                
+
             </Drawer>
         </Box>
     );

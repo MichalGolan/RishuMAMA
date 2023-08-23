@@ -14,7 +14,7 @@ function RemoveButton({removeCourse}: Props) {
     return (
         <button
             className='close'
-            onClick={removeCourse}
+            onClick= { removeCourse }
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}>
             {isHovered ? <DeleteIcon/> : <DeleteOutlineIcon/>}

@@ -18,8 +18,8 @@ function CourseToggleDisplay(props: Props) {
                     name={course.name}
                     id={course.id}
                     isChecked={course.isChecked}
-                    removeCourse={props.removeCourse}
-                    onToggleCheck={props.onToggleCheck}/>)}
+                    removeCourse={ props.removeCourse }
+                    onToggleCheck={ props.onToggleCheck }/>)}
         </div>
     )
 }
