@@ -20,7 +20,7 @@ import "./Viewer.css"
 import SignUp from "../sign up/SignUp";
 import Login from "../log in/Login";
 import {CourseLight, Exam} from "../../data/api/courses";
-import { defaultColor } from "../../utils/defaults";
+import {defaultColor, releaseAllColors, releaseColor, reserveAvailableColor} from "../../utils/defaults";
 import { User } from "../../data/api/users";
 import ExamBoard from "../exam board/ExamBoard";
 
@@ -89,6 +89,11 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 const defaultUser: User = {name:"", email:"", password:""}
 
+const getLocalUser = () => {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : defaultUser;
+}
+
 const Viewer = () => {
     const theme = useTheme();
     const [open, setOpen] = useState(true);
@@ -97,6 +102,16 @@ const Viewer = () => {
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [signUp, setSignUp] = useState<Boolean>(false);
     const [activeExams, setActiveExams] = useState<Exam[]>([]);
+
+
+
+    useEffect(() => {
+        const user = getLocalUser();
+        if(user.name !== ""){
+            setLoggedIn(true);
+        }
+        setUser(user);
+    },[])
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -107,10 +122,12 @@ const Viewer = () => {
     };
 
     const logout = () => {
+        localStorage.removeItem('user');
         setUser(defaultUser);
         setLoggedIn(false);
         setActiveExams([]);
         setActiveCourses([]);
+        releaseAllColors();
     }
 
     const courseIdToTitle = (courseId: number) : string => {
@@ -120,6 +137,10 @@ const Viewer = () => {
 
     const handleCourseToggle = (id: number, name: string, active: Boolean, exams: {date: Date, isFirst: boolean}[]) => {
         if(!active){
+            const toBeRemovedCourse = activeCourses.find(course => course.id === id);
+            if(toBeRemovedCourse) {
+                releaseColor(toBeRemovedCourse.color);
+            }
             setActiveExams(prevState => prevState.filter(activeExam => activeExam.course.id !== id));
             return setActiveCourses(activeCourses.filter(course => course.id !== id));
         }
@@ -132,7 +153,7 @@ const Viewer = () => {
             id,
             name,
             isChecked: true,
-            color: defaultColor
+            color: reserveAvailableColor(),
         }
 
         const courseExams: Exam[] = exams.map((exam) => ({
@@ -146,11 +167,13 @@ const Viewer = () => {
     }
 
     const onSignUp = (user: User) => {
+        localStorage.setItem('user', JSON.stringify(user));
         setUser(user);
         setSignUp(!signUp);
     }
 
     const onLogin = (user: User) => {
+        localStorage.setItem('user', JSON.stringify(user));
         setUser(user);
         setLoggedIn(!isLoggedIn);
     }
@@ -171,7 +194,7 @@ const Viewer = () => {
                             edge="end"
                             onClick={logout}
                         >
-                            { isLoggedIn && <LogoutIcon/> }
+                            { isLoggedIn && <LogoutIcon color="secondary"/> }
                         </IconButton>
 
                     </SideBox>
@@ -183,7 +206,7 @@ const Viewer = () => {
                             onClick={handleDrawerOpen}
                             sx={{ ...(open && { display: 'none' }) }}
                         >
-                            { isLoggedIn ? <FilterAltIcon /> : <PersonIcon /> }
+                            { isLoggedIn ? <FilterAltIcon color="secondary" /> : <PersonIcon color="secondary" /> }
                         </IconButton>
                     </SideBox>
                 </StyledToolbar>

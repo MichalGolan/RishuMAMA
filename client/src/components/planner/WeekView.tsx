@@ -12,6 +12,7 @@ import { useGetActiveCoursesLecturesQuery } from "../../data/queries/useGetActiv
 import { CourseLight } from "../../data/api/courses";
 
 import eventClasses from './event.module.css';
+import {defaultColor} from "../../utils/defaults";
 
 interface Props {
     activeCourses: Array<CourseLight>;
@@ -85,6 +86,8 @@ export default function WeekView (props: Props) {
     
     function getEvents (myLectures: Lecture[]) : EventInput[] {
         return myLectures.map(lecture => {
+            const color = props.activeCourses
+                .find(course => course.id === lecture.courseId)?.color;
             return {
                 id: lecture.id.toString(),
                 title: props.courseIdToTitle(lecture.courseId),
@@ -92,7 +95,7 @@ export default function WeekView (props: Props) {
                 end: fixLectureTimeToWeekViewDate(lecture.endTime, lecture.day),
                 extendedProps: {
                     lecturer: lecture.lecutrer,
-                    color: '#6082B6'
+                    color: color ? color : defaultColor,
                 }
             }
         });

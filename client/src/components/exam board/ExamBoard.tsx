@@ -29,15 +29,16 @@ const calcMonths = (exams: Exam[]) : number[] => {
 const stringifyMonthDay = (month: number, day: number) => {
     return `M${month}/D${day}`
 }
-const getDatesMap = (exams: Exam[]): Map<string, {name: string, isFirst: boolean}> => {
-    const datesMap =  new Map<string, {name: string, isFirst: boolean}>();
+const getDatesMap = (exams: Exam[]): Map<string, { name: string, isFirst: boolean, color: string }> => {
+    const datesMap =  new Map<string, {name: string, isFirst: boolean, color: string}>();
 
     for (const exam of exams) {
         datesMap.set(
             stringifyMonthDay(exam.date.getMonth(),
                 exam.date.getDate()), {
                 name: exam.course.name,
-                isFirst: exam.isFirst
+                isFirst: exam.isFirst,
+                color: exam.course.color,
             });
     }
 
@@ -65,13 +66,11 @@ const StyledPaper = (props: PaperProps) => {
 
 function ExamBoard(props: Props) {
     let months: number[] = [];
-    let datesMap: Map<string, {name: string, isFirst: boolean}> = new Map();
+    let datesMap: Map<string,  { name: string, isFirst: boolean, color: string }> = new Map();
 
     if(props.exams.length > 0){
         months = calcMonths(props.exams);
         datesMap = getDatesMap(props.exams);
-        console.log(props.exams);
-        console.log(datesMap);
     }
 
     const isColored = (month: number, day: number) => {
@@ -86,6 +85,11 @@ function ExamBoard(props: Props) {
     const getIsFirstByDate = (month: number, day: number) => {
         if(!isColored(month, day)) return '';
         return datesMap.get(stringifyMonthDay(month, day))?.isFirst;
+    }
+
+    const getDataByDate = (month: number, day: number) => {
+        const data = datesMap.get(stringifyMonthDay(month, day));
+        return data ? data : { name: '', isFirst: '', color: 'none'};
     }
     
     return (
@@ -107,6 +111,7 @@ function ExamBoard(props: Props) {
                             {months
                                 .map((monthNo) => {
                                         const colorMe = isColored(monthNo, i + 1);
+                                        const { name, isFirst, color } = getDataByDate(monthNo, i + 1);
                                         const hoverHTML = colorMe ? (
                                             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                                                 <div>{`${get2DigitString(i + 1)}/${get2DigitString(monthNo + 1)}`}</div>
@@ -124,7 +129,7 @@ function ExamBoard(props: Props) {
                                                 sx={{
                                                     borderRight: 1,
                                                     borderColor: '#E5E4E2',
-                                                    background: colorMe ? defaultColor : 'none'
+                                                    background: colorMe ? color : 'none'
                                                 }}
                                             >
                                             </TableCell>
