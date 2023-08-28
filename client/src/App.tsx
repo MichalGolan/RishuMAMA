@@ -2,18 +2,6 @@ import React, {useRef} from "react";
 import Viewer from "./components/viewer/Viewer";
 import {ThemeProvider, createTheme} from "@mui/material/styles";
 
-// const themeOptions: ThemeOptions = {
-//     palette: {
-//         mode: 'light',
-//         primary: {
-//             main: '#e3eef4',
-//         },
-//         secondary: {
-//             main: '#f50057',
-//         },
-//     },
-// };
-
 const theme = createTheme({
     palette: {
         primary: {
@@ -34,7 +22,6 @@ const theme = createTheme({
                         color: '#03555E',
                         backgroundColor: '#FFE35E',
                         fontWeight: 'bold',
-                        // color: 'white',
                     }
                 }
             }
