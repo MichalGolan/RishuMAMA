@@ -20,7 +20,7 @@ import "./Viewer.css"
 import SignUp from "../sign up/SignUp";
 import Login from "../log in/Login";
 import {CourseLight, Exam} from "../../data/api/courses";
-import {defaultColor, releaseAllColors, releaseColor, reserveAvailableColor} from "../../utils/defaults";
+import { releaseAllColors, releaseColor, reserveAvailableColor} from "../../utils/defaults";
 import { User } from "../../data/api/users";
 import ExamBoard from "../exam board/ExamBoard";
 

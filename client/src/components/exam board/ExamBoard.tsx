@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -8,8 +8,6 @@ import TableRow from '@mui/material/TableRow';
 import Tooltip from '@mui/material/Tooltip'
 import Paper, { PaperProps } from '@mui/material/Paper';
 import { Exam } from "../../data/api/courses";
-import classes from './ExamBoard.module.css';
-import { defaultColor } from '../../utils/defaults'
 
 const maxDaysInMonth = 31;
 interface Props {
@@ -115,8 +113,8 @@ function ExamBoard(props: Props) {
                                         const hoverHTML = colorMe ? (
                                             <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                                                 <div>{`${get2DigitString(i + 1)}/${get2DigitString(monthNo + 1)}`}</div>
-                                                <div>{getNameByDate(monthNo, i + 1)}</div>
-                                                <div>{getIsFirstByDate(monthNo, i + 1) ? 'מועד א' : 'מועד ב'}</div>
+                                                <div>{ name }</div>
+                                                <div>{ isFirst ? 'מועד א' : 'מועד ב'}</div>
                                             </div>
                                         ) : ''
                                         return (

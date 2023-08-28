@@ -1,6 +1,6 @@
 import React, {useRef} from "react";
 import Viewer from "./components/viewer/Viewer";
-import {ThemeOptions, ThemeProvider, createTheme} from "@mui/material/styles";
+import {ThemeProvider, createTheme} from "@mui/material/styles";
 
 // const themeOptions: ThemeOptions = {
 //     palette: {
