@@ -121,7 +121,6 @@ userRouter.post("/user", async (req, res) => {
 
 userRouter.post("/user-courses", async (req, res) => {
   let { selectedCoursesIds, userEmail } = req.body;
-  console.log(`email: ${userEmail} selected ${selectedCoursesIds}`)
   const selectedCoursesString: string = JSON.stringify(selectedCoursesIds);
   try {
     const updatedUser = await prismaClient.user.update({
@@ -131,7 +130,6 @@ userRouter.post("/user-courses", async (req, res) => {
       },
       
       });
-      console.log(`${updatedUser} and ${updatedUser.email}`);
       return res.json({
         message: "selected courses updated successdully"
       })

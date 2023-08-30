@@ -170,8 +170,6 @@ const Viewer = () => {
     }
 
     const onSignUp = (user: User) => {
-        localStorage.setItem('user', JSON.stringify(user));
-        setUser(user);
         setSignUp(!signUp);
     }
     
