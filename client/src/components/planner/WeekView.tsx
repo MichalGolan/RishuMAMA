@@ -131,7 +131,10 @@ export default function WeekView (props: Props) {
             let colliding: boolean = false;
             lectures?.forEach((lecture) => {
                 if (thisLecture.id !== lecture.id && checkCollision(thisLecture, lecture)) {
-                    colliding = true
+                    //colliding only if lecture is in events (showing!)
+                    const present = events
+                        .find(event => event.id === lecture.id.toString())
+                    colliding = !!present;
                     return;
                 }
             })
