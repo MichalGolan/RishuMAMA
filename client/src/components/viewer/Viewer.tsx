@@ -217,7 +217,7 @@ const Viewer = () => {
                 <Divider />
                 {
                     isLoggedIn
-                    ? <Sidebar onCourseToggle={handleCourseToggle} userEmail={user?.email}/>
+                    ? <Sidebar onCourseToggle={handleCourseToggle} userEmail={user?.email} userCourses={user?.selectedCourses}/>
                     : signUp 
                     ? <SignUp onSignUp={onSignUp}></SignUp>
                     : <Login onSignUp={onSignUp} onLogin={onLogin}></Login>

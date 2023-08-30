@@ -22,7 +22,8 @@ type CourseToggleEvent = {
 }
 interface Props {
     onCourseToggle: Function,
-    userEmail: string
+    userEmail: string,
+    userCourses: Course[]
 }
 
 const noneChosen = "";
