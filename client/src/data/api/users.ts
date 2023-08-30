@@ -5,7 +5,6 @@ import { ApiResponse } from "./utils";
 export type User = {
   name: string;
   email: string;
-  password: string;
   selectedCourses: Course[];
 };
 

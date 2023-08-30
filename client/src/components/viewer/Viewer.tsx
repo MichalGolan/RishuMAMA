@@ -87,13 +87,13 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     ...theme.mixins.toolbar,
     justifyContent: 'flex-start',
 }));
-const defaultUser: User = {name:"", email:"", password:"", selectedCourses:[]}
+const defaultUser: User = {name:"", email:"", selectedCourses:[]}
 
-
+/*
 const getLocalUser = () => {
     const user = localStorage.getItem('user');
     return user ? JSON.parse(user) : defaultUser;
-}
+}*/
 
 const Viewer = () => {
     const theme = useTheme();
@@ -105,13 +105,13 @@ const Viewer = () => {
     const [activeExams, setActiveExams] = useState<Exam[]>([]);
     const [restore, setRestore] = useState<boolean>(false);
 
-    useEffect(() => {
+    /*useEffect(() => {
         const user = getLocalUser();
         if(user.name !== ""){
             setLoggedIn(true);
         }
         setUser(user);
-    },[])
+    },[])*/
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -122,7 +122,7 @@ const Viewer = () => {
     };
 
     const logout = () => {
-        localStorage.removeItem('user');
+        //localStorage.removeItem('user');
         setUser(defaultUser);
         setLoggedIn(false);
         resetCourseSelection();
@@ -174,7 +174,7 @@ const Viewer = () => {
     }
     
     const onLogin = (user: User) => {
-        localStorage.setItem('user', JSON.stringify(user));
+        //localStorage.setItem('user', JSON.stringify(user));
         setUser(user);
         if(user.selectedCourses.length) {
             if (confirm(`Would like to restore your previous course selection?'`)) {

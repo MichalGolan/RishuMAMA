@@ -19,7 +19,6 @@ export type FECourse = {
 export type User = {
   email:string,
   name: string,
-  password: string,
   selectedCourses: FECourse[]
 }
 
@@ -40,7 +39,6 @@ userRouter.get("/user", async (req, res) => {
       select: {
         name: true,
         email: true,
-        password: true,
         selectedCoursesIds: true,
       },
       where: {
@@ -61,7 +59,7 @@ userRouter.get("/user", async (req, res) => {
         }
       }
       const feSelectedCourses: FECourse[] = setFeSelectedCourses(selectedCourses);
-      const user: User = {name:data.name, email:data.email, password:data.password, selectedCourses: feSelectedCourses }
+      const user: User = {name:data.name, email:data.email, selectedCourses: feSelectedCourses }
       const response: ApiResponse<User> = {
         result: user
       };
@@ -70,9 +68,11 @@ userRouter.get("/user", async (req, res) => {
       
     } else {
       // handle not signed user
-      return res.json({
-        error: "get user failed"
-      })
+      const response: ApiResponse<User> = {
+        result: {name: "", email: "", selectedCourses: []}
+      };
+
+      return res.json(response);
     }
     
   } catch (e) {
@@ -106,7 +106,7 @@ userRouter.post("/user", async (req, res) => {
           selectedCoursesIds: ""
         },
       });
-      const user: User = {email: email, name: name, password: password, selectedCourses:[]}
+      const user: User = {email: email, name: name, selectedCourses:[]}
       const response: ApiResponse<User> = {
         result: user
       };

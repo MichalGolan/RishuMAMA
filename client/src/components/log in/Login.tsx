@@ -27,14 +27,16 @@ export default function Login(props: Props) {
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
-
+    console.log(`email ${email} password ${password}`)
     fetchUser().then(r => {
-      if(r.data) {
+      if(r.data?.name !== "") {
         props.onLogin(r.data);
         setUserNotFound(false);
       } else {
         setUserNotFound(true);
       }
+      setEmail(noneChosen);
+      setPassword(noneChosen);
     })
   }
 
