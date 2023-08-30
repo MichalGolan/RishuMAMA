@@ -78,7 +78,8 @@ export default function WeekView (props: Props) {
       let parallel: boolean = false;
       activeLectures?.forEach((activeLec) => {
         if (lecture.id !== activeLec.id &&  lecture.courseId === activeLec.courseId ) {
-          parallel = true;
+            // lectures are parallel only if they are NOT in the same group
+            parallel = lecture.group !== activeLec.group;
         }
       })
       return parallel;    
@@ -95,6 +96,7 @@ export default function WeekView (props: Props) {
                 end: fixLectureTimeToWeekViewDate(lecture.endTime, lecture.day),
                 extendedProps: {
                     lecturer: lecture.lecutrer,
+                    group: lecture.group,
                     color: color ? color : defaultColor,
                 }
             }
@@ -158,6 +160,7 @@ export default function WeekView (props: Props) {
             <p>{eventContent.event.title}</p>
             <p style={{direction: 'ltr'}}>{eventContent.timeText}</p>
             <p>{eventContent.event.extendedProps.lecturer}</p>
+            <p>{` קבוצה ${eventContent.event.extendedProps.group}`}</p>
           </div>
         )
     }
@@ -166,12 +169,22 @@ export default function WeekView (props: Props) {
       if (confirm(`Are you sure you want to modify this Lecture '${clickInfo.event.title}'`)) {
         const selectedLecture = lectures?.find((lecture) => lecture.id.toString() === clickInfo.event.id);
         if(selectedLecture){
-          
+            // כל ההרצאות שהן מאותו קורס ומאותה הקבוצה כמו הקורס שבחרתי, זה כולל את זה שבחרתי מלכתחילה
+          const groupedLectures = lectures?.filter((lecture) =>
+              lecture.courseId === selectedLecture.courseId && lecture.group === selectedLecture.group);
+
           if (activeLectures.includes(selectedLecture)) {
-            setActiveLectures(activeLectures.filter(lecture => lecture.id !== selectedLecture.id));
+              const filteredOut = activeLectures.filter(lecture =>
+              !(lecture.courseId === selectedLecture.courseId && lecture.group === selectedLecture.group));
+              setActiveLectures(filteredOut);
+            //setActiveLectures(activeLectures.filter(lecture => lecture.id !== selectedLecture.id));
           }
           else {
-            setActiveLectures([...activeLectures, selectedLecture])
+              if(groupedLectures){
+                  setActiveLectures([...activeLectures, ...groupedLectures]);
+              } else {
+                  setActiveLectures([...activeLectures, selectedLecture]);
+              }
           }
         }
         // clickInfo.event.remove()
