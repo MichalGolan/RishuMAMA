@@ -54,10 +54,9 @@ function Sidebar(props: Props) {
             setFrame(props.userCourses[0].frame);
             setDepartment(props.userCourses[0].department);
             setSemester(props.userCourses[0].semester);
-            //const newChosenCourses: Set<Course> = new Set(props.userCourses)
-            //setChosenCourses(newChosenCourses);
         }
     }, [])
+    
     useEffect(() => {
         setShowButtonState(frame!==noneChosen && department !==noneChosen && semester!==noneChosen);
     }, [frame, department, semester]);
@@ -100,7 +99,8 @@ function Sidebar(props: Props) {
     }
 
     const resetSelection = () => {
-        setChosenCourses(new Set<Course>())
+        setChosenCourses(new Set<Course>());
+        setCoursesFetched(false);
     }
 
     return (
