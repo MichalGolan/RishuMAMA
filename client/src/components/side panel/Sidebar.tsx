@@ -24,7 +24,8 @@ interface Props {
     onCourseToggle: Function,
     userEmail: string,
     userCourses: Course[],
-    restore: boolean
+    restore: boolean,
+    resetCourseSelection: Function
 }
 
 const noneChosen = "";
@@ -101,6 +102,7 @@ function Sidebar(props: Props) {
     const resetSelection = () => {
         setChosenCourses(new Set<Course>());
         setCoursesFetched(false);
+        props.resetCourseSelection();
     }
 
     return (

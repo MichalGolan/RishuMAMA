@@ -105,8 +105,6 @@ const Viewer = () => {
     const [activeExams, setActiveExams] = useState<Exam[]>([]);
     const [restore, setRestore] = useState<boolean>(false);
 
-
-
     useEffect(() => {
         const user = getLocalUser();
         if(user.name !== ""){
@@ -127,6 +125,10 @@ const Viewer = () => {
         localStorage.removeItem('user');
         setUser(defaultUser);
         setLoggedIn(false);
+        resetCourseSelection();
+    }
+
+    const resetCourseSelection = () => {
         setActiveExams([]);
         setActiveCourses([]);
         releaseAllColors();
@@ -247,7 +249,7 @@ const Viewer = () => {
                 <Divider />
                 {
                     isLoggedIn
-                    ? <Sidebar onCourseToggle={handleCourseToggle} userEmail={user?.email} userCourses={user?.selectedCourses} restore={restore}/>
+                    ? <Sidebar onCourseToggle={handleCourseToggle} userEmail={user?.email} userCourses={user?.selectedCourses} restore={restore} resetCourseSelection={resetCourseSelection}/>
                     : signUp 
                     ? <SignUp onSignUp={onSignUp}></SignUp>
                     : <Login onSignUp={onSignUp} onLogin={onLogin}></Login>
