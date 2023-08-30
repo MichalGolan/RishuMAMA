@@ -12,6 +12,17 @@ const theme = createTheme({
         secondary: ({ main: '#069AAA' }),
     },
     components: {
+        MuiLink: {
+            styleOverrides: {
+                root: {
+                    color: '#069AAA',
+                    cursor: "pointer",
+                    ":hover": {
+                        color: '#03555E',
+                    }
+                }
+            }
+        },
         MuiButton: {
             styleOverrides: {
                 root: {
@@ -25,7 +36,7 @@ const theme = createTheme({
                     }
                 }
             }
-        }
+        },
     }
 });
 
