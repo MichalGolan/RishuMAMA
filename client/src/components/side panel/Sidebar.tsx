@@ -99,6 +99,10 @@ function Sidebar(props: Props) {
         props.onCourseToggle(id, null, false, null);
     }
 
+    const resetSelection = () => {
+        setChosenCourses(new Set<Course>())
+    }
+
     return (
         <Stack
             direction="column"
@@ -125,7 +129,11 @@ function Sidebar(props: Props) {
                         enabled={true}
                         name={"מסלול"}
                         options={departments.map(getDepartmentPresentation)}
-                        setVal={(val: string) => setDepartment(getDepartmentDB(val))}
+                        setVal={(val: string) => {
+                            setDepartment(getDepartmentDB(val))
+                            resetSelection();
+                        }
+                        }
                         courseChoicesInput={false}
                         restoredData={props.restore ? getDepartmentPresentation(department as Department) : ""}/>
                 </ListItem>
@@ -134,7 +142,11 @@ function Sidebar(props: Props) {
                         enabled={true}
                         name={"סמסטר"}
                         options={semesters.map(getSemesterPresentation)}
-                        setVal={(val: string) => setSemester(getSemesterDB(val))}
+                        setVal={(val: string) => {
+                            setSemester(getSemesterDB(val))
+                            resetSelection();
+                        }
+                        }
                         courseChoicesInput={false}
                         restoredData={props.restore ? getSemesterPresentation(semester as Semester) : ""}/>
                 </ListItem>
