@@ -19,7 +19,7 @@ import WeekView from "../planner/WeekView";
 import "./Viewer.css"
 import SignUp from "../sign up/SignUp";
 import Login from "../log in/Login";
-import {CourseLight, Exam} from "../../data/api/courses";
+import {Course, CourseLight, Exam} from "../../data/api/courses";
 import { defaultColor } from "../../utils/defaults";
 import { User } from "../../data/api/users";
 import ExamBoard from "../exam board/ExamBoard";
@@ -97,6 +97,7 @@ const Viewer = () => {
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [signUp, setSignUp] = useState<Boolean>(false);
     const [activeExams, setActiveExams] = useState<Exam[]>([]);
+    const [restore, setRestore] = useState<boolean>(false);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -149,8 +150,25 @@ const Viewer = () => {
         setSignUp(!signUp);
     }
 
+    const restoreCourses = () => {
+        const userActiveCourses: CourseLight[] = [];
+        user.selectedCourses.forEach((course) => {
+            userActiveCourses.push(diluteCourseData(course));
+        })
+        setActiveCourses(userActiveCourses);
+    }
+
+    const diluteCourseData = (course: Course): CourseLight => {
+        return { id: course.id, name: course.name, isChecked: false, color: defaultColor };
+    }
+    
     const onLogin = (user: User) => {
         setUser(user);
+        if(user.selectedCourses.length) {
+            if (confirm(`Would like to restore your previous course selection?'`)) {
+                setRestore(true);
+            }
+        }
         setLoggedIn(!isLoggedIn);
     }
 
@@ -217,7 +235,7 @@ const Viewer = () => {
                 <Divider />
                 {
                     isLoggedIn
-                    ? <Sidebar onCourseToggle={handleCourseToggle} userEmail={user?.email} userCourses={user?.selectedCourses}/>
+                    ? <Sidebar onCourseToggle={handleCourseToggle} userEmail={user?.email} userCourses={user?.selectedCourses} restore={restore}/>
                     : signUp 
                     ? <SignUp onSignUp={onSignUp}></SignUp>
                     : <Login onSignUp={onSignUp} onLogin={onLogin}></Login>

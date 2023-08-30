@@ -23,7 +23,8 @@ type CourseToggleEvent = {
 interface Props {
     onCourseToggle: Function,
     userEmail: string,
-    userCourses: Course[]
+    userCourses: Course[],
+    restore: boolean
 }
 
 const noneChosen = "";
@@ -38,7 +39,7 @@ function Sidebar(props: Props) {
     const [semester, setSemester] = useState<string>(noneChosen);
     const [coursesFetched, setCoursesFetched] = useState<boolean>(false);
     const [showButtonState, setShowButtonState] = useState<boolean>(false);
-    const [chosenCourses, setChosenCourses] = useState<Set<Course>>(new Set<Course>())
+    const [chosenCourses, setChosenCourses] = useState<Set<Course>>(props.restore ? new Set(props.userCourses) : new Set<Course>())
 
     const {isLoading: isCoursesLoading,refetch: fetchFilteredCourses, data: courses, isError: isCoursesError} = useGetFilteredCoursesQuery(department, frame, semester);
     const {
@@ -48,6 +49,15 @@ function Sidebar(props: Props) {
         isError: isPostSelectionError} = usePostUserCourseSelectionQuery([...chosenCourses].map(course => course.id)
         , props.userEmail);
 
+    useEffect(() => {
+        if(props.restore) {
+            setFrame(props.userCourses[0].frame);
+            setDepartment(props.userCourses[0].department);
+            setSemester(props.userCourses[0].semester);
+            //const newChosenCourses: Set<Course> = new Set(props.userCourses)
+            //setChosenCourses(newChosenCourses);
+        }
+    }, [])
     useEffect(() => {
         setShowButtonState(frame!==noneChosen && department !==noneChosen && semester!==noneChosen);
     }, [frame, department, semester]);
@@ -107,7 +117,8 @@ function Sidebar(props: Props) {
                         name={"מסגרת"}
                         options={frames.map(getFramePresentation)}
                         setVal={(val: string) => setFrame(getFrameDB(val))}
-                        courseChoicesInput={false}/>
+                        courseChoicesInput={false}
+                        restoredData={props.restore ? getFramePresentation(frame as Frame) : ""}/>
                 </ListItem>
                 <ListItem key="select2" >
                     <ComboSelect
@@ -115,7 +126,8 @@ function Sidebar(props: Props) {
                         name={"מסלול"}
                         options={departments.map(getDepartmentPresentation)}
                         setVal={(val: string) => setDepartment(getDepartmentDB(val))}
-                        courseChoicesInput={false}/>
+                        courseChoicesInput={false}
+                        restoredData={props.restore ? getDepartmentPresentation(department as Department) : ""}/>
                 </ListItem>
                 <ListItem key="select3" >
                     <ComboSelect
@@ -123,7 +135,8 @@ function Sidebar(props: Props) {
                         name={"סמסטר"}
                         options={semesters.map(getSemesterPresentation)}
                         setVal={(val: string) => setSemester(getSemesterDB(val))}
-                        courseChoicesInput={false}/>
+                        courseChoicesInput={false}
+                        restoredData={props.restore ? getSemesterPresentation(semester as Semester) : ""}/>
                 </ListItem>
                 <Button
                     variant="contained"
@@ -137,7 +150,8 @@ function Sidebar(props: Props) {
                         name={"קורסים"}
                         options={courses ? courses : []}
                         setVal={addCourse}
-                        courseChoicesInput={true}/>
+                        courseChoicesInput={true}
+                        restoredData=''/>
                 </ListItem>
             </List>
             <CourseToggleDisplay

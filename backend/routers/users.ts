@@ -2,13 +2,25 @@ import {Router} from "express";
 import {prismaClient} from "../prisma/client";
 import { ApiResponse } from "../utils/response";
 import { Course } from "@prisma/client";
+import { setFeSelectedCourses } from "../utils/functions";
 
 export const userRouter = Router();
+
+export type FECourse = {
+  id: number,
+  name: string,
+  department: string,
+  frame: string,
+  semester: string,
+  exam_A: Date,
+  exam_B: Date
+}
+
 export type User = {
   email:string,
   name: string,
   password: string,
-  selectedCourses: Course[]
+  selectedCourses: FECourse[]
 }
 
 userRouter.post("/", async (req, res) => {
@@ -40,7 +52,6 @@ userRouter.get("/user", async (req, res) => {
       let selectedCourses: Course[] = [];
       if(data.selectedCoursesIds) {
         const selectedCoursesIdArr: number[] = JSON.parse(data.selectedCoursesIds);
-        console.log(`len ${selectedCoursesIdArr}`)
         if(selectedCoursesIdArr.length) {
           selectedCourses = await prismaClient.course.findMany({
             where: {
@@ -49,7 +60,8 @@ userRouter.get("/user", async (req, res) => {
           });
         }
       }
-      const user: User = {name:data.name, email:data.email, password:data.password, selectedCourses: selectedCourses }
+      const feSelectedCourses: FECourse[] = setFeSelectedCourses(selectedCourses);
+      const user: User = {name:data.name, email:data.email, password:data.password, selectedCourses: feSelectedCourses }
       const response: ApiResponse<User> = {
         result: user
       };
@@ -100,11 +112,6 @@ userRouter.post("/user", async (req, res) => {
       };
       return res.json(response);
     }
-/*
-      return res.json({
-        message: `User added: ${newUser}`
-      })
-*/
   } catch (e) {
     return res.json({
       error: e
@@ -140,13 +147,4 @@ userRouter.post("/user-courses", async (req, res) => {
   })
 });
 
-/*
-const updatedUser: User = await prisma.updateUser({
-  data: {
-    role: 'ADMIN',
-  },
-  where: {
-    id: 'cjli512bd005g0a233s1ogbgy',
-  },
-})
-*/
+
