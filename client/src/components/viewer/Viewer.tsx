@@ -19,7 +19,7 @@ import WeekView from "../planner/WeekView";
 import "./Viewer.css"
 import SignUp from "../sign up/SignUp";
 import Login from "../log in/Login";
-import {CourseLight, Exam} from "../../data/api/courses";
+import {Course, CourseLight, Exam} from "../../data/api/courses";
 import { releaseAllColors, releaseColor, reserveAvailableColor} from "../../utils/defaults";
 import { User } from "../../data/api/users";
 import ExamBoard from "../exam board/ExamBoard";
@@ -87,7 +87,8 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     ...theme.mixins.toolbar,
     justifyContent: 'flex-start',
 }));
-const defaultUser: User = {name:"", email:"", password:""}
+const defaultUser: User = {name:"", email:"", password:"", selectedCourses:[]}
+
 
 const getLocalUser = () => {
     const user = localStorage.getItem('user');
@@ -102,6 +103,7 @@ const Viewer = () => {
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [signUp, setSignUp] = useState<Boolean>(false);
     const [activeExams, setActiveExams] = useState<Exam[]>([]);
+    const [restore, setRestore] = useState<boolean>(false);
 
 
 
@@ -144,9 +146,8 @@ const Viewer = () => {
             setActiveExams(prevState => prevState.filter(activeExam => activeExam.course.id !== id));
             return setActiveCourses(activeCourses.filter(course => course.id !== id));
         }
-
+        
         const course = activeCourses.find(course => course.id === id);
-
         if(course) return;
 
         const courseLight = {
@@ -172,9 +173,26 @@ const Viewer = () => {
         setSignUp(!signUp);
     }
 
+    const restoreCourses = () => {
+        const userActiveCourses: CourseLight[] = [];
+        user.selectedCourses.forEach((course) => {
+            userActiveCourses.push(diluteCourseData(course));
+        })
+        setActiveCourses(userActiveCourses);
+    }
+
+    const diluteCourseData = (course: Course): CourseLight => {
+        return { id: course.id, name: course.name, isChecked: false, color: reserveAvailableColor() };
+    }
+    
     const onLogin = (user: User) => {
         localStorage.setItem('user', JSON.stringify(user));
         setUser(user);
+        if(user.selectedCourses.length) {
+            if (confirm(`Would like to restore your previous course selection?'`)) {
+                setRestore(true);
+            }
+        }
         setLoggedIn(!isLoggedIn);
     }
 
@@ -241,8 +259,8 @@ const Viewer = () => {
                 <Divider />
                 {
                     isLoggedIn
-                    ? <Sidebar onCourseToggle={handleCourseToggle}/>
-                    : signUp
+                    ? <Sidebar onCourseToggle={handleCourseToggle} userEmail={user?.email} userCourses={user?.selectedCourses} restore={restore}/>
+                    : signUp 
                     ? <SignUp onSignUp={onSignUp}></SignUp>
                     : <Login onSignUp={onSignUp} onLogin={onLogin}></Login>
                 }

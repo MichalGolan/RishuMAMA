@@ -13,6 +13,7 @@ import { useGetSemestersQuery } from '../../data/queries/useGetSemestersQuery';
 import { useGetFilteredCoursesQuery } from "../../data/queries/useGetFilteredCoursesQuery";
 import CourseToggleDisplay from "./CourseToggleDisplay";
 import { defaultColor } from "../../utils/defaults";
+import { usePostUserCourseSelectionQuery } from '../../data/queries/usePostUserCourseSelectionQuery';
 
 
 type CourseToggleEvent = {
@@ -20,7 +21,10 @@ type CourseToggleEvent = {
     active: boolean;
 }
 interface Props {
-    onCourseToggle: Function
+    onCourseToggle: Function,
+    userEmail: string,
+    userCourses: Course[],
+    restore: boolean
 }
 
 const noneChosen = "";
@@ -33,16 +37,33 @@ function Sidebar(props: Props) {
     const [frame, setFrame] = useState<string>(noneChosen);
     const [department, setDepartment] = useState<string>(noneChosen);
     const [semester, setSemester] = useState<string>(noneChosen);
-    const {isLoading: isCoursesLoading,refetch: fetchFilteredCourses, data: courses, isError: isCoursesError} = useGetFilteredCoursesQuery(department, frame, semester);
-
     const [coursesFetched, setCoursesFetched] = useState<boolean>(false);
     const [showButtonState, setShowButtonState] = useState<boolean>(false);
-    const [chosenCourses, setChosenCourses] = useState<Set<Course>>(new Set<Course>())
+    const [chosenCourses, setChosenCourses] = useState<Set<Course>>(props.restore ? new Set(props.userCourses) : new Set<Course>())
 
+    const {isLoading: isCoursesLoading,refetch: fetchFilteredCourses, data: courses, isError: isCoursesError} = useGetFilteredCoursesQuery(department, frame, semester);
+    const {
+        isLoading: isPostCourseSelectionLoading, 
+        refetch: fetchUserCourseSelection, 
+        data: postUserCourseSelection, 
+        isError: isPostSelectionError} = usePostUserCourseSelectionQuery([...chosenCourses].map(course => course.id)
+        , props.userEmail);
+
+    useEffect(() => {
+        if(props.restore) {
+            setFrame(props.userCourses[0].frame);
+            setDepartment(props.userCourses[0].department);
+            setSemester(props.userCourses[0].semester);
+        }
+    }, [])
+    
     useEffect(() => {
         setShowButtonState(frame!==noneChosen && department !==noneChosen && semester!==noneChosen);
     }, [frame, department, semester]);
 
+    useEffect(() => {
+        fetchUserCourseSelection()
+    }, [chosenCourses])
 
     function filter() {
         fetchFilteredCourses().then(r => {
@@ -77,6 +98,11 @@ function Sidebar(props: Props) {
         props.onCourseToggle(id, null, false, null);
     }
 
+    const resetSelection = () => {
+        setChosenCourses(new Set<Course>());
+        setCoursesFetched(false);
+    }
+
     return (
         <Stack
             direction="column"
@@ -95,23 +121,34 @@ function Sidebar(props: Props) {
                         name={"מסגרת"}
                         options={frames.map(getFramePresentation)}
                         setVal={(val: string) => setFrame(getFrameDB(val))}
-                        courseChoicesInput={false}/>
+                        courseChoicesInput={false}
+                        restoredData={props.restore ? getFramePresentation(frame as Frame) : ""}/>
                 </ListItem>
                 <ListItem key="select2" >
                     <ComboSelect
                         enabled={true}
                         name={"מסלול"}
                         options={departments.map(getDepartmentPresentation)}
-                        setVal={(val: string) => setDepartment(getDepartmentDB(val))}
-                        courseChoicesInput={false}/>
+                        setVal={(val: string) => {
+                            setDepartment(getDepartmentDB(val))
+                            resetSelection();
+                        }
+                        }
+                        courseChoicesInput={false}
+                        restoredData={props.restore ? getDepartmentPresentation(department as Department) : ""}/>
                 </ListItem>
                 <ListItem key="select3" >
                     <ComboSelect
                         enabled={true}
                         name={"סמסטר"}
                         options={semesters.map(getSemesterPresentation)}
-                        setVal={(val: string) => setSemester(getSemesterDB(val))}
-                        courseChoicesInput={false}/>
+                        setVal={(val: string) => {
+                            setSemester(getSemesterDB(val))
+                            resetSelection();
+                        }
+                        }
+                        courseChoicesInput={false}
+                        restoredData={props.restore ? getSemesterPresentation(semester as Semester) : ""}/>
                 </ListItem>
                 <Button
                     variant="contained"
@@ -125,7 +162,8 @@ function Sidebar(props: Props) {
                         name={"קורסים"}
                         options={courses ? courses : []}
                         setVal={addCourse}
-                        courseChoicesInput={true}/>
+                        courseChoicesInput={true}
+                        restoredData=''/>
                 </ListItem>
             </List>
             <CourseToggleDisplay

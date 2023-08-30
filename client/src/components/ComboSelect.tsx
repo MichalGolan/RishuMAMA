@@ -8,10 +8,11 @@ interface Props {
     enabled: boolean;
     setVal: Function;
     courseChoicesInput: boolean;
+    restoredData: string
 }
 
 export default function ComboSelect(props: Props) {
-    const [value, setValue] = useState<string>("");
+    const [value, setValue] = useState<string>(props.restoredData);
     const [inputValue, setInputValue] = useState('');
 
     function mapOptions(){

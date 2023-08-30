@@ -82,7 +82,6 @@ coursesRouter.get("/filtered", async (req, res) => {
     }
 });
 
-
 function getDepartmentDB(dep: string): Department {
     const mapping: Record<string, Department> = {
         "COMPUTER_SCIENCE": Department.COMPUTER_SCIENCE,

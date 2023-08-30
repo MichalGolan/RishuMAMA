@@ -1,10 +1,12 @@
-import {httpClient} from "../../http/axios";
+import { httpClient } from "../../http/axios";
+import { Course } from "./courses";
 import { ApiResponse } from "./utils";
 
 export type User = {
   name: string;
   email: string;
   password: string;
+  selectedCourses: Course[];
 };
 
 export function getAllUsers() {
@@ -35,4 +37,11 @@ export function postUser(email: string, name: string, password: string) {
   type GetUserResponse = ApiResponse<User>;
   return httpClient.post<GetUserResponse>(
     "/users/user", data);
+}
+
+export function postUserCourseSelection(selectedCoursesIds: Array<number>, userEmail: string) {
+  const data = { selectedCoursesIds: selectedCoursesIds, userEmail: userEmail }
+  type GetUserResponse = ApiResponse<User>;
+  return httpClient.post<GetUserResponse>(
+    "/users/user-courses", data);
 }

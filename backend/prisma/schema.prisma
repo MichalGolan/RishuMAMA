@@ -11,14 +11,13 @@ datasource db {
 }
 
 model User {
-  id              Int      @id @default(autoincrement())
-  email           String   @unique
-  name            String?
-  createdAt       DateTime @default(now())
-  //updatedAt       DateTime @updatedAt
-  password        String   
+  id                  Int      @id @default(autoincrement())
+  email               String   @unique
+  name                String?
+  createdAt           DateTime @default(now())
+  password            String   
   // Define the relation to the selected courses
-  selectedCourses Course[] @relation("SelectedCourses")
+  selectedCoursesIds  String
 }
 
 // Define the enum types
@@ -61,7 +60,6 @@ model Course {
   exam_A     DateTime
   exam_B     DateTime
 
-  selectedBy User[]    @relation("SelectedCourses")
   lectures   Lecture[]
 }
 
