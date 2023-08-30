@@ -11,17 +11,17 @@ import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography"
-import {useTheme, styled } from "@mui/material/styles"
+import {styled, useTheme} from "@mui/material/styles"
 
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import Sidebar from "../side panel/Sidebar";
 import WeekView from "../planner/WeekView";
 import "./Viewer.css"
 import SignUp from "../sign up/SignUp";
 import Login from "../log in/Login";
-import {Course, CourseLight, Exam} from "../../data/api/courses";
-import { releaseAllColors, releaseColor, reserveAvailableColor} from "../../utils/defaults";
-import { User } from "../../data/api/users";
+import {CourseLight, Exam} from "../../data/api/courses";
+import {releaseAllColors, releaseColor, reserveAvailableColor} from "../../utils/defaults";
+import {User} from "../../data/api/users";
 import ExamBoard from "../exam board/ExamBoard";
 
 const StyledToolbar = styled(Toolbar)({
@@ -89,11 +89,29 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 const defaultUser: User = {name:"", email:"", selectedCourses:[]}
 
-/*
-const getLocalUser = () => {
-    const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) : defaultUser;
-}*/
+const getLocalUser = () : User => {
+    const storedName = localStorage.getItem('user-name');
+    const storedMail = localStorage.getItem('user-email');
+    if (!storedName || !storedMail) {
+        return defaultUser;
+    }
+
+    return {
+        name: storedName,
+        email: storedMail,
+        selectedCourses: [],
+    };
+}
+
+const setLocalUser = (user: User)  => {
+    localStorage.setItem('user-name', user.name);
+    localStorage.setItem('user-email', user.email);
+}
+
+const removeLocalUser = () => {
+    localStorage.removeItem('user-name');
+    localStorage.removeItem('user-email');
+}
 
 const Viewer = () => {
     const theme = useTheme();
@@ -105,13 +123,13 @@ const Viewer = () => {
     const [activeExams, setActiveExams] = useState<Exam[]>([]);
     const [restore, setRestore] = useState<boolean>(false);
 
-    /*useEffect(() => {
-        const user = getLocalUser();
+    useEffect(() => {
+        const user: User = getLocalUser();
         if(user.name !== ""){
             setLoggedIn(true);
         }
         setUser(user);
-    },[])*/
+    },[])
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -122,7 +140,7 @@ const Viewer = () => {
     };
 
     const logout = () => {
-        //localStorage.removeItem('user');
+        removeLocalUser();
         setUser(defaultUser);
         setLoggedIn(false);
         resetCourseSelection();
@@ -174,7 +192,7 @@ const Viewer = () => {
     }
     
     const onLogin = (user: User) => {
-        //localStorage.setItem('user', JSON.stringify(user));
+        setLocalUser(user);
         setUser(user);
         if(user.selectedCourses.length) {
             if (confirm(`Would like to restore your previous course selection?'`)) {
