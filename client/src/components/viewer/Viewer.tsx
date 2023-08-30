@@ -172,18 +172,6 @@ const Viewer = () => {
         setUser(user);
         setSignUp(!signUp);
     }
-
-    const restoreCourses = () => {
-        const userActiveCourses: CourseLight[] = [];
-        user.selectedCourses.forEach((course) => {
-            userActiveCourses.push(diluteCourseData(course));
-        })
-        setActiveCourses(userActiveCourses);
-    }
-
-    const diluteCourseData = (course: Course): CourseLight => {
-        return { id: course.id, name: course.name, isChecked: false, color: reserveAvailableColor() };
-    }
     
     const onLogin = (user: User) => {
         localStorage.setItem('user', JSON.stringify(user));
