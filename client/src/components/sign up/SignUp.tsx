@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useState } from "react";
 import { usePostUserQuery } from "../../data/queries/usePostUserQuery"
+import classes from "../log in/Login.module.css"
 
 interface Props {
   onSignUp: Function;
@@ -128,7 +129,7 @@ export default function SignUp(props: Props) {
             </Grid>
           </Grid>
           <br></br>
-          <h3 className="error">{getErrorMessage()}</h3>
+          <h3 className={classes.error}>{getErrorMessage()}</h3>
         </Box>
       </Box>
     </Container>

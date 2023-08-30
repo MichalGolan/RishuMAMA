@@ -10,7 +10,7 @@ import Container from "@mui/material/Container";
 import { useGetUserQuery } from "../../data/queries/useGetUserQuery";
 import { useState } from "react";
 import { User } from "../../data/api/users";
-
+import classes from "./Login.module.css"
 
 interface Props {
     onSignUp: Function;
@@ -120,7 +120,7 @@ export default function Login(props: Props) {
             </Grid>
           </Grid>
           <br></br>
-          <h3 className="error">{getErrorMessage()}</h3>
+          <h3 className={classes.error}>{getErrorMessage()}</h3>
         </Box>
       </Box>
     </Container>
