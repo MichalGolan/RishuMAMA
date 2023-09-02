@@ -8,6 +8,7 @@ export type Lecture = {
     endTime: string, //HH:mm
     day: DayOfWeek,
     lecutrer: String,
+    group: number,
     isLecture: Boolean,
     practices: number[],
     courseId: number,
@@ -19,6 +20,7 @@ type DBLecture = {
   endTime: string, //HH:mm
   day: string,
   lecutrer: String,
+  group: number,
   isLecture: Boolean,
   practices: number[],
   courseId: number,

@@ -7,26 +7,6 @@ export function useGetFilteredCoursesQuery(department: string, frame: string, se
         queryFn: async () => {
             const response = await getFiltered(department, frame, semester);
             return response.data.result;},
-        //     const courses: Array<Course> = [
-        //       {
-        //         id: 1,
-        //         name: "Course 1",
-        //         department: "COMPUTER_SCIENCE",
-        //         frame: "A",
-        //         semester: "A"
-        //
-        //     },
-        //         {
-        //             id: 2,
-        //             name: "Course 2",
-        //             department: "COMPUTER_SCIENCE",
-        //             frame: "A",
-        //             semester: "A"
-        //
-        //         }
-        //     ]
-        //     return courses;
-        // },
         refetchOnWindowFocus: false,
         enabled: false // disable this query from automatically running
     })

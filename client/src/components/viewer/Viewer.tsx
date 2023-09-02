@@ -1,23 +1,33 @@
-import { ChevronLeft, ChevronRight} from "@mui/icons-material";
-import MenuIcon from '@mui/icons-material/Menu';
-import {
-    AppBar,
-    Box, Divider, Drawer, IconButton,
-    styled,
-    Toolbar,
-    Typography, useTheme,
-} from "@mui/material";
-import { useState } from "react";
+import ChevronRight from "@mui/icons-material/ChevronRight"
+import ChevronLeft from "@mui/icons-material/ChevronLeft"
+import PersonIcon from '@mui/icons-material/Person';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import LogoutIcon from '@mui/icons-material/Logout';
+import AppBar from "@mui/material/AppBar";
+
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography"
+import {styled, useTheme} from "@mui/material/styles"
+
+import {useEffect, useState} from "react";
 import Sidebar from "../side panel/Sidebar";
 import WeekView from "../planner/WeekView";
 import "./Viewer.css"
-import { CourseLight } from "../../data/api/courses";
-import { defaultColor } from "../../utils/defaults";
+import SignUp from "../sign up/SignUp";
+import Login from "../log in/Login";
+import {CourseLight, Exam} from "../../data/api/courses";
+import {releaseAllColors, releaseColor, reserveAvailableColor} from "../../utils/defaults";
+import {User} from "../../data/api/users";
+import ExamBoard from "../exam board/ExamBoard";
 
 const StyledToolbar = styled(Toolbar)({
     display: "flex",
     flexDirection: "row",
-    justifyContent: "right",
+    justifyContent: "space-between",
     gap:"50px"
 });
 
@@ -77,14 +87,49 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     ...theme.mixins.toolbar,
     justifyContent: 'flex-start',
 }));
+const defaultUser: User = {name:"", email:"", selectedCourses:[]}
+
+const getLocalUser = () : User => {
+    const storedName = localStorage.getItem('user-name');
+    const storedMail = localStorage.getItem('user-email');
+    if (!storedName || !storedMail) {
+        return defaultUser;
+    }
+
+    return {
+        name: storedName,
+        email: storedMail,
+        selectedCourses: [],
+    };
+}
+
+const setLocalUser = (user: User)  => {
+    localStorage.setItem('user-name', user.name);
+    localStorage.setItem('user-email', user.email);
+}
+
+const removeLocalUser = () => {
+    localStorage.removeItem('user-name');
+    localStorage.removeItem('user-email');
+}
 
 const Viewer = () => {
     const theme = useTheme();
-    const username = "מיכל";
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(true);
     const [activeCourses, setActiveCourses] = useState<Array<CourseLight>>([]);
-    const [isLoggedIn, setLoggedIn] = useState<boolean>(true);
+    const [user, setUser] = useState<User>(defaultUser);
+    const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
     const [signUp, setSignUp] = useState<Boolean>(false);
+    const [activeExams, setActiveExams] = useState<Exam[]>([]);
+    const [restore, setRestore] = useState<boolean>(false);
+
+    useEffect(() => {
+        const user: User = getLocalUser();
+        if(user.name !== ""){
+            setLoggedIn(true);
+        }
+        setUser(user);
+    },[])
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -94,38 +139,90 @@ const Viewer = () => {
         setOpen(false);
     };
 
+    const logout = () => {
+        removeLocalUser();
+        setUser(defaultUser);
+        setLoggedIn(false);
+        resetCourseSelection();
+    }
+
+    const resetCourseSelection = () => {
+        setActiveExams([]);
+        setActiveCourses([]);
+        releaseAllColors();
+    }
+
     const courseIdToTitle = (courseId: number) : string => {
         const course = activeCourses.find((course) => course.id === courseId);
         return course ? course.name : '';
     }
 
-    const handleCourseToggle = (id: number, name: string, active: Boolean) => {
+    const handleCourseToggle = (id: number, name: string, active: Boolean, exams: {date: Date, isFirst: boolean}[]) => {
         if(!active){
+            const toBeRemovedCourse = activeCourses.find(course => course.id === id);
+            if(toBeRemovedCourse) {
+                releaseColor(toBeRemovedCourse.color);
+            }
+            setActiveExams(prevState => prevState.filter(activeExam => activeExam.course.id !== id));
             return setActiveCourses(activeCourses.filter(course => course.id !== id));
         }
-
+        
         const course = activeCourses.find(course => course.id === id);
-
         if(course) return;
 
-        setActiveCourses([...activeCourses, {id: id, name: name, isChecked: true, color: defaultColor}]);
+        const courseLight = {
+            id,
+            name,
+            isChecked: true,
+            color: reserveAvailableColor(),
+        }
+
+        const courseExams: Exam[] = exams.map((exam) => ({
+            course: courseLight,
+            date: new Date(exam.date),
+            isFirst: exam.isFirst
+        }))
+
+        setActiveExams(prevState => [...prevState, ...courseExams]);
+        setActiveCourses([...activeCourses, courseLight]);
     }
 
-    const onSignUp = () => {
+    const onSignUp = (user: User) => {
         setSignUp(!signUp);
+    }
+    
+    const onLogin = (user: User) => {
+        setLocalUser(user);
+        setUser(user);
+        if(user.selectedCourses.length) {
+            if (confirm(`Would like to restore your previous course selection?'`)) {
+                setRestore(true);
+            }
+        }
+        setLoggedIn(!isLoggedIn);
     }
 
     return (
         <Box sx={{ display: 'flex' }}>
             <AppBarStyled position="fixed">
                 <StyledToolbar>
-                    <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-                        RISHUMAMA
-                    </Typography>
                     <SideBox>
                         <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-                            שלום {username}
+                                RISHUMAMA
                         </Typography>
+                        <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
+                            Hello {isLoggedIn ? user.name : 'guest'}
+                        </Typography>
+                        <IconButton
+                            color="inherit"
+                            edge="end"
+                            onClick={logout}
+                        >
+                            { isLoggedIn && <LogoutIcon color="secondary"/> }
+                        </IconButton>
+
+                    </SideBox>
+                    <SideBox>
                         <IconButton
                             color="inherit"
                             aria-label="open drawer"
@@ -133,7 +230,7 @@ const Viewer = () => {
                             onClick={handleDrawerOpen}
                             sx={{ ...(open && { display: 'none' }) }}
                         >
-                            <MenuIcon />
+                            { isLoggedIn ? <FilterAltIcon color="secondary" /> : <PersonIcon color="secondary" /> }
                         </IconButton>
                     </SideBox>
                 </StyledToolbar>
@@ -141,9 +238,10 @@ const Viewer = () => {
             <Main open={open}>
                 <DrawerHeader />
                 <div className="viewer-row">
-                    <WeekView activeCourses={activeCourses} courseIdToTitle={courseIdToTitle}/>
-                    <div style={{alignSelf:"center", flex:"none"}}>  here will be exams board
+                    <div style={{alignSelf:"flex-start", paddingTop: "23px", paddingRight: "10px", flex:"none", justifyContent:"flex-start"}}>
+                        <ExamBoard exams={activeExams}/>
                     </div>
+                    <WeekView activeCourses={activeCourses} courseIdToTitle={courseIdToTitle}/>
                 </div>
             </Main>
             <Drawer
@@ -165,7 +263,14 @@ const Viewer = () => {
                     {isLoggedIn && <Typography>בחירת פילטרים</Typography> }
                 </DrawerHeader>
                 <Divider />
-                <Sidebar onCourseToggle={handleCourseToggle}/>               
+                {
+                    isLoggedIn
+                    ? <Sidebar onCourseToggle={handleCourseToggle} userEmail={user?.email} userCourses={user?.selectedCourses} restore={restore} resetCourseSelection={resetCourseSelection}/>
+                    : signUp 
+                    ? <SignUp onSignUp={onSignUp}></SignUp>
+                    : <Login onSignUp={onSignUp} onLogin={onLogin}></Login>
+                }
+
             </Drawer>
         </Box>
     );

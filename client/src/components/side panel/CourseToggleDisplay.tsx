@@ -11,8 +11,7 @@ interface Props {
     removeCourse: Function;
 }
 
-function CourseToggleDisplay(props: Props) {
-
+function CourseToggleDisplay(props: Props) {    
     return (
         <div className="toggle-container">
             {props.courses.map(course =>
@@ -21,8 +20,8 @@ function CourseToggleDisplay(props: Props) {
                     name={course.name}
                     id={course.id}
                     isChecked={course.isChecked}
-                    removeCourse={props.removeCourse}
-                    onToggleCheck={props.onToggleCheck}/>)}
+                    removeCourse={ props.removeCourse }
+                    onToggleCheck={ props.onToggleCheck }/>)}
         </div>
     )
 }

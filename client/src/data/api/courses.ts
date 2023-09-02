@@ -24,7 +24,9 @@ export type Course = {
   name: string,
   department: string,
   frame: string,
-  semester: string
+  semester: string,
+  exam_A: Date,
+  exam_B: Date
 }
 
 export type CourseLight = {
@@ -34,8 +36,15 @@ export type CourseLight = {
   color: string
 }
 
+export type Exam = {
+  course: CourseLight,
+  date: Date,
+  isFirst: boolean
+}
+
+
 /*export type CourseData = {
-  id: number,
+  id number,
   isChecked: boolean
 }
 */

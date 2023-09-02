@@ -11,13 +11,13 @@ datasource db {
 }
 
 model User {
-  id              String   @id @default(uuid())
-  email           String   @unique
-  name            String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id                  Int      @id @default(autoincrement())
+  email               String   @unique
+  name                String?
+  createdAt           DateTime @default(now())
+  password            String   
   // Define the relation to the selected courses
-  selectedCourses Course[] @relation("SelectedCourses")
+  selectedCoursesIds  String
 }
 
 // Define the enum types
@@ -57,8 +57,9 @@ model Course {
   department Department
   semester   Semester
   year       Year
+  exam_A     DateTime
+  exam_B     DateTime
 
-  selectedBy User[]    @relation("SelectedCourses")
   lectures   Lecture[]
 }
 
@@ -69,6 +70,7 @@ model Lecture {
   day       DayOfWeek? // The day of the week
   lecutrer  String
   isLecture Boolean
+  group     Int
   practices Int[]
   course    Course     @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   courseId  Int
