@@ -60,7 +60,6 @@ model Course {
   exam_A     DateTime
   exam_B     DateTime
 
-  lectures   Lecture[]
 }
 
 model Lecture {
@@ -72,6 +71,6 @@ model Lecture {
   isLecture Boolean
   group     Int
   practices Int[]
-  course    Course     @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  //course    Course     @relation(fields: [courseId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   courseId  Int
 }

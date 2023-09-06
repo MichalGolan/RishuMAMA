@@ -1,5 +1,7 @@
 import React from 'react';
-import { CourseLight } from "../../data/api/courses";
+import {Stack, ToggleButton} from "@mui/material";
+import CourseToggle from "./CourseToggle";
+import {Course, CourseLight} from "../../data/api/courses";
 import Toggle from "./course toggle/Toggle";
 import './ToggleContainer.css'
 
