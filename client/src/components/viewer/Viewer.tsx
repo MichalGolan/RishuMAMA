@@ -132,7 +132,9 @@ const Viewer = () => {
     },[])
 
     const handleDrawerOpen = () => {
-        setOpen(true);
+        if(isLoggedIn) {
+            setOpen(true);
+        }
     };
 
     const handleDrawerClose = () => {
@@ -144,6 +146,7 @@ const Viewer = () => {
         setUser(defaultUser);
         setLoggedIn(false);
         resetCourseSelection();
+        setOpen(false);
     }
 
     const resetCourseSelection = () => {
@@ -241,7 +244,13 @@ const Viewer = () => {
                     <div style={{alignSelf:"flex-start", paddingTop: "23px", paddingRight: "10px", flex:"none", justifyContent:"flex-start"}}>
                         <ExamBoard exams={activeExams}/>
                     </div>
-                    <WeekView activeCourses={activeCourses} courseIdToTitle={courseIdToTitle}/>
+                    {
+                        isLoggedIn
+                        ? <WeekView activeCourses={activeCourses} courseIdToTitle={courseIdToTitle}/>
+                        : signUp 
+                        ? <SignUp onSignUp={onSignUp}></SignUp>
+                        : <Login onSignUp={onSignUp} onLogin={onLogin}></Login>
+                    }
                 </div>
             </Main>
             <Drawer
@@ -262,15 +271,8 @@ const Viewer = () => {
                     </IconButton>
                     {isLoggedIn && <Typography>בחירת פילטרים</Typography> }
                 </DrawerHeader>
-                <Divider />
-                {
-                    isLoggedIn
-                    ? <Sidebar onCourseToggle={handleCourseToggle} userEmail={user?.email} userCourses={user?.selectedCourses} restore={restore} resetCourseSelection={resetCourseSelection}/>
-                    : signUp 
-                    ? <SignUp onSignUp={onSignUp}></SignUp>
-                    : <Login onSignUp={onSignUp} onLogin={onLogin}></Login>
-                }
-
+                <Divider /> 
+                <Sidebar onCourseToggle={handleCourseToggle} userEmail={user?.email} userCourses={user?.selectedCourses} restore={restore} resetCourseSelection={resetCourseSelection}/>
             </Drawer>
         </Box>
     );
