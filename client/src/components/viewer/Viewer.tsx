@@ -118,10 +118,10 @@ const removeLocalUser = () => {
 
 const Viewer = () => {
     const theme = useTheme();
-    const [open, setOpen] = useState(true);
     const [activeCourses, setActiveCourses] = useState<Array<CourseLight>>([]);
     const [user, setUser] = useState<User>(defaultUser);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
+    const [open, setOpen] = useState(isLoggedIn);
     const [signUp, setSignUp] = useState<Boolean>(false);
     const [activeExams, setActiveExams] = useState<Exam[]>([]);
     const [restore, setRestore] = useState<boolean>(false);
@@ -206,6 +206,7 @@ const Viewer = () => {
             if (confirm(`Would like to restore your previous course selection?'`)) {
                 setRestore(true);
             }
+            setOpen(true);
         }
         setLoggedIn(!isLoggedIn);
     }
@@ -277,7 +278,7 @@ const Viewer = () => {
                     {isLoggedIn && <Typography>בחירת פילטרים</Typography> }
                 </DrawerHeader>
                 <Divider /> 
-                <Sidebar onCourseToggle={handleCourseToggle} userEmail={user?.email} userCourses={user?.selectedCourses} restore={restore} resetCourseSelection={resetCourseSelection}/>
+                <Sidebar onCourseToggle={handleCourseToggle} userEmail={user?.email} userCourses={user?.selectedCourses} restore={restore} resetCourseSelection={resetCourseSelection} setRestore={setRestore}/>
             </Drawer>
         </Box>
     );
