@@ -32,6 +32,16 @@ export default function WeekView (props: Props) {
     }, [props.activeCourses])
 
     useEffect(() => {
+        //active lectures can only include lectures that are of active courses
+        const updated = activeLectures.filter(lec => {
+          props.activeCourses.find(course => course.id === lec.courseId)
+        })
+        if(updated.length !== activeLectures.length){
+          setActiveLectures(updated);
+        }
+    }, [props.activeCourses])
+
+    useEffect(() => {
       const filteredLectures: Lecture[] = [];
       lectures?.forEach((lecture) => {
         if (!checkCollidingLectures(lecture) && !checkParallelLectureChosen(lecture)) {
