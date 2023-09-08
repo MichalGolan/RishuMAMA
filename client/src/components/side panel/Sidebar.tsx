@@ -21,7 +21,8 @@ interface Props {
     userEmail: string,
     userCourses: Course[],
     restore: boolean,
-    resetCourseSelection: Function
+    resetCourseSelection: Function,
+    setRestore: Function
 }
 
 const noneChosen = "";
@@ -51,8 +52,9 @@ function Sidebar(props: Props) {
             setFrame(props.userCourses[0].frame);
             setDepartment(props.userCourses[0].department);
             setSemester(props.userCourses[0].semester);
+            props.setRestore(false);
         }
-    }, [])
+    }, [props.restore])
     
     useEffect(() => {
         setShowButtonState(frame!==noneChosen && department !==noneChosen && semester!==noneChosen);
