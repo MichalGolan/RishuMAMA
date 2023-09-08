@@ -198,9 +198,9 @@ function getDepartmentDB(dep: string): Department {
 
 function getFramePresentation(frame: Frame): string {
     const mapping: Record<Frame, string> = {
-        A: "א",
-        B: "ב",
-        C: "ג",
+        A: "'שנה א",
+        B: "'שנה ב",
+        C: "'שנה ג",
         OPTIONAL_COURSES: "קורסי בחירה"
     };
 
