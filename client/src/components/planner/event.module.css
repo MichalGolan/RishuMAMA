@@ -1,9 +1,10 @@
 .event {
-    /*font-family: 'Varela Round', sans-serif;*/
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
     text-align: center;
     font-size: 1em;
     line-height: 1.2em;
     background-color: transparent;
+    overflow-y:auto;
 }
 
 .event.active {
