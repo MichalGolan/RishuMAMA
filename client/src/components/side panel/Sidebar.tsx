@@ -209,9 +209,9 @@ function getFramePresentation(frame: Frame): string {
 
 function getFrameDB(frame: string): Frame {
     const mapping: Record<string, Frame> = {
-        "א": "A",
-        "ב": "B",
-        "ג": "C",
+        "'שנה א": "A",
+        "'שנה ב": "B",
+        "'שנה ג": "C",
         "קורסי בחירה": "OPTIONAL_COURSES"
     };
 

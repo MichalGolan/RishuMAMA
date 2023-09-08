@@ -106,7 +106,7 @@ const url = "";
                     exam_B: "2024-07-04T11:00:00Z"
                 },
                 {
-                    name: "מבוא לתקשורת מחשבים",
+                    name: "מבוא לביג דאטה",
                     department: "COMPUTER_SCIENCE",
                     semester: "A",
                     year: "OPTIONAL_COURSES",
