@@ -167,29 +167,27 @@ export default function WeekView (props: Props) {
 
     
     const handleEventClick = (clickInfo: EventClickArg) => {
-      if (confirm(`Are you sure you want to modify this Lecture '${clickInfo.event.title}'`)) {
-        const selectedLecture = lectures?.find((lecture) => lecture.id.toString() === clickInfo.event.id);
-        if(selectedLecture){
-            // כל ההרצאות שהן מאותו קורס ומאותה הקבוצה כמו הקורס שבחרתי, זה כולל את זה שבחרתי מלכתחילה
-          const groupedLectures = lectures?.filter((lecture) =>
-              lecture.courseId === selectedLecture.courseId && lecture.group === selectedLecture.group);
+      const selectedLecture = lectures?.find((lecture) => lecture.id.toString() === clickInfo.event.id);
+      if(selectedLecture){
+          // כל ההרצאות שהן מאותו קורס ומאותה הקבוצה כמו הקורס שבחרתי, זה כולל את זה שבחרתי מלכתחילה
+        const groupedLectures = lectures?.filter((lecture) =>
+            lecture.courseId === selectedLecture.courseId && lecture.group === selectedLecture.group);
 
-          if (activeLectures.includes(selectedLecture)) {
-              const filteredOut = activeLectures.filter(lecture =>
-              !(lecture.courseId === selectedLecture.courseId && lecture.group === selectedLecture.group));
-              setActiveLectures(filteredOut);
-            //setActiveLectures(activeLectures.filter(lecture => lecture.id !== selectedLecture.id));
-          }
-          else {
-              if(groupedLectures){
-                  setActiveLectures([...activeLectures, ...groupedLectures]);
-              } else {
-                  setActiveLectures([...activeLectures, selectedLecture]);
-              }
-          }
+        if (activeLectures.includes(selectedLecture)) {
+            const filteredOut = activeLectures.filter(lecture =>
+            !(lecture.courseId === selectedLecture.courseId && lecture.group === selectedLecture.group));
+            setActiveLectures(filteredOut);
+          //setActiveLectures(activeLectures.filter(lecture => lecture.id !== selectedLecture.id));
         }
-        // clickInfo.event.remove()
+        else {
+            if(groupedLectures){
+                setActiveLectures([...activeLectures, ...groupedLectures]);
+            } else {
+                setActiveLectures([...activeLectures, selectedLecture]);
+            }
+        }
       }
+      
     }
 
     return (
