@@ -125,7 +125,7 @@ const Viewer = () => {
     const [signUp, setSignUp] = useState<Boolean>(false);
     const [activeExams, setActiveExams] = useState<Exam[]>([]);
     const [restore, setRestore] = useState<boolean>(false);
-    const [resetSelectedLectures, setResetSelectedLectures] = useState<boolean>(false);
+//    const [resetSelectedLectures, setResetSelectedLectures] = useState<boolean>(false);
 
     useEffect(() => {
         const user: User = getLocalUser();
@@ -157,7 +157,7 @@ const Viewer = () => {
         setActiveExams([]);
         setActiveCourses([]);
         releaseAllColors();
-        setResetSelectedLectures(!resetSelectedLectures);
+        // setResetSelectedLectures(!resetSelectedLectures);
     }
 
     const courseIdToTitle = (courseId: number) : string => {
@@ -252,7 +252,7 @@ const Viewer = () => {
                     </div>
                     {
                         isLoggedIn
-                        ? <WeekView activeCourses={activeCourses} courseIdToTitle={courseIdToTitle} resetSelectedLectures={resetSelectedLectures}/>
+                        ? <WeekView activeCourses={activeCourses} courseIdToTitle={courseIdToTitle}/>
                         : signUp 
                         ? <SignUp onSignUp={onSignUp}></SignUp>
                         : <Login onSignUp={onSignUp} onLogin={onLogin}></Login>

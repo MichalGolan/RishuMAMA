@@ -17,7 +17,6 @@ import {defaultColor} from "../../utils/defaults";
 interface Props {
     activeCourses: Array<CourseLight>;
     courseIdToTitle: Function;
-    resetSelectedLectures: boolean;
 }
 
 let todayStr = new Date().toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
@@ -53,9 +52,6 @@ export default function WeekView (props: Props) {
       setEvents(filteredEvents);
     }, [lectures, activeLectures])
 
-    useEffect(() => {
-      setActiveLectures([]); 
-    }, [props.resetSelectedLectures])
 
     // check if Lecture colliding with lecture that was chosen ; true:collide
     function checkCollidingLectures(lecture: Lecture) : boolean {
