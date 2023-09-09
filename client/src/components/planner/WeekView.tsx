@@ -34,7 +34,7 @@ export default function WeekView (props: Props) {
     useEffect(() => {
         //active lectures can only include lectures that are of active courses
         const updated = activeLectures.filter(lec => {
-          props.activeCourses.find(course => course.id === lec.courseId)
+          return props.activeCourses.find(course => course.id === lec.courseId)
         })
         if(updated.length !== activeLectures.length){
           setActiveLectures(updated);
