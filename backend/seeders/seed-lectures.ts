@@ -58,8 +58,8 @@ const url = "";
                 courseId: 2
               },
               {
-                startTime: "10:15",
-                endTime: "12:45",
+                startTime: "10:45",
+                endTime: "12:15",
                 day: "TUESDAY",
                 lecutrer: "דוקטור אביגיל רבין",
                 isLecture: true,
@@ -68,12 +68,12 @@ const url = "";
                 courseId: 3
               },
               {
-                startTime: "10:15",
-                endTime: "12:45",
-                day: "TUESDAY",
+                startTime: "10:45",
+                endTime: "12:15",
+                day: "WEDNESDAY",
                 lecutrer: "דוקטור אביגיל רבין",
                 isLecture: true,
-                group: 1,
+                group: 2,
                 practices: [],
                 courseId: 3
               },
