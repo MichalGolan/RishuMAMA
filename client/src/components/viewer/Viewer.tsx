@@ -125,12 +125,12 @@ const Viewer = () => {
     const [signUp, setSignUp] = useState<Boolean>(false);
     const [activeExams, setActiveExams] = useState<Exam[]>([]);
     const [restore, setRestore] = useState<boolean>(false);
-//    const [resetSelectedLectures, setResetSelectedLectures] = useState<boolean>(false);
 
     useEffect(() => {
         const user: User = getLocalUser();
         if(user.name !== ""){
             setLoggedIn(true);
+            setOpen(true);
         }
         setUser(user);
     },[])
@@ -157,7 +157,6 @@ const Viewer = () => {
         setActiveExams([]);
         setActiveCourses([]);
         releaseAllColors();
-        // setResetSelectedLectures(!resetSelectedLectures);
     }
 
     const courseIdToTitle = (courseId: number) : string => {
@@ -206,9 +205,9 @@ const Viewer = () => {
             if (confirm(`Would like to restore your previous course selection?'`)) {
                 setRestore(true);
             }
-            setOpen(true);
         }
         setLoggedIn(!isLoggedIn);
+        setOpen(true);
     }
 
     return (

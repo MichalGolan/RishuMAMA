@@ -42,12 +42,23 @@ export default function WeekView (props: Props) {
     }, [props.activeCourses])
 
     useEffect(() => {
-      const filteredLectures: Lecture[] = [];
+      let filteredLectures: Lecture[] = [];
+      const collidingGroupLectures: Lecture[] = [];
       lectures?.forEach((lecture) => {
-        if (!checkCollidingLectures(lecture) && !checkParallelLectureChosen(lecture)) {
-          filteredLectures.push(lecture);
+        if (!checkParallelLectureChosen(lecture)){
+          if (!checkCollidingLectures(lecture)) {
+            filteredLectures.push(lecture);
+          } else {
+            collidingGroupLectures.push(lecture);
+          }
         }
       })
+      collidingGroupLectures.forEach(collideLecture => {
+        const groupedLectures = lectures?.filter((lecture) =>
+        lecture.id !== collideLecture.id && lecture.courseId === collideLecture.courseId && lecture.group === collideLecture.group);
+        filteredLectures = filteredLectures.filter((filteredLecture) => !groupedLectures?.includes(filteredLecture))
+      });
+
       const filteredEvents = getEvents(filteredLectures? filteredLectures : [])
       setEvents(filteredEvents);
     }, [lectures, activeLectures])
@@ -185,9 +196,9 @@ export default function WeekView (props: Props) {
             lecture.courseId === selectedLecture.courseId && lecture.group === selectedLecture.group);
 
         if (activeLectures.includes(selectedLecture)) {
-            const filteredOut = activeLectures.filter(lecture =>
+            const filteredIn = activeLectures.filter(lecture =>
             !(lecture.courseId === selectedLecture.courseId && lecture.group === selectedLecture.group));
-            setActiveLectures(filteredOut);
+            setActiveLectures(filteredIn);
         }
         else {
             if(groupedLectures){
