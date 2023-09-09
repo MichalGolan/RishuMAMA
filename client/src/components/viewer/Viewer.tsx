@@ -24,7 +24,7 @@ import {releaseAllColors, releaseColor, reserveAvailableColor} from "../../utils
 import {User} from "../../data/api/users";
 import ExamBoard from "../exam board/ExamBoard";
 
-import Logo from "./Logo.png";
+import logo from "./logo.png";
 
 
 const StyledToolbar = styled(Toolbar)({
@@ -216,7 +216,7 @@ const Viewer = () => {
                 <StyledToolbar>
                     <SideBox>
                         <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-                            <img src={Logo} alt="Your SVG" />
+                            <img src={logo} alt="Your SVG" />
                         </Typography>
                         <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
                             Hello {isLoggedIn ? user.name : 'guest'}
