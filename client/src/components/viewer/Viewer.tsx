@@ -24,7 +24,7 @@ import {releaseAllColors, releaseColor, reserveAvailableColor} from "../../utils
 import {User} from "../../data/api/users";
 import ExamBoard from "../exam board/ExamBoard";
 
-import Logo from "../../../assets/Logo.png";
+import Logo from "./Logo.png";
 
 
 const StyledToolbar = styled(Toolbar)({
