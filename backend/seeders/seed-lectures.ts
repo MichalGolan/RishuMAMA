@@ -48,8 +48,8 @@ const url = "";
                 courseId: 1
               },
               {
-                startTime: "09:45",
-                endTime: "11:15",
+                startTime: "10:15",
+                endTime: "11:45",
                 day: "MONDAY",
                 lecutrer: "פרופסור יעל גולדשטיין",
                 isLecture: true,
