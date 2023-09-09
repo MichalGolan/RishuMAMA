@@ -24,6 +24,9 @@ import {releaseAllColors, releaseColor, reserveAvailableColor} from "../../utils
 import {User} from "../../data/api/users";
 import ExamBoard from "../exam board/ExamBoard";
 
+import Logo from "../../../../client/assets/Logo.png";
+
+
 const StyledToolbar = styled(Toolbar)({
     display: "flex",
     flexDirection: "row",
@@ -115,10 +118,10 @@ const removeLocalUser = () => {
 
 const Viewer = () => {
     const theme = useTheme();
-    const [open, setOpen] = useState(true);
     const [activeCourses, setActiveCourses] = useState<Array<CourseLight>>([]);
     const [user, setUser] = useState<User>(defaultUser);
     const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
+    const [open, setOpen] = useState(isLoggedIn);
     const [signUp, setSignUp] = useState<Boolean>(false);
     const [activeExams, setActiveExams] = useState<Exam[]>([]);
     const [restore, setRestore] = useState<boolean>(false);
@@ -127,12 +130,15 @@ const Viewer = () => {
         const user: User = getLocalUser();
         if(user.name !== ""){
             setLoggedIn(true);
+            setOpen(true);
         }
         setUser(user);
     },[])
 
     const handleDrawerOpen = () => {
-        setOpen(true);
+        if(isLoggedIn) {
+            setOpen(true);
+        }
     };
 
     const handleDrawerClose = () => {
@@ -144,6 +150,7 @@ const Viewer = () => {
         setUser(defaultUser);
         setLoggedIn(false);
         resetCourseSelection();
+        setOpen(false);
     }
 
     const resetCourseSelection = () => {
@@ -200,6 +207,7 @@ const Viewer = () => {
             }
         }
         setLoggedIn(!isLoggedIn);
+        setOpen(true);
     }
 
     return (
@@ -208,7 +216,7 @@ const Viewer = () => {
                 <StyledToolbar>
                     <SideBox>
                         <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-                                RISHUMAMA
+                            <img src={Logo} alt="Your SVG" />
                         </Typography>
                         <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
                             Hello {isLoggedIn ? user.name : 'guest'}
@@ -241,7 +249,13 @@ const Viewer = () => {
                     <div style={{alignSelf:"flex-start", paddingTop: "23px", paddingRight: "10px", flex:"none", justifyContent:"flex-start"}}>
                         <ExamBoard exams={activeExams}/>
                     </div>
-                    <WeekView activeCourses={activeCourses} courseIdToTitle={courseIdToTitle}/>
+                    {
+                        isLoggedIn
+                        ? <WeekView activeCourses={activeCourses} courseIdToTitle={courseIdToTitle}/>
+                        : signUp 
+                        ? <SignUp onSignUp={onSignUp}></SignUp>
+                        : <Login onSignUp={onSignUp} onLogin={onLogin}></Login>
+                    }
                 </div>
             </Main>
             <Drawer
@@ -262,15 +276,8 @@ const Viewer = () => {
                     </IconButton>
                     {isLoggedIn && <Typography>בחירת פילטרים</Typography> }
                 </DrawerHeader>
-                <Divider />
-                {
-                    isLoggedIn
-                    ? <Sidebar onCourseToggle={handleCourseToggle} userEmail={user?.email} userCourses={user?.selectedCourses} restore={restore} resetCourseSelection={resetCourseSelection}/>
-                    : signUp 
-                    ? <SignUp onSignUp={onSignUp}></SignUp>
-                    : <Login onSignUp={onSignUp} onLogin={onLogin}></Login>
-                }
-
+                <Divider /> 
+                <Sidebar onCourseToggle={handleCourseToggle} userEmail={user?.email} userCourses={user?.selectedCourses} restore={restore} resetCourseSelection={resetCourseSelection} setRestore={setRestore}/>
             </Drawer>
         </Box>
     );

@@ -32,15 +32,37 @@ export default function WeekView (props: Props) {
     }, [props.activeCourses])
 
     useEffect(() => {
-      const filteredLectures: Lecture[] = [];
+        //active lectures can only include lectures that are of active courses
+        const updated = activeLectures.filter(lec => {
+          props.activeCourses.find(course => course.id === lec.courseId)
+        })
+        if(updated.length !== activeLectures.length){
+          setActiveLectures(updated);
+        }
+    }, [props.activeCourses])
+
+    useEffect(() => {
+      let filteredLectures: Lecture[] = [];
+      const collidingGroupLectures: Lecture[] = [];
       lectures?.forEach((lecture) => {
-        if (!checkCollidingLectures(lecture) && !checkParallelLectureChosen(lecture)) {
-          filteredLectures.push(lecture);
+        if (!checkParallelLectureChosen(lecture)){
+          if (!checkCollidingLectures(lecture)) {
+            filteredLectures.push(lecture);
+          } else {
+            collidingGroupLectures.push(lecture);
+          }
         }
       })
+      collidingGroupLectures.forEach(collideLecture => {
+        const groupedLectures = lectures?.filter((lecture) =>
+        lecture.id !== collideLecture.id && lecture.courseId === collideLecture.courseId && lecture.group === collideLecture.group);
+        filteredLectures = filteredLectures.filter((filteredLecture) => !groupedLectures?.includes(filteredLecture))
+      });
+
       const filteredEvents = getEvents(filteredLectures? filteredLectures : [])
       setEvents(filteredEvents);
     }, [lectures, activeLectures])
+
 
     // check if Lecture colliding with lecture that was chosen ; true:collide
     function checkCollidingLectures(lecture: Lecture) : boolean {
@@ -167,29 +189,26 @@ export default function WeekView (props: Props) {
 
     
     const handleEventClick = (clickInfo: EventClickArg) => {
-      if (confirm(`Are you sure you want to modify this Lecture '${clickInfo.event.title}'`)) {
-        const selectedLecture = lectures?.find((lecture) => lecture.id.toString() === clickInfo.event.id);
-        if(selectedLecture){
-            // כל ההרצאות שהן מאותו קורס ומאותה הקבוצה כמו הקורס שבחרתי, זה כולל את זה שבחרתי מלכתחילה
-          const groupedLectures = lectures?.filter((lecture) =>
-              lecture.courseId === selectedLecture.courseId && lecture.group === selectedLecture.group);
+      const selectedLecture = lectures?.find((lecture) => lecture.id.toString() === clickInfo.event.id);
+      if(selectedLecture){
+          // כל ההרצאות שהן מאותו קורס ומאותה הקבוצה כמו הקורס שבחרתי, זה כולל את זה שבחרתי מלכתחילה
+        const groupedLectures = lectures?.filter((lecture) =>
+            lecture.courseId === selectedLecture.courseId && lecture.group === selectedLecture.group);
 
-          if (activeLectures.includes(selectedLecture)) {
-              const filteredOut = activeLectures.filter(lecture =>
-              !(lecture.courseId === selectedLecture.courseId && lecture.group === selectedLecture.group));
-              setActiveLectures(filteredOut);
-            //setActiveLectures(activeLectures.filter(lecture => lecture.id !== selectedLecture.id));
-          }
-          else {
-              if(groupedLectures){
-                  setActiveLectures([...activeLectures, ...groupedLectures]);
-              } else {
-                  setActiveLectures([...activeLectures, selectedLecture]);
-              }
-          }
+        if (activeLectures.includes(selectedLecture)) {
+            const filteredIn = activeLectures.filter(lecture =>
+            !(lecture.courseId === selectedLecture.courseId && lecture.group === selectedLecture.group));
+            setActiveLectures(filteredIn);
         }
-        // clickInfo.event.remove()
+        else {
+            if(groupedLectures){
+                setActiveLectures([...activeLectures, ...groupedLectures]);
+            } else {
+                setActiveLectures([...activeLectures, selectedLecture]);
+            }
+        }
       }
+      
     }
 
     return (

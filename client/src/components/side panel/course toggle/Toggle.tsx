@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './Toggle.css'
 import RemoveButton from "./RemoveButton";
 
@@ -16,6 +16,10 @@ function Toggle(props: Props) {
         setChecked(!checked);
         props.onToggleCheck(props.id, props.name, !checked);
     };
+
+    useEffect(() => {
+        setChecked(props.isChecked);
+        }, [props.isChecked])
 
     return (
         <div className={`container${checked ? ' checked' : ''}`}>

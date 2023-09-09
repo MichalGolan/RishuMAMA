@@ -21,7 +21,8 @@ interface Props {
     userEmail: string,
     userCourses: Course[],
     restore: boolean,
-    resetCourseSelection: Function
+    resetCourseSelection: Function,
+    setRestore: Function
 }
 
 const noneChosen = "";
@@ -51,8 +52,9 @@ function Sidebar(props: Props) {
             setFrame(props.userCourses[0].frame);
             setDepartment(props.userCourses[0].department);
             setSemester(props.userCourses[0].semester);
+            props.setRestore(false);
         }
-    }, [])
+    }, [props.restore])
     
     useEffect(() => {
         setShowButtonState(frame!==noneChosen && department !==noneChosen && semester!==noneChosen);
@@ -74,8 +76,13 @@ function Sidebar(props: Props) {
     function addCourse(courseName: string){
         //map course name to Course
         if(!courses) return;
-        const course = courses.find((course) => course.name === courseName);
+        const course = courses.find((c) => c.name === courseName);
         if(!course) return;
+        
+        //check that this course is not already in the Set of chosen courses
+        const exists = [...chosenCourses].find((chosenCourse) => chosenCourse.name === course.name )
+        if(exists) return;
+
         setChosenCourses(prevState => {
             prevState.add(course)
             return new Set(prevState);
@@ -198,9 +205,9 @@ function getDepartmentDB(dep: string): Department {
 
 function getFramePresentation(frame: Frame): string {
     const mapping: Record<Frame, string> = {
-        A: "א",
-        B: "ב",
-        C: "ג",
+        A: "'שנה א",
+        B: "'שנה ב",
+        C: "'שנה ג",
         OPTIONAL_COURSES: "קורסי בחירה"
     };
 
@@ -209,9 +216,9 @@ function getFramePresentation(frame: Frame): string {
 
 function getFrameDB(frame: string): Frame {
     const mapping: Record<string, Frame> = {
-        "א": "A",
-        "ב": "B",
-        "ג": "C",
+        "'שנה א": "A",
+        "'שנה ב": "B",
+        "'שנה ג": "C",
         "קורסי בחירה": "OPTIONAL_COURSES"
     };
 
