@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
+import IosShareIcon from '@mui/icons-material/IosShare';
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography"
 import {styled, useTheme} from "@mui/material/styles"
@@ -23,6 +24,7 @@ import {CourseLight, Exam} from "../../data/api/courses";
 import {releaseAllColors, releaseColor, reserveAvailableColor} from "../../utils/defaults";
 import {User} from "../../data/api/users";
 import ExamBoard from "../exam board/ExamBoard";
+import ReactSelectionPopup from 'react-selection-popup';
 
 import logo from "./logo.png";
 
@@ -145,6 +147,21 @@ const Viewer = () => {
         setOpen(false);
     };
 
+    const activeCourseNames = (): string => {
+        if(!activeCourses.length) {
+            return "לא נבחרו קורסים להציג."
+        }
+        let names = "קודי הקורסים הנבחרים:\n"
+        activeCourses.forEach(course => {
+            names = names + course.name + " - (" + course.id.toString() + ")\n";
+        })
+        return names
+    }
+
+    const exportIds = () => {
+        confirm(activeCourseNames())  
+    };
+
     const logout = () => {
         removeLocalUser();
         setUser(defaultUser);
@@ -221,6 +238,14 @@ const Viewer = () => {
                         <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
                             Hello {isLoggedIn ? user.name : 'guest'}
                         </Typography>
+                        {/* { isLoggedIn && activeExams.length &&  */}
+                            <IconButton
+                                color="inherit"
+                                aria-label="open drawer"
+                                edge="end"
+                                onClick={exportIds}
+                            >
+                            <IosShareIcon color="secondary" /></IconButton> 
                         <IconButton
                             color="inherit"
                             edge="end"
@@ -246,8 +271,10 @@ const Viewer = () => {
             <Main open={open}>
                 <DrawerHeader />
                 <div className="viewer-row">
-                    <div style={{alignSelf:"flex-start", paddingTop: "23px", paddingRight: "10px", flex:"none", justifyContent:"flex-start"}}>
-                        <ExamBoard exams={activeExams}/>
+                    <div className="grid-container">
+                        <div style={{alignSelf:"flex-start", paddingTop: "23px", paddingRight: "10px", paddingBottom:"10px", flex:"none", justifyContent:"flex-start"}}>
+                            <ExamBoard exams={activeExams}/>
+                        </div >  
                     </div>
                     {
                         isLoggedIn
