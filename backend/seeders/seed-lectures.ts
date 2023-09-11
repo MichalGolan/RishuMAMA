@@ -776,7 +776,57 @@ const url = "";
                 group: 1,
                 practices: [],
                 courseId: 64
-              },              
+              },       
+              {
+                startTime: "16:00",
+                endTime: "18:30",
+                day: "THURSDAY",
+                lecutrer: "דר מועלם רוני",
+                isLecture: true,
+                group: 1,
+                practices: [],
+                courseId: 65
+              },    
+              {
+                startTime: "10:15",
+                endTime: "12:45",
+                day: "THURSDAY",
+                lecutrer: "פרופסור גדעון דרור",
+                isLecture: true,
+                group: 1,
+                practices: [],
+                courseId: 66
+              },    
+              {
+                startTime: "15:15",
+                endTime: "17:45",
+                day: "WEDNESDAY",
+                lecutrer: "דר קומן אלכסנדר",
+                isLecture: true,
+                group: 1,
+                practices: [],
+                courseId: 67
+              },   
+              {
+                startTime: "15:30",
+                endTime: "18:00",
+                day: "SUNDAY",
+                lecutrer: "דר כהן שראל",
+                isLecture: true,
+                group: 1,
+                practices: [],
+                courseId: 68
+              },  
+              {
+                startTime: "19:00",
+                endTime: "21:30",
+                day: "WEDNESDAY",
+                lecutrer: "גב ברמן אליענה",
+                isLecture: true,
+                group: 1,
+                practices: [],
+                courseId: 69
+              },  
         ]
     });
 
@@ -784,56 +834,3 @@ const url = "";
 
 })();
 // set DATABASE_URL={railway-pgadmin-DATABASE_URL} && npx ts-node .\seeders\seed-lectures.ts
-/*
-              {
-                startTime: "15:45",
-                endTime: "17:15",
-                day: "TUESDAY",
-                lecutrer: "דוקטור רחל אהרון",
-                isLecture: true,
-                group: 1,
-                practices: [],
-                courseId: 65
-              },
-              {
-                startTime: "14:15",
-                endTime: "15:45",
-                day: "THURSDAY",
-                lecutrer: "דוקטור רחל אהרון",
-                isLecture: true,
-                group: 1,
-                practices: [],
-                courseId: 66
-              },
-              {
-                startTime: "14:15",
-                endTime: "16:45",
-                day: "SUNDAY",
-                lecutrer: "פרופסור מאיה שרון",
-                isLecture: true,
-                group: 1,
-                practices: [],
-                courseId: 67
-              },
-              {
-                startTime: "12:45",
-                endTime: "14:15",
-                day: "MONDAY",
-                lecutrer: "דוקטור נועה לוי",
-                isLecture: true,
-                group: 1,
-                practices: [],
-                courseId: 68
-              },
-              {
-                startTime: "10:15",
-                endTime: "12:45",
-                day: "WEDNESDAY",
-                lecutrer: "דוקטור מיה כהן",
-                isLecture: true,
-                group: 1,
-                practices: [],
-                courseId: 69
-              }
-
-*/

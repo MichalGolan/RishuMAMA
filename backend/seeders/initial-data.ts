@@ -106,7 +106,7 @@ const url = "";
                     exam_B: "2024-07-04T11:00:00Z"
                 },
                 {
-                    name: "מבוא לביג דאטה",
+                    name: "תקשורת מחשבים",
                     department: "COMPUTER_SCIENCE",
                     semester: "A",
                     year: "OPTIONAL_COURSES",
@@ -482,7 +482,7 @@ const url = "";
 
             // Year C, Semester B
             {
-                name: "מבחנים והערכה",
+                name: "ניקוד",
                 department: "PSYCHOLOGY",
                 semester: "B",
                 year: "C",
@@ -548,7 +548,47 @@ const url = "";
                 year: "OPTIONAL_COURSES",
                 exam_A: "2024-06-06T10:00:00Z",
                 exam_B: "2024-06-20T10:00:00Z"
-            }
+            },
+            {
+                name: "אסטרופיזיקה",
+                department: "COMPUTER_SCIENCE",
+                semester: "A",
+                year: "OPTIONAL_COURSES",
+                exam_A: "2024-01-25T10:00:00Z",
+                exam_B: "2024-02-26T10:00:00Z"
+            },
+            {
+                name: "מבוא לבינה מלאכותית",
+                department: "COMPUTER_SCIENCE",
+                semester: "A",
+                year: "OPTIONAL_COURSES",
+                exam_A: "2024-02-21T10:00:00Z",
+                exam_B: "2024-03-29T10:00:00Z"
+            },
+            {
+                name: "ניתוח מערכות",
+                department: "COMPUTER_SCIENCE",
+                semester: "A",
+                year: "OPTIONAL_COURSES",
+                exam_A: "2024-02-20T10:00:00Z",
+                exam_B: "2024-03-11T10:00:00Z"
+            },
+            {
+                name: "סדנה בתכנות תחרותי",
+                department: "COMPUTER_SCIENCE",
+                semester: "A",
+                year: "OPTIONAL_COURSES",
+                exam_A: "2024-02-25T10:00:00Z",
+                exam_B: "2024-03-15T10:00:00Z"
+            },
+            {
+                name: "ניהול מוצר",
+                department: "COMPUTER_SCIENCE",
+                semester: "A",
+                year: "OPTIONAL_COURSES",
+                exam_A: "2024-02-29T10:00:00Z",
+                exam_B: "2024-03-19T10:00:00Z"
+            },
         ] 
     });
 
