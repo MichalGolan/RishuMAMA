@@ -238,14 +238,14 @@ const Viewer = () => {
                         <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
                             Hello {isLoggedIn ? user.name : 'guest'}
                         </Typography>
-                        {/* { isLoggedIn && activeExams.length &&  */}
+                        { isLoggedIn ?
                             <IconButton
                                 color="inherit"
                                 aria-label="open drawer"
                                 edge="end"
                                 onClick={exportIds}
                             >
-                            <IosShareIcon color="secondary" /></IconButton> 
+                            <IosShareIcon color="secondary" /></IconButton> : null}
                         <IconButton
                             color="inherit"
                             edge="end"
