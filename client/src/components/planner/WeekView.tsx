@@ -17,7 +17,6 @@ import {defaultColor} from "../../utils/defaults";
 interface Props {
     activeCourses: Array<CourseLight>;
     courseIdToTitle: Function;
-    resetSelectedLectures: boolean;
 }
 
 let todayStr = new Date().toISOString().replace(/T.*$/, '') // YYYY-MM-DD of today
@@ -33,19 +32,37 @@ export default function WeekView (props: Props) {
     }, [props.activeCourses])
 
     useEffect(() => {
-      const filteredLectures: Lecture[] = [];
+        //active lectures can only include lectures that are of active courses
+        const updated = activeLectures.filter(lec => {
+          return props.activeCourses.find(course => course.id === lec.courseId)
+        })
+        if(updated.length !== activeLectures.length){
+          setActiveLectures(updated);
+        }
+    }, [props.activeCourses])
+
+    useEffect(() => {
+      let filteredLectures: Lecture[] = [];
+      const collidingGroupLectures: Lecture[] = [];
       lectures?.forEach((lecture) => {
-        if (!checkCollidingLectures(lecture) && !checkParallelLectureChosen(lecture)) {
-          filteredLectures.push(lecture);
+        if (!checkParallelLectureChosen(lecture)){
+          if (!checkCollidingLectures(lecture)) {
+            filteredLectures.push(lecture);
+          } else {
+            collidingGroupLectures.push(lecture);
+          }
         }
       })
+      collidingGroupLectures.forEach(collideLecture => {
+        const groupedLectures = lectures?.filter((lecture) =>
+        lecture.id !== collideLecture.id && lecture.courseId === collideLecture.courseId && lecture.group === collideLecture.group);
+        filteredLectures = filteredLectures.filter((filteredLecture) => !groupedLectures?.includes(filteredLecture))
+      });
+
       const filteredEvents = getEvents(filteredLectures? filteredLectures : [])
       setEvents(filteredEvents);
     }, [lectures, activeLectures])
 
-    useEffect(() => {
-      setActiveLectures([]); 
-    }, [props.resetSelectedLectures])
 
     // check if Lecture colliding with lecture that was chosen ; true:collide
     function checkCollidingLectures(lecture: Lecture) : boolean {
@@ -179,9 +196,9 @@ export default function WeekView (props: Props) {
             lecture.courseId === selectedLecture.courseId && lecture.group === selectedLecture.group);
 
         if (activeLectures.includes(selectedLecture)) {
-            const filteredOut = activeLectures.filter(lecture =>
+            const filteredIn = activeLectures.filter(lecture =>
             !(lecture.courseId === selectedLecture.courseId && lecture.group === selectedLecture.group));
-            setActiveLectures(filteredOut);
+            setActiveLectures(filteredIn);
         }
         else {
             if(groupedLectures){

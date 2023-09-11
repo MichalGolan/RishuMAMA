@@ -76,8 +76,13 @@ function Sidebar(props: Props) {
     function addCourse(courseName: string){
         //map course name to Course
         if(!courses) return;
-        const course = courses.find((course) => course.name === courseName);
+        const course = courses.find((c) => c.name === courseName);
         if(!course) return;
+        
+        //check that this course is not already in the Set of chosen courses
+        const exists = [...chosenCourses].find((chosenCourse) => chosenCourse.name === course.name )
+        if(exists) return;
+
         setChosenCourses(prevState => {
             prevState.add(course)
             return new Set(prevState);

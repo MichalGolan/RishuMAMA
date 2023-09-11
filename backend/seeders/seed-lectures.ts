@@ -18,8 +18,38 @@ const url = "";
                 courseId: 1
               },
               {
-                startTime: "09:45",
-                endTime: "11:15",
+                startTime: "08:15",
+                endTime: "09:45",
+                day: "MONDAY",
+                lecutrer: "גברת רבקה לוי",
+                isLecture: true,
+                group: 1,
+                practices: [],
+                courseId: 1
+              },
+              {
+                startTime: "08:15",
+                endTime: "09:45",
+                day: "TUESDAY",
+                lecutrer: "גברת רבקה לוי",
+                isLecture: true,
+                group: 2,
+                practices: [],
+                courseId: 1
+              },
+              {
+                startTime: "08:15",
+                endTime: "09:45",
+                day: "WEDNESDAY",
+                lecutrer: "גברת רבקה לוי",
+                isLecture: true,
+                group: 2,
+                practices: [],
+                courseId: 1
+              },
+              {
+                startTime: "10:15",
+                endTime: "11:45",
                 day: "MONDAY",
                 lecutrer: "פרופסור יעל גולדשטיין",
                 isLecture: true,
@@ -28,8 +58,8 @@ const url = "";
                 courseId: 2
               },
               {
-                startTime: "10:15",
-                endTime: "12:45",
+                startTime: "10:45",
+                endTime: "12:15",
                 day: "TUESDAY",
                 lecutrer: "דוקטור אביגיל רבין",
                 isLecture: true,
@@ -38,12 +68,32 @@ const url = "";
                 courseId: 3
               },
               {
+                startTime: "10:45",
+                endTime: "12:15",
+                day: "WEDNESDAY",
+                lecutrer: "דוקטור אביגיל רבין",
+                isLecture: true,
+                group: 2,
+                practices: [],
+                courseId: 3
+              },
+              {
                 startTime: "16:15",
-                endTime: "17:45",
+                endTime: "18:45",
                 day: "WEDNESDAY",
                 lecutrer: "דוקטור אביגיל רבין",
                 isLecture: true,
                 group: 1,
+                practices: [],
+                courseId: 4
+              },
+              {
+                startTime: "13:15",
+                endTime: "15:45",
+                day: "WEDNESDAY",
+                lecutrer: "דוקטור אביגיל רבין",
+                isLecture: true,
+                group: 2,
                 practices: [],
                 courseId: 4
               },
@@ -88,12 +138,52 @@ const url = "";
                 courseId: 8
               },
               {
+                startTime: "10:45",
+                endTime: "12:15",
+                day: "WEDNESDAY",
+                lecutrer: "גברת אביגיל לוי",
+                isLecture: true,
+                group: 1,
+                practices: [],
+                courseId: 8
+              },
+              {
+                startTime: "10:45",
+                endTime: "12:15",
+                day: "SUNDAY",
+                lecutrer: "גברת אביגיל לוי",
+                isLecture: true,
+                group: 2,
+                practices: [],
+                courseId: 8
+              },
+              {
+                startTime: "10:45",
+                endTime: "12:15",
+                day: "MONDAY",
+                lecutrer: "גברת אביגיל לוי",
+                isLecture: true,
+                group: 2,
+                practices: [],
+                courseId: 8
+              },
+              {
                 startTime: "10:15",
                 endTime: "11:45",
                 day: "WEDNESDAY",
                 lecutrer: "פרופסור דניאלה רז",
                 isLecture: true,
                 group: 1,
+                practices: [],
+                courseId: 9
+              },
+              {
+                startTime: "10:15",
+                endTime: "11:45",
+                day: "SUNDAY",
+                lecutrer: "פרופסור דניאלה רז",
+                isLecture: true,
+                group: 2,
                 practices: [],
                 courseId: 9
               },
@@ -114,6 +204,36 @@ const url = "";
                 lecutrer: "מר דוד גורדון",
                 isLecture: true,
                 group: 1,
+                practices: [],
+                courseId: 11
+              },
+              {
+                startTime: "14:45",
+                endTime: "16:45",
+                day: "MONDAY",
+                lecutrer: "מר דוד גורדון",
+                isLecture: true,
+                group: 1,
+                practices: [],
+                courseId: 11
+              },
+              {
+                startTime: "12:45",
+                endTime: "13:45",
+                day: "TUESDAY",
+                lecutrer: "מר דוד גורדון",
+                isLecture: true,
+                group: 2,
+                practices: [],
+                courseId: 11
+              },
+              {
+                startTime: "11:45",
+                endTime: "13:45",
+                day: "MONDAY",
+                lecutrer: "מר דוד גורדון",
+                isLecture: true,
+                group: 2,
                 practices: [],
                 courseId: 11
               },
@@ -141,6 +261,16 @@ const url = "";
                 startTime: "08:45",
                 endTime: "11:15",
                 day: "THURSDAY",
+                lecutrer: "פרופסור ליאון רפאל",
+                isLecture: true,
+                group: 1,
+                practices: [],
+                courseId: 14
+              },
+              {
+                startTime: "08:45",
+                endTime: "11:15",
+                day: "FRIDAY",
                 lecutrer: "פרופסור ליאון רפאל",
                 isLecture: true,
                 group: 1,

@@ -24,7 +24,7 @@ import {releaseAllColors, releaseColor, reserveAvailableColor} from "../../utils
 import {User} from "../../data/api/users";
 import ExamBoard from "../exam board/ExamBoard";
 
-import Logo from "../../../../client/assets/Logo.png";
+import logo from "./logo.png";
 
 
 const StyledToolbar = styled(Toolbar)({
@@ -125,12 +125,12 @@ const Viewer = () => {
     const [signUp, setSignUp] = useState<Boolean>(false);
     const [activeExams, setActiveExams] = useState<Exam[]>([]);
     const [restore, setRestore] = useState<boolean>(false);
-    const [resetSelectedLectures, setResetSelectedLectures] = useState<boolean>(false);
 
     useEffect(() => {
         const user: User = getLocalUser();
         if(user.name !== ""){
             setLoggedIn(true);
+            setOpen(true);
         }
         setUser(user);
     },[])
@@ -157,7 +157,6 @@ const Viewer = () => {
         setActiveExams([]);
         setActiveCourses([]);
         releaseAllColors();
-        setResetSelectedLectures(!resetSelectedLectures);
     }
 
     const courseIdToTitle = (courseId: number) : string => {
@@ -206,9 +205,9 @@ const Viewer = () => {
             if (confirm(`Would like to restore your previous course selection?'`)) {
                 setRestore(true);
             }
-            setOpen(true);
         }
         setLoggedIn(!isLoggedIn);
+        setOpen(true);
     }
 
     return (
@@ -217,7 +216,7 @@ const Viewer = () => {
                 <StyledToolbar>
                     <SideBox>
                         <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-                            <img src={Logo} alt="Your SVG" />
+                            <img src={logo} alt="Your SVG" />
                         </Typography>
                         <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
                             Hello {isLoggedIn ? user.name : 'guest'}
@@ -252,7 +251,7 @@ const Viewer = () => {
                     </div>
                     {
                         isLoggedIn
-                        ? <WeekView activeCourses={activeCourses} courseIdToTitle={courseIdToTitle} resetSelectedLectures={resetSelectedLectures}/>
+                        ? <WeekView activeCourses={activeCourses} courseIdToTitle={courseIdToTitle}/>
                         : signUp 
                         ? <SignUp onSignUp={onSignUp}></SignUp>
                         : <Login onSignUp={onSignUp} onLogin={onLogin}></Login>
