@@ -91,54 +91,59 @@ function ExamBoard(props: Props) {
     }
     
     return (
-        <TableContainer component={StyledPaper}>
-            <Table sx={{ minWidth: 20 }} size="small" aria-label="exams table by months">
-                <TableHead>
-                    <TableRow>
-                        { months
-                            .map((monthNo) =>
-                                <TableCell key={monthNo}>
-                                    {getMonthShortName(monthNo)}
-                                </TableCell>
-                        )}
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {[...Array(maxDaysInMonth)].map((e, i) => {
-                        return <TableRow key={i}>
-                            {months
-                                .map((monthNo) => {
-                                        const colorMe = isColored(monthNo, i + 1);
-                                        const { name, isFirst, color } = getDataByDate(monthNo, i + 1);
-                                        const hoverHTML = colorMe ? (
-                                            <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                                                <div>{`${get2DigitString(i + 1)}/${get2DigitString(monthNo + 1)}`}</div>
-                                                <div>{ name }</div>
-                                                <div>{ isFirst ? 'מועד א' : 'מועד ב'}</div>
-                                            </div>
-                                        ) : ''
-                                        return (
-                                        <Tooltip
-                                            title={hoverHTML}
-                                            followCursor>
-                                            <TableCell
-                                                align={'center'}
-                                                key={monthNo}
-                                                sx={{
-                                                    borderRight: 1,
-                                                    borderColor: '#E5E4E2',
-                                                    background: colorMe ? color : 'none'
-                                                }}
-                                            >
-                                            </TableCell>
-                                        </Tooltip>)
-                                    }
-                                )}
+        <div>
+            {
+                props.exams.length ? <div style={{marginBottom: "6px"}}>  לוח מבחנים </div> : null
+            }
+            <TableContainer component={StyledPaper}>
+                <Table sx={{ minWidth: 20 }} size="small" aria-label="exams table by months">
+                    <TableHead>
+                        <TableRow>
+                            { months
+                                .map((monthNo) =>
+                                    <TableCell key={monthNo}>
+                                        {getMonthShortName(monthNo)}
+                                    </TableCell>
+                            )}
                         </TableRow>
-                    })}
-                </TableBody>
-            </Table>
-        </TableContainer>
+                    </TableHead>
+                    <TableBody>
+                        {[...Array(maxDaysInMonth)].map((e, i) => {
+                            return <TableRow key={i}>
+                                {months
+                                    .map((monthNo) => {
+                                            const colorMe = isColored(monthNo, i + 1);
+                                            const { name, isFirst, color } = getDataByDate(monthNo, i + 1);
+                                            const hoverHTML = colorMe ? (
+                                                <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                                                    <div>{`${get2DigitString(i + 1)}/${get2DigitString(monthNo + 1)}`}</div>
+                                                    <div>{ name }</div>
+                                                    <div>{ isFirst ? 'מועד א' : 'מועד ב'}</div>
+                                                </div>
+                                            ) : ''
+                                            return (
+                                            <Tooltip
+                                                title={hoverHTML}
+                                                followCursor>
+                                                <TableCell
+                                                    align={'center'}
+                                                    key={monthNo}
+                                                    sx={{
+                                                        borderRight: 1,
+                                                        borderColor: '#E5E4E2',
+                                                        background: colorMe ? color : 'none'
+                                                    }}
+                                                >
+                                                </TableCell>
+                                            </Tooltip>)
+                                        }
+                                    )}
+                            </TableRow>
+                        })}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </div>
     );
 }
 
