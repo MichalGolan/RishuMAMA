@@ -24,7 +24,6 @@ import {CourseLight, Exam} from "../../data/api/courses";
 import {releaseAllColors, releaseColor, reserveAvailableColor} from "../../utils/defaults";
 import {User} from "../../data/api/users";
 import ExamBoard from "../exam board/ExamBoard";
-import ReactSelectionPopup from 'react-selection-popup';
 
 import logo from "./logo.png";
 
